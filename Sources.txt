@@ -1,0 +1,8 @@
+Unity DOTS Explained (ECS, Job System, Burst Compiler)
+https://www.youtube.com/watch?v=Z9-WkwdDoNY
+
+Getting Started with ECS in Unity 2019
+https://www.youtube.com/watch?v=ILfUuBLfzGI
+
+Getting Started with the Job System in Unity 2019
+https://www.youtube.com/watch?v=C56bbgtPr_w
