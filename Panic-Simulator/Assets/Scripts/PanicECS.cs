@@ -5,72 +5,59 @@ using UnityEngine;
 public class PanicECS : MonoBehaviour
 {
     #region Variables
+    // Instance Variable
     public static PanicECS instance;
 
-
     // Camera
-    private Vector3 actualPositon;
-    [SerializeField] private float panBorderThickness = 10f; // Top Screen Border limit
-    [SerializeField] private float panSpeed = 20f; // Speed for moving Camera across the world
-    [SerializeField] private Vector2 panLimit; // For Clamp Purpose (Camera x,z)
-    [SerializeField] private float scrollSpeed = 20f; // Speed for scroll wheel
-    [SerializeField] private float minY = 20f; // Min Y height for the scroll wheel
-    [SerializeField] private float maxY = 120f; // Max Y height for the scroll wheel
-    // Camera Smoothness
-    private Vector3 desiredPosition;
-    [SerializeField] private float smoothSpeed = 10f;
+    [SerializeField] private float zoomSpeed; // Speed Variable for zoom up/down feature
+    [SerializeField] private float cameraSpeed; // Speed Variable for camera movement
+    private float lookSpeedH = 2f; // Variable for Camera rotation feature
+    private float lookSpeedV = 2f; // Variable for Camera rotation feature
+    private float yaw = 0f; // Variable for Camera rotation feature
+    private float pitch = 0f; // Variable for Camera rotation feature
     #endregion // Variables
 
-    private void Start()
-    {
-
-    }
-
-    private void Update()
-    {
-        //HandleCamera();
-    }
-
-    private void LateUpdate()
+    void Update()
     {
         HandleCamera();
-        SmoothCamera(); // No conflicts with the camera movement
     }
 
+    /// <summary>
+    /// Controls Camera with WASD
+    /// Look around with right mouse click (holded)
+    /// Zoom up and down with mouse wheel
+    /// TODO: SMOOTH FEATURE, CHECKBOX FOR GAME VIEW BORDER MOUSE CONTROL
+    /// </summary>
     private void HandleCamera()
     {
-        actualPositon = Camera.main.transform.position;
-
-        if (Input.GetKey(KeyCode.W) || Input.mousePosition.y >= Screen.height - panBorderThickness)
+        // Control Camera with WASD
+        if (Input.GetKey(KeyCode.W) /*|| Input.mousePosition.y >= Screen.height - panBorderThickness*/)
         {
-            actualPositon.z += panSpeed * Time.deltaTime;
+            transform.Translate(Vector3.forward * cameraSpeed * Time.deltaTime);
         }
-        if (Input.GetKey(KeyCode.S) || Input.mousePosition.y <= panBorderThickness)
+        if (Input.GetKey(KeyCode.S) /*|| Input.mousePosition.y <= panBorderThickness*/)
         {
-            actualPositon.z -= panSpeed * Time.deltaTime;
+            transform.Translate(Vector3.back * cameraSpeed * Time.deltaTime);
         }
-        if (Input.GetKey(KeyCode.D) || Input.mousePosition.x >= Screen.width - panBorderThickness)
+        if (Input.GetKey(KeyCode.D) /*|| Input.mousePosition.x >= Screen.width - panBorderThickness*/)
         {
-            actualPositon.x += panSpeed * Time.deltaTime;
+            transform.Translate(Vector3.right * cameraSpeed * Time.deltaTime);
         }
-        if (Input.GetKey(KeyCode.A) || Input.mousePosition.x <= panBorderThickness)
+        if (Input.GetKey(KeyCode.A) /*|| Input.mousePosition.x <= panBorderThickness*/)
         {
-            actualPositon.x -= panSpeed * Time.deltaTime;
+            transform.Translate(Vector3.left * cameraSpeed * Time.deltaTime);
         }
 
-        float scroll = Input.GetAxis("Mouse ScrollWheel");
-        actualPositon.y -= scroll * scrollSpeed * 100f * Time.deltaTime;
+        //Look around with Right Mouse [DONE][BUG: FLIP AT START]
+        if (Input.GetMouseButton(1))
+        {
+            yaw += lookSpeedH * Input.GetAxis("Mouse X");
+            pitch -= lookSpeedV * Input.GetAxis("Mouse Y");
 
-        actualPositon.x = Mathf.Clamp(actualPositon.x, -panLimit.x, panLimit.x);
-        actualPositon.z = Mathf.Clamp(actualPositon.z, -panLimit.y, panLimit.y);
-        actualPositon.y = Mathf.Clamp(actualPositon.y, minY, maxY);
+            transform.eulerAngles = new Vector3(pitch, yaw, 0f);
+        }
 
-        //Camera.main.transform.position = actualPositon;
-
-    }
-
-    private void SmoothCamera()
-    {
-        Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, actualPositon, smoothSpeed * Time.deltaTime); ;
+        //Zoom up and down with mouse wheel [DONE]
+        transform.Translate(0, Input.GetAxis("Mouse ScrollWheel") * zoomSpeed, 0, Space.Self);
     }
 }
