@@ -4,9 +4,25 @@ using UnityEngine;
 
 public class PanicECS : MonoBehaviour
 {
+    #region Radial Menu UI
+    /// <summary>
+    /// The Action class for every single Radial Menu Slot
+    /// </summary>
+    [System.Serializable]
+    public class Action
+    {
+        public Color color;
+        public Sprite sprite;
+        public string title;
+    }
+    #endregion // Radial Menu UI
     #region Variables
-    // Instance Variable
+    // Singleton Instance Variable
     public static PanicECS instance;
+
+    // Radial Menu UI
+    public string title; // Label text
+    public Action[] options;
 
     // Camera
     [SerializeField] private float zoomSpeed; // Speed Variable for zoom up/down feature
@@ -17,9 +33,32 @@ public class PanicECS : MonoBehaviour
     private float pitch = 0f; // Variable for Camera rotation feature
     #endregion // Variables
 
+    private void Start()
+    {
+        if (title == "" || title == null)
+        {
+            title = gameObject.name;
+        }    
+    }
+
+    private void Awake()
+    {
+        instance = this;
+    }
+
     void Update()
     {
+        HandleRadialMenuUI();
         HandleCamera();
+    }
+
+    private void HandleRadialMenuUI()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            // Tell the canvas to spawn a menu
+            RadialMenuSpawner.instance.SpawnMenu(this); // The buttons (slots) needs .this
+        }
     }
 
     /// <summary>
