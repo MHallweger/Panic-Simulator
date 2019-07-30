@@ -1806,6 +1806,9 @@ MonoBehaviour:
     title: Exit door
   zoomSpeed: 13
   cameraSpeed: 5
+  humanAmount: 100000
+  humanGameObject: {fileID: 6111648044872281106, guid: 902de8e9e121f7d43884ef0e2e68cf8e,
+    type: 3}
 --- !u!1 &966184172
 GameObject:
   m_ObjectHideFlags: 0
@@ -3237,7 +3240,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!64 &1888998087
 MeshCollider:
   m_ObjectHideFlags: 0
