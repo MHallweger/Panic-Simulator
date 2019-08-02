@@ -120,6 +120,66 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &36462641
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 36462643}
+  - component: {fileID: 36462644}
+  - component: {fileID: 36462642}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &36462642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36462641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea7d7495833204790ba1d3a8755397f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ConversionMode: 1
+--- !u!4 &36462643
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36462641}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 20.29769, y: -39.121162, z: 60.34901}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &36462644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36462641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c539ba202976a34dbce3b0bf6d5a830, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Prefab: {fileID: 3914500843918464402, guid: 902de8e9e121f7d43884ef0e2e68cf8e, type: 3}
+  CountX: 100
+  CountY: 100
 --- !u!1 &158839098
 GameObject:
   m_ObjectHideFlags: 0
@@ -1787,7 +1847,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a75667e63a24a644eb54018bcbd78411, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: 
+  title: Menu
   options:
   - color: {r: 0.4339623, g: 0.4278213, b: 0.4278213, a: 1}
     sprite: {fileID: 21300000, guid: 50c1420e02b40bd4abd010d939a625a0, type: 3}
@@ -1806,9 +1866,6 @@ MonoBehaviour:
     title: Exit door
   zoomSpeed: 13
   cameraSpeed: 5
-  humanAmount: 100000
-  humanGameObject: {fileID: 6111648044872281106, guid: 902de8e9e121f7d43884ef0e2e68cf8e,
-    type: 3}
 --- !u!1 &966184172
 GameObject:
   m_ObjectHideFlags: 0

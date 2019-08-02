@@ -40,10 +40,6 @@ public class PanicECS : MonoBehaviour
     private float pitch = 0f; // Variable for Camera rotation feature
 
     // ECS
-    private EntityManager entityManager;
-    private Entity humanEntityPrefab;
-    [SerializeField] private int humanAmount;
-    [SerializeField] private GameObject humanGameObject;
     #endregion // Variables
 
     private void Start()
@@ -52,40 +48,17 @@ public class PanicECS : MonoBehaviour
         {
             title = gameObject.name;
         }
-
-        BeginECSProcess();
     }
 
     private void Awake()
     {
         instance = this;
-
-        HandleECS();
     }
 
     void Update()
     {
         HandleRadialMenuUI();
         HandleCamera();
-    }
-
-    private void BeginECSProcess()
-    {
-        NativeArray<Entity> humans = new NativeArray<Entity>(humanAmount, Allocator.Temp);
-        entityManager.Instantiate(humanEntityPrefab, humans);
-
-        for (int i = 0; i < humans.Length; i++)
-        {
-            entityManager.SetComponentData(humans[i], new Translation { Value = new float3(UnityEngine.Random.Range(-10, 10), UnityEngine.Random.Range(-10, 10), UnityEngine.Random.Range(-10, 10))});
-        }
-
-        humans.Dispose();
-    }
-
-    private void HandleECS()
-    {
-        entityManager = World.Active.EntityManager;
-        humanEntityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(humanGameObject, World.Active);
     }
 
     private void HandleRadialMenuUI()
