@@ -1,0 +1,191 @@
+fileFormatVersion: 2
+guid: 5bab220367991d7469030e096fd3f993
+timeCreated: 1495533910
+licenseType: Store
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Geometry
+    100002: Hanging_Detai_Long_2_Star_Cable_010
+    100004: Hanging_Detai_Long_2_Star_Cable_011
+    100006: Hanging_Detai_Long_2_Star_Cable_012
+    100008: Hanging_Detai_Long_2_Star_Cable_09
+    100010: Hanging_Detail_Spikes
+    100012: Hanging_Detail_Spikes_Outer
+    100014: Hanging_Detail_Tube_Outer
+    100016: //RootNode
+    100018: Hanging_Spiral
+    100020: joint1
+    100022: joint2
+    100024: joint3
+    100026: joint4
+    100028: joint5
+    100030: joint6
+    100032: joint7
+    100034: joint8
+    100036: Hanging_Spiral_RedYellow
+    400000: Geometry
+    400002: Hanging_Detai_Long_2_Star_Cable_010
+    400004: Hanging_Detai_Long_2_Star_Cable_011
+    400006: Hanging_Detai_Long_2_Star_Cable_012
+    400008: Hanging_Detai_Long_2_Star_Cable_09
+    400010: Hanging_Detail_Spikes
+    400012: Hanging_Detail_Spikes_Outer
+    400014: Hanging_Detail_Tube_Outer
+    400016: //RootNode
+    400018: Hanging_Spiral
+    400020: joint1
+    400022: joint2
+    400024: joint3
+    400026: joint4
+    400028: joint5
+    400030: joint6
+    400032: joint7
+    400034: joint8
+    400036: Hanging_Spiral_RedYellow
+    2300000: Hanging_Detai_Long_2_Star_Cable_010
+    2300002: Hanging_Detai_Long_2_Star_Cable_011
+    2300004: Hanging_Detai_Long_2_Star_Cable_012
+    2300006: Hanging_Detai_Long_2_Star_Cable_09
+    2300008: Hanging_Detail_Spikes_Outer
+    2300010: Hanging_Detail_Tube_Outer
+    2300012: Hanging_Detail_Spikes
+    3300000: Hanging_Detai_Long_2_Star_Cable_010
+    3300002: Hanging_Detai_Long_2_Star_Cable_011
+    3300004: Hanging_Detai_Long_2_Star_Cable_012
+    3300006: Hanging_Detai_Long_2_Star_Cable_09
+    3300008: Hanging_Detail_Spikes_Outer
+    3300010: Hanging_Detail_Tube_Outer
+    3300012: Hanging_Detail_Spikes
+    4300000: Hanging_Detail_Spikes_Outer
+    4300002: Hanging_Detail_Tube_Outer
+    4300004: Hanging_Detai_Long_2_Star_Cable_09
+    4300006: Hanging_Detai_Long_2_Star_Cable_010
+    4300008: Hanging_Detai_Long_2_Star_Cable_011
+    4300010: Hanging_Detai_Long_2_Star_Cable_012
+    4300012: Hanging_Detail_Spikes
+    7400000: Take 001
+    9500000: //RootNode
+    11100000: //RootNode
+    13700000: Hanging_Detai_Long_2_Star_Cable_010
+    13700002: Hanging_Detai_Long_2_Star_Cable_011
+    13700004: Hanging_Detai_Long_2_Star_Cable_012
+    13700006: Hanging_Detai_Long_2_Star_Cable_09
+    13700008: Hanging_Detail_Spikes_Outer
+    13700010: Hanging_Detail_Tube_Outer
+  materials:
+    importMaterials: 1
+    materialName: 1
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 3
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Take 001
+      takeName: Take 001
+      firstFrame: 1
+      lastFrame: 100
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Hanging_Spiral_RedYellow
+        weight: 1
+      - path: Hanging_Spiral_RedYellow/Geometry
+        weight: 1
+      - path: Hanging_Spiral_RedYellow/Geometry/Hanging_Detai_Long_2_Star_Cable_09
+        weight: 1
+      - path: Hanging_Spiral_RedYellow/Geometry/Hanging_Detai_Long_2_Star_Cable_010
+        weight: 1
+      - path: Hanging_Spiral_RedYellow/Geometry/Hanging_Detai_Long_2_Star_Cable_011
+        weight: 1
+      - path: Hanging_Spiral_RedYellow/Geometry/Hanging_Detai_Long_2_Star_Cable_012
+        weight: 1
+      - path: Hanging_Spiral_RedYellow/Geometry/Hanging_Detail_Spikes
+        weight: 1
+      - path: Hanging_Spiral_RedYellow/Geometry/Hanging_Detail_Spikes_Outer
+        weight: 1
+      - path: Hanging_Spiral_RedYellow/Geometry/Hanging_Detail_Tube_Outer
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 1
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

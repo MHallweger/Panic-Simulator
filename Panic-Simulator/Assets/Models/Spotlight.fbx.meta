@@ -1,0 +1,126 @@
+fileFormatVersion: 2
+guid: d8eaf29929182644fbe6d7fcea16beca
+ModelImporter:
+  serializedVersion: 16
+  fileIDToRecycleName:
+    100000: Arms
+    100002: Base
+    100004: Body
+    100006: Bulb_Glow
+    100008: //RootNode
+    100010: Light_Beam_Strip_A
+    100012: Light_Beam_Strip_A1
+    100014: Light_Beam_Strip_A2
+    100016: Light_Beam_Strip_A3
+    100018: Light_Cone
+    100020: group1
+    100022: Light_Beam_Strip_A4
+    100024: group3
+    100026: Light_Beams
+    100028: LightBeams
+    400000: Arms
+    400002: Base
+    400004: Body
+    400006: Bulb_Glow
+    400008: //RootNode
+    400010: Light_Beam_Strip_A
+    400012: Light_Beam_Strip_A1
+    400014: Light_Beam_Strip_A2
+    400016: Light_Beam_Strip_A3
+    400018: Light_Cone
+    400020: group1
+    400022: Light_Beam_Strip_A4
+    400024: group3
+    400026: Light_Beams
+    400028: LightBeams
+    2300000: Arms
+    2300002: Base
+    2300004: Body
+    2300006: Bulb_Glow
+    2300008: Light_Beam_Strip_A
+    2300010: Light_Beam_Strip_A1
+    2300012: Light_Beam_Strip_A2
+    2300014: Light_Beam_Strip_A3
+    2300016: Light_Cone
+    2300018: Light_Beam_Strip_A4
+    2300020: group3
+    2300022: Light_Beams
+    3300000: Arms
+    3300002: Base
+    3300004: Body
+    3300006: Bulb_Glow
+    3300008: Light_Beam_Strip_A
+    3300010: Light_Beam_Strip_A1
+    3300012: Light_Beam_Strip_A2
+    3300014: Light_Beam_Strip_A3
+    3300016: Light_Cone
+    3300018: Light_Beam_Strip_A4
+    3300020: group3
+    3300022: Light_Beams
+    4300000: Base
+    4300002: Arms
+    4300004: Body
+    4300006: Bulb_Glow
+    4300008: Light_Beam_Strip_A
+    4300010: Light_Beam_Strip_A1
+    4300012: Light_Beam_Strip_A2
+    4300014: Light_Beam_Strip_A3
+    4300016: Light_Cone
+    4300018: Light_Beam_Strip_A4
+    4300020: group3
+    4300022: Light_Beams
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 1
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 
