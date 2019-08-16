@@ -7,8 +7,8 @@ using UnityEngine;
 /// </summary>
 public class StageBackgroundChange : MonoBehaviour
 {
-    [SerializeField] private GameObject[] stageBackgrounds; // 4 different background Screens
-    [SerializeField] private float waitTime; // Time to wait between Background Screen change
+    [SerializeField] private GameObject[] stageBackgrounds = new GameObject[4]; // 4 different background Screens
+    [SerializeField] private float waitTime = 3f; // Time to wait between Background Screen change
 
     private void Start()
     {

@@ -2,7 +2,7 @@
 using Unity.Entities;
 using UnityEngine;
 
-public struct UnitSpawner : IComponentData
+public struct UnitSpawnerComponent : IComponentData
 {
     public int CountX;
     public int CountY;

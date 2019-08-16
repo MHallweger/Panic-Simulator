@@ -7,7 +7,7 @@ using Unity.Transforms;
 using Unity.Mathematics;
 using Unity.Burst;
 using Unity.Collections;
-using System.Collections;
+using TMPro;
 
 public class UIHandler : MonoBehaviour
 {
@@ -27,14 +27,20 @@ public class UIHandler : MonoBehaviour
     // Radial Menu UI
     public string title; // Label text
     public Action[] options;
+    [SerializeField] private TextMeshProUGUI fpsText;
+    private float deltaTime = 0.0f;
 
     // Camera
-    [SerializeField] private float zoomSpeed; // Speed Variable for zoom up/down feature
-    [SerializeField] private float cameraSpeed; // Speed Variable for camera movement
+    [SerializeField] private float zoomSpeed = 13.0f; // Speed Variable for zoom up/down feature
+    [SerializeField] private float cameraSpeed = 5.0f; // Speed Variable for camera movement
     private float lookSpeedH = 2f; // Variable for Camera rotation feature
     private float lookSpeedV = 2f; // Variable for Camera rotation feature
     private float yaw = 0f; // Variable for Camera rotation feature
     private float pitch = 0f; // Variable for Camera rotation feature
+
+    // FPS
+    private float ms = 0.0f;
+    private float fps = 0.0f;
     #endregion // Variables
 
     private void Start()
@@ -49,6 +55,8 @@ public class UIHandler : MonoBehaviour
     {
         HandleRadialMenuUI();
         HandleCamera();
+
+        ShowFPS();
     }
 
     private void HandleRadialMenuUI()
@@ -58,6 +66,14 @@ public class UIHandler : MonoBehaviour
             // Tell the canvas to spawn a menu
             RadialMenuSpawner.instance.SpawnMenu(this); // The buttons (slots) needs .this
         }
+    }
+
+    private void ShowFPS()
+    {
+        deltaTime += (Time.unscaledDeltaTime - deltaTime) * 0.1f;
+        ms = deltaTime * 1000.0f;
+        fps = 1.0f / deltaTime;
+        fpsText.text = "ms: " + ms + "    FPS: " + Mathf.Ceil(fps).ToString();
     }
 
     /// <summary>
@@ -90,7 +106,7 @@ public class UIHandler : MonoBehaviour
         if (Input.GetMouseButton(1))
         {
             yaw += lookSpeedH * Input.GetAxis("Mouse X");
-            pitch -= lookSpeedV * Input.GetAxis("Mouse Y");
+            pitch += lookSpeedV * Input.GetAxis("Mouse Y");
 
             transform.eulerAngles = new Vector3(pitch, yaw, 0f);
         }

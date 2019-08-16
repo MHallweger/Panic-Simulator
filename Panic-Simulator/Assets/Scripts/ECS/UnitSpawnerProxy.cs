@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
+using Unity.Mathematics;
 
 // Authoring
 [RequiresEntityConversion]
 public class UnitSpawnerProxy : MonoBehaviour, IDeclareReferencedPrefabs, IConvertGameObjectToEntity
 {
-    public GameObject Prefab; // Prefab created in MonoBehaviour
+    public GameObject Prefab; // Prefab created in MonoBehaviour (Human)
     public int CountX;
     public int CountY;
 
@@ -19,7 +20,7 @@ public class UnitSpawnerProxy : MonoBehaviour, IDeclareReferencedPrefabs, IConve
     // Lets you convert the editor data representation to the entity optimal runtime representation
     public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
     {
-        var spawnerData = new UnitSpawner
+        var spawnerData = new UnitSpawnerComponent
         {
             // The referenced prefab will be converted due to DeclareReferencedPrefabs.
             // So here we simply map the game object to an entity reference to that prefab.
@@ -27,6 +28,7 @@ public class UnitSpawnerProxy : MonoBehaviour, IDeclareReferencedPrefabs, IConve
             CountX = CountX,
             CountY = CountY
         };
-        dstManager.AddComponentData(entity, spawnerData);
+
+        dstManager.AddComponentData(entity, spawnerData); // SYNC POINT //
     }
 }

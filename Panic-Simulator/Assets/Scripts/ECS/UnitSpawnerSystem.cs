@@ -26,66 +26,52 @@ public class UnitSpawnerSystem : JobComponentSystem
         m_EntityCommandBufferSystem = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem>();
     }
 
-    struct SpawnJob : IJobForEachWithEntity<UnitSpawner, LocalToWorld> // Cannot use the EntityManager in a c# Job -> Reason for using IJobForEachWithEntity
+    struct SpawnJob : IJobForEachWithEntity<UnitSpawnerComponent, LocalToWorld> // Cannot use the EntityManager in a c# Job (UnitSpawner is needed) -> Reason for using IJobForEachWithEntity
     {
         public EntityCommandBuffer CommandBuffer;
+        [ReadOnly] public uint BaseSeed;
 
-        public void Execute(Entity entity, int index, [ReadOnly] ref UnitSpawner spawner,
-            [ReadOnly] ref LocalToWorld location)
+        public void Execute(Entity entity, int index, [ReadOnly] ref UnitSpawnerComponent spawner, [ReadOnly] ref LocalToWorld location)
         {
-            for (int x = 0; x < spawner.CountX; x++)
+            var seed = (uint) (BaseSeed + index); // For Unity.Mathematics.Random --Slightly useless here because there is only one entity which calls this Execute()
+            var rnd = new Random(seed); // Random Object for accessing rnd.NextFloat()
+
+            for (int i = 0; i < 50000; i++)
             {
-                for (int y = 0; y < spawner.CountY; y++)
-                {
-                    var instance = CommandBuffer.Instantiate(spawner.Prefab);
+                var instance = CommandBuffer.Instantiate(spawner.Prefab);
 
-                    var position = math.transform(location.Value,
-                        new float3(x * 2, 0, y * 2));
+                // LocalToWorld (float4x4) represents the transform from local space (float3) to world space
+                // returns the result of transforming a float3 point by a float4x4 matrix.
+                var randomPosition = math.transform(location.Value, new float3(rnd.NextFloat(134.838f, 215.446f), 0.5f, rnd.NextFloat(367.907f, 506.695f)));
 
-                    //TODO: Eventually switch to the new Unity.Physics AABB 
-                    //var aabb = new AABB
-                    //{
-                    //    //0.5f will represent halfwidth for now
-                    //    max = position + 0.5f,
-                    //    min = position - 0.5f,
-
-                    //};
-
-
-
-
-                    CommandBuffer.SetComponent(instance, new Translation { Value = position });
-
-                    //Weirdly have to do it in code now
-                    //CommandBuffer.AddComponent(instance, aabb);
-                    //CommandBuffer.AddComponent(instance, new PlayerInput());
-                    //CommandBuffer.AddComponent(instance, new UnitNavAgent());
-
-
-                }
+                CommandBuffer.SetComponent(instance, new Translation { Value = randomPosition });
             }
             // Destory spawner, so the system only runs once
             CommandBuffer.DestroyEntity(entity);
         }
     }
 
+    uint Seed = (uint) UnityEngine.Random.Range(1, 100); // prevent to run 1 times per frame in OnUpdate
+    /// <summary>
+    /// Runs on main thread, 1 times per frame
+    /// </summary>
+    /// <param name="inputDeps"></param>
+    /// <returns></returns>
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
         //Instead of performing structural changes directly, a Job can add a command to an EntityCommandBuffer to perform such changes on the main thread after the Job has finished.
         //Command buffers allow you to perform any, potentially costly, calculations on a worker thread, while queuing up the actual insertions and deletions for later.
-
         // Schedule the job that will add Instantiate commands to the EntityCommandBuffer.
         var job = new SpawnJob
         {
-            CommandBuffer = m_EntityCommandBufferSystem.CreateCommandBuffer()
+            CommandBuffer = m_EntityCommandBufferSystem.CreateCommandBuffer(),
+            BaseSeed = Seed
         }.ScheduleSingle(this, inputDeps);
-
 
         // SpawnJob runs in parallel with no sync point until the barrier system executes.
         // When the barrier system executes we want to complete the SpawnJob and then play back the commands (Creating the entities and placing them).
         // We need to tell the barrier system which job it needs to complete before it can play back the commands.
         m_EntityCommandBufferSystem.AddJobHandleForProducer(job);
-
         return job;
     }
 }
