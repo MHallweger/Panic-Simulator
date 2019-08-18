@@ -36,7 +36,7 @@ public class UnitSpawnerSystem : JobComponentSystem
             var seed = (uint) (BaseSeed + index); // For Unity.Mathematics.Random --Slightly useless here because there is only one entity which calls this Execute()
             var rnd = new Random(seed); // Random Object for accessing rnd.NextFloat()
 
-            for (int i = 0; i < 50000; i++)
+            for (int i = 0; i < 20000; i++)
             {
                 var instance = CommandBuffer.Instantiate(spawner.Prefab);
 
