@@ -5,11 +5,12 @@ using UnityEngine;
 using Unity.Rendering;
 using Unity.Mathematics;
 
-public class testing : MonoBehaviour
+public class Bootstrap : MonoBehaviour
 {
     #region Variables
     [SerializeField] private Mesh mesh;
     [SerializeField] private Material material;
+    [SerializeField] private int amountToSpawn;
     #endregion // Variables
     private void Start()
     {
@@ -18,11 +19,10 @@ public class testing : MonoBehaviour
         EntityArchetype entityArchetype = entityManager.CreateArchetype(
             typeof(Translation),
             typeof(RenderMesh),
-            typeof(LocalToWorld),
-            typeof(MoveSpeedComponent)
+            typeof(LocalToWorld)
             );
 
-        NativeArray<Entity> entityArray = new NativeArray<Entity>(50000, Allocator.Temp);
+        NativeArray<Entity> entityArray = new NativeArray<Entity>(amountToSpawn, Allocator.Temp);
 
         entityManager.CreateEntity(entityArchetype, entityArray);
 
@@ -31,13 +31,8 @@ public class testing : MonoBehaviour
             Entity entity = entityArray[i];
             entityManager.SetComponentData(entity, new Translation
             {
-                Value = new float3(UnityEngine.Random.Range(1000f, 1300f), UnityEngine.Random.Range(10f, 15f), UnityEngine.Random.Range(1000f, 1300f))
-            });
-
-            entityManager.SetComponentData(entity, new MoveSpeedComponent
-            {
-                speed = UnityEngine.Random.Range(2f, 4f)
-            });
+                Value = new float3(UnityEngine.Random.Range(134.838f, 215.446f), 0.5f, UnityEngine.Random.Range(367.907f, 506.695f))
+        });
 
             entityManager.SetSharedComponentData(entity, new RenderMesh
             {

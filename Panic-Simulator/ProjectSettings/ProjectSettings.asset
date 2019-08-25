@@ -563,7 +563,7 @@ PlayerSettings:
   platformArchitecture: {}
   scriptingBackend:
     PS4: 1
-    Standalone: 1
+    Standalone: 0
     XboxOne: 1
   il2cppCompilerConfiguration: {}
   managedStrippingLevel: {}
