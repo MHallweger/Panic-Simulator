@@ -53,6 +53,7 @@ public class UnitSpawnerSystem : JobComponentSystem
                     // Adding Components to every single Entity
                     CommandBuffer.AddComponent(index, instance, new MoveSpeedComponent { moveSpeed = rnd.NextFloat(3.0f, 6.0f), runningSpeed = rnd.NextFloat(6.0f, 10.0f) });
                     CommandBuffer.AddComponent(index, instance, new AgentComponent { hasTarget = false, target = randomPosition , agentStatus = AgentStatus.Idle});
+                    CommandBuffer.AddComponent(index, instance, new BorderComponent { frontRight_x = 134.838f, frontLeft_x = 215.446f, frontLeftRight_z = 367.907f, backLeftRight_z = 506.695f });
                 }
             }
             // Destory spawner, so the system only runs once

@@ -14,6 +14,7 @@ public enum AgentStatus
 public struct AgentComponent : IComponentData
 {
     public bool hasTarget; // Which agent has a target?
+    public bool jumped; // For checking if the agent jumped up from the ground
     public float3 target; // The actual target
     public AgentStatus agentStatus; // The actual status of the agent
 }

@@ -18,13 +18,14 @@ public class CalculateNewRandomPositionSystem : JobComponentSystem
         public float3 newRandomPosition;
     }
 
-    [BurstCompile]
-    struct CalculateNewRandomPositionJob : IJobForEachWithEntity<Translation, AgentComponent, LocalToWorld>
+    //[BurstCompile]
+    struct CalculateNewRandomPositionJob : IJobForEachWithEntity<Translation, AgentComponent, BorderComponent>
     {
         [DeallocateOnJobCompletion]
         [ReadOnly] public NativeArray<EntityWithRandomPositions> randomAgentPositionsArray; // Array with EntityWithRandomPositions Strcut values. They include the specified entity + newPosition
 
-        public void Execute(Entity entity, int index, ref Translation translation, ref AgentComponent agentComponent, ref LocalToWorld localToWorld)
+        public float dice;
+        public void Execute(Entity entity, int index, ref Translation translation, ref AgentComponent agentComponent, [ReadOnly] ref BorderComponent borderComponent)
         {
             if (!agentComponent.hasTarget) // Agent dont have a target
             {
@@ -34,10 +35,35 @@ public class CalculateNewRandomPositionSystem : JobComponentSystem
 
                     if (agent == entity) // Check if its the same agent
                     {
-                        // Set values like target and agentStatus
-                        agentComponent.target = randomAgentPositionsArray[i].newRandomPosition;
-                        agentComponent.agentStatus = AgentStatus.Moving;
-                        agentComponent.hasTarget = true;
+                        if (dice % 2 == 0 && dice >= 45f && dice <= 65)
+                        {
+                            // Looking to stage:
+                            // Front-Right.x: 134.838f ; Front-Left.x: 215.446f ; Front-Left/Right.z: 367.907f ; Back-Left/Right.z: 506.695
+                            if (!(randomAgentPositionsArray[i].newRandomPosition.x < borderComponent.frontRight_x
+                                || randomAgentPositionsArray[i].newRandomPosition.x > borderComponent.frontLeft_x
+                                || randomAgentPositionsArray[i].newRandomPosition.z < borderComponent.frontLeftRight_z
+                                || randomAgentPositionsArray[i].newRandomPosition.z > borderComponent.backLeftRight_z))
+                            {
+                                // If newRandomPosition is inside the festival area, move to this position
+                                // Set values like target and agentStatus
+                                agentComponent.target = randomAgentPositionsArray[i].newRandomPosition;
+                                agentComponent.agentStatus = AgentStatus.Moving;
+                                agentComponent.hasTarget = true;
+                            }
+                            else
+                            {
+                                // Else if newRandomPosition is outside the festival area, stay with AgentStatus.Idle
+                                agentComponent.target = translation.Value;
+                                agentComponent.agentStatus = AgentStatus.Idle;
+                                agentComponent.hasTarget = false;
+                            }
+                        }
+                        else
+                        {
+                            agentComponent.target = translation.Value;
+                            agentComponent.agentStatus = AgentStatus.Idle;
+                            agentComponent.hasTarget = false;
+                        }
                     }
                 }
             }
@@ -78,15 +104,16 @@ public class CalculateNewRandomPositionSystem : JobComponentSystem
         }
 
         // Schedule job for passing the newPosition to each entity
-        var findNearestPositionJob = new CalculateNewRandomPositionJob
+        var calculateNewRandomPositionjob = new CalculateNewRandomPositionJob
         {
             randomAgentPositionsArray = randomPositionsArray,
+            dice = UnityEngine.Random.Range(1, 1000)
         }.Schedule(this, inputDeps);
 
         // Disposing NativeArrays
         agentEntityArray.Dispose();
         agentTranslationArray.Dispose();
 
-        return findNearestPositionJob;
+        return calculateNewRandomPositionjob;
     }
 }

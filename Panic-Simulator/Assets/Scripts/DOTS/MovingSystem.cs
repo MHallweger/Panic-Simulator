@@ -17,7 +17,7 @@ public class MovingSystem : JobComponentSystem
 
         public void Execute(Entity entity, int index, ref Translation translation, ref AgentComponent agentComponent, [ReadOnly] ref MoveSpeedComponent moveSpeedComponent)
         {
-            if (agentComponent.hasTarget && agentComponent.agentStatus == AgentStatus.Moving) // Agent has the correct conditions?
+            if (agentComponent.hasTarget && agentComponent.agentStatus == AgentStatus.Moving && !(agentComponent.agentStatus == AgentStatus.Dancing)) // Agent has the correct conditions?
             {
                 // Calculations for checking conditions and calculating the new translation.value
                 float3 direction = math.normalize(agentComponent.target - translation.Value);
@@ -25,15 +25,22 @@ public class MovingSystem : JobComponentSystem
 
                 if (distance > .5f) // agent far away
                 {
-                    translation.Value += direction * moveSpeedComponent.moveSpeed * deltaTime; 
+                    translation.Value += direction * moveSpeedComponent.moveSpeed * deltaTime;
                 }
                 else if (distance < .5f) // closer/close
                 {
-                    agentComponent.hasTarget = false;
+                    agentComponent.hasTarget = false; // Triggers the CalculateNewRandomPositionSystem to set a new position to each agent
                     agentComponent.agentStatus = AgentStatus.Idle;
                 }
             }
+            else if (!agentComponent.hasTarget && agentComponent.agentStatus == AgentStatus.Idle)
+            {
+                translation.Value = agentComponent.target;
+            }
             // else: stay TODO
+
+            //agentComponent.hasTarget = false;
+            //agentComponent.agentStatus = AgentStatus.Dancing;
         }
     }
 
