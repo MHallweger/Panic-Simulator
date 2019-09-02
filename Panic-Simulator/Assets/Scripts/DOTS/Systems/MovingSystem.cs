@@ -30,17 +30,13 @@ public class MovingSystem : JobComponentSystem
                 else if (distance < .5f) // closer/close
                 {
                     agentComponent.hasTarget = false; // Triggers the CalculateNewRandomPositionSystem to set a new position to each agent
-                    agentComponent.agentStatus = AgentStatus.Idle;
+                    //agentComponent.agentStatus = AgentStatus.Idle;
                 }
             }
             else if (!agentComponent.hasTarget && agentComponent.agentStatus == AgentStatus.Idle)
             {
                 translation.Value = agentComponent.target;
             }
-            // else: stay TODO
-
-            //agentComponent.hasTarget = false;
-            //agentComponent.agentStatus = AgentStatus.Dancing;
         }
     }
 

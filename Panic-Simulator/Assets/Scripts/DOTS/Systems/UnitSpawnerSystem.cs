@@ -41,6 +41,7 @@ public class UnitSpawnerSystem : JobComponentSystem
 
                     // LocalToWorld (float4x4) represents the transform from local space (float3) to world space
                     // returns the result of transforming a float3 point by a float4x4 matrix.
+                    // Looking to stage:
                     // Front-Right.x: 134.838f ; Front-Left.x: 215.446f ; Front-Left/Right.z: 367.907f ; Back-Left/Right.z: 506.695
                     var randomPosition = /*math.transform(location.Value, */new float3(
                         rnd.NextFloat(borderComponent.frontRight_x, borderComponent.frontLeft_x),
@@ -48,12 +49,13 @@ public class UnitSpawnerSystem : JobComponentSystem
                         rnd.NextFloat(borderComponent.frontLeftRight_z, borderComponent.backLeftRight_z));
 
                     // Set values of already attached Components
-                    CommandBuffer.SetComponent(index, instance, new Translation { Value = randomPosition});
+                    CommandBuffer.SetComponent(index, instance, new Translation { Value = randomPosition });
 
                     // Adding Components to every single Entity
                     CommandBuffer.AddComponent(index, instance, new MoveSpeedComponent { moveSpeed = rnd.NextFloat(3.0f, 6.0f), runningSpeed = rnd.NextFloat(6.0f, 10.0f) });
-                    CommandBuffer.AddComponent(index, instance, new AgentComponent { hasTarget = false, target = randomPosition , agentStatus = AgentStatus.Idle});
+                    CommandBuffer.AddComponent(index, instance, new AgentComponent { hasTarget = false, target = randomPosition, agentStatus = AgentStatus.Idle });
                     CommandBuffer.AddComponent(index, instance, new BorderComponent { frontRight_x = 134.838f, frontLeft_x = 215.446f, frontLeftRight_z = 367.907f, backLeftRight_z = 506.695f });
+                    CommandBuffer.AddComponent(index, instance, new InputComponent { });
                 }
             }
             // Destory spawner, so the system only runs once

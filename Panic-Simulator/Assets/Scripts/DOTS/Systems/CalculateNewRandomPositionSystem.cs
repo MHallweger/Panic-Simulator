@@ -4,6 +4,7 @@ using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
+using Unity.Rendering;
 
 /// <summary>
 /// JobComponentSystem that runs on worker threads.
@@ -18,7 +19,7 @@ public class CalculateNewRandomPositionSystem : JobComponentSystem
         public float3 newRandomPosition;
     }
 
-    //[BurstCompile]
+    [BurstCompile]
     struct CalculateNewRandomPositionJob : IJobForEachWithEntity<Translation, AgentComponent, BorderComponent>
     {
         [DeallocateOnJobCompletion]
@@ -50,18 +51,27 @@ public class CalculateNewRandomPositionSystem : JobComponentSystem
                                 agentComponent.agentStatus = AgentStatus.Moving;
                                 agentComponent.hasTarget = true;
                             }
-                            else
+                            else 
                             {
                                 // Else if newRandomPosition is outside the festival area, stay with AgentStatus.Idle
+                                agentComponent.target = translation.Value;
+                                agentComponent.agentStatus = AgentStatus.Dancing;
+                                agentComponent.hasTarget = false;
+                            }
+                        }
+                        else if (dice % 2 == 0 && dice >= 430 && dice <= 450)
+                        {
+                            if (!agentComponent.jumped) // prevent from beeing idle when jumping, in der luft stehen bleiben
+                            {
                                 agentComponent.target = translation.Value;
                                 agentComponent.agentStatus = AgentStatus.Idle;
                                 agentComponent.hasTarget = false;
                             }
                         }
-                        else
+                        else if (dice % 2 == 0 && dice >= 630 && dice <= 650)
                         {
                             agentComponent.target = translation.Value;
-                            agentComponent.agentStatus = AgentStatus.Idle;
+                            agentComponent.agentStatus = AgentStatus.Dancing;
                             agentComponent.hasTarget = false;
                         }
                     }
@@ -80,7 +90,7 @@ public class CalculateNewRandomPositionSystem : JobComponentSystem
         // Create Query for array creation (next steps)
         EntityQuery agentQuery = GetEntityQuery(typeof(AgentComponent), ComponentType.ReadOnly<Translation>());
 
-        // Get all agents
+        // Get all agents (entitys)
         NativeArray<Entity> agentEntityArray = agentQuery.ToEntityArray(Allocator.TempJob);
 
         // Get all translation components of the agents
@@ -103,6 +113,9 @@ public class CalculateNewRandomPositionSystem : JobComponentSystem
             };
         }
 
+        //var test = EntityManager.GetSharedComponentData<RenderMesh>(agentEntityArray[0]);
+
+        //UnityEngine.Debug.Log(test.material);
         // Schedule job for passing the newPosition to each entity
         var calculateNewRandomPositionjob = new CalculateNewRandomPositionJob
         {

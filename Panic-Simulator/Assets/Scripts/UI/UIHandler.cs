@@ -1,12 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Linq;
-using Unity.Entities;
-using Unity.Transforms;
-using Unity.Mathematics;
-using Unity.Burst;
-using Unity.Collections;
+﻿using UnityEngine;
+
 using TMPro;
 
 public class UIHandler : MonoBehaviour
@@ -38,9 +31,13 @@ public class UIHandler : MonoBehaviour
     private float yaw = 0f; // Variable for Camera rotation feature
     private float pitch = 0f; // Variable for Camera rotation feature
 
-    // FPS
+    // FPS/ms/Entity/exits amount
     private float ms = 0.0f;
     private float fps = 0.0f;
+    [SerializeField] private GameObject crowdObject;
+    private int entityAmount;
+    private int exitsAmount;
+
     #endregion // Variables
 
     private void Start()
@@ -49,6 +46,9 @@ public class UIHandler : MonoBehaviour
         {
             title = gameObject.name;
         }
+
+        // Get Entity amount
+        entityAmount = crowdObject.GetComponent<UnitSpawnerProxy>().CountX * crowdObject.GetComponent<UnitSpawnerProxy>().CountY;
     }
 
     void Update()
@@ -73,7 +73,7 @@ public class UIHandler : MonoBehaviour
         deltaTime += (Time.unscaledDeltaTime - deltaTime) * 0.1f;
         ms = deltaTime * 1000.0f;
         fps = 1.0f / deltaTime;
-        fpsText.text = "ms: " + ms + "    FPS: " + Mathf.Ceil(fps).ToString();
+        fpsText.text = "ms: " + ms + "    FPS: " + Mathf.Ceil(fps).ToString() + "\n" + "Entitys: " + entityAmount + "    Exits: " + exitsAmount;
     }
 
     /// <summary>

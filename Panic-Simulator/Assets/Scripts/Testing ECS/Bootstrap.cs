@@ -32,7 +32,7 @@ public class Bootstrap : MonoBehaviour
             entityManager.SetComponentData(entity, new Translation
             {
                 Value = new float3(UnityEngine.Random.Range(134.838f, 215.446f), 0.5f, UnityEngine.Random.Range(367.907f, 506.695f))
-        });
+            });
 
             entityManager.SetSharedComponentData(entity, new RenderMesh
             {

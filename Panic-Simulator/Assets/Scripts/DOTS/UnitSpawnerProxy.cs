@@ -11,12 +11,14 @@ public class UnitSpawnerProxy : MonoBehaviour, IDeclareReferencedPrefabs, IConve
 {
     // MonoBehaviour Variables
     [SerializeField] private GameObject Prefab;
-    [SerializeField] private int CountX;
-    [SerializeField] private int CountY;
+    [SerializeField] public int CountX;
+    [SerializeField] public int CountY;
     [SerializeField] private float frontRight_x;
     [SerializeField] private float frontLeft_x;
     [SerializeField] private float frontLeftRight_z;
     [SerializeField] private float backLeftRight_z;
+
+    public Color material;
 
     // Referenced prefabs have to be declared so that the conversion system knows about them ahead of time
     public void DeclareReferencedPrefabs(List<GameObject> gameObjects)
@@ -44,7 +46,7 @@ public class UnitSpawnerProxy : MonoBehaviour, IDeclareReferencedPrefabs, IConve
             backLeftRight_z = backLeftRight_z //506.695f
         };
 
-        dstManager.AddComponentData(entity, spawnerData); // SYNC POINT //
-        dstManager.AddComponentData(entity, borderData); // SYNC POINT //
+        dstManager.AddComponentData(entity, spawnerData); // SYNC POINT // Just for the Entity Manager
+        dstManager.AddComponentData(entity, borderData); // SYNC POINT // Just for the Entity Manager
     }
 }
