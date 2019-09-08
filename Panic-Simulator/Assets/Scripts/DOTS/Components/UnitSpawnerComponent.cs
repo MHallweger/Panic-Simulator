@@ -4,9 +4,7 @@
 /// </summary>
 public struct UnitSpawnerComponent : IComponentData
 {
-    // Two variables for instantiating copys of the prefab entity 
-    public int CountX;
-    public int CountY;
+    public int AmountToSpawn; // Amount to spawn
 
     public Entity Prefab; // Gameobject/Prefab -> converted into Entity -> accessed and copyed
 }

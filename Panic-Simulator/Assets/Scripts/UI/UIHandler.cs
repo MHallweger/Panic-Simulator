@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
-
 using TMPro;
-
 public class UIHandler : MonoBehaviour
 {
     #region Radial Menu UI
@@ -38,6 +36,10 @@ public class UIHandler : MonoBehaviour
     private int entityAmount;
     private int exitsAmount;
 
+    // Information/Statistic Windows
+    [SerializeField] private GameObject informationWindowPanel;
+    [SerializeField] private GameObject statisticWindowPanel;
+
     #endregion // Variables
 
     private void Start()
@@ -48,7 +50,7 @@ public class UIHandler : MonoBehaviour
         }
 
         // Get Entity amount
-        entityAmount = crowdObject.GetComponent<UnitSpawnerProxy>().CountX * crowdObject.GetComponent<UnitSpawnerProxy>().CountY;
+        entityAmount = crowdObject.GetComponent<UnitSpawnerProxy>().AmountToSpawn;
     }
 
     void Update()
@@ -57,6 +59,8 @@ public class UIHandler : MonoBehaviour
         HandleCamera();
 
         ShowFPS();
+
+        WindowCheck();
     }
 
     private void HandleRadialMenuUI()
@@ -113,5 +117,36 @@ public class UIHandler : MonoBehaviour
 
         //Zoom up and down with mouse wheel [DONE]
         transform.Translate(0, Input.GetAxis("Mouse ScrollWheel") * zoomSpeed, 0, Space.Self);
+    }
+
+    private void WindowCheck()
+    {
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            if (informationWindowPanel.activeInHierarchy)
+            {
+                // Information Window is enabled
+                informationWindowPanel.SetActive(false);
+            }
+            else
+            {
+                // Information Window is disabled
+                informationWindowPanel.SetActive(true);
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            if (statisticWindowPanel.activeInHierarchy)
+            {
+                // Information Window is enabled
+                statisticWindowPanel.SetActive(false);
+            }
+            else
+            {
+                // Information Window is disabled
+                statisticWindowPanel.SetActive(true);
+            }
+        }
     }
 }

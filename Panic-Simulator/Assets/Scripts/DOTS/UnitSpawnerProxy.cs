@@ -11,14 +11,11 @@ public class UnitSpawnerProxy : MonoBehaviour, IDeclareReferencedPrefabs, IConve
 {
     // MonoBehaviour Variables
     [SerializeField] private GameObject Prefab;
-    [SerializeField] public int CountX;
-    [SerializeField] public int CountY;
-    [SerializeField] private float frontRight_x;
-    [SerializeField] private float frontLeft_x;
-    [SerializeField] private float frontLeftRight_z;
-    [SerializeField] private float backLeftRight_z;
-
-    public Color material;
+    [SerializeField] public int AmountToSpawn;
+    [SerializeField] private GameObject frontRight;
+    [SerializeField] private GameObject frontLeft;
+    [SerializeField] private GameObject backRight;
+    [SerializeField] private GameObject backLeft;
 
     // Referenced prefabs have to be declared so that the conversion system knows about them ahead of time
     public void DeclareReferencedPrefabs(List<GameObject> gameObjects)
@@ -34,19 +31,23 @@ public class UnitSpawnerProxy : MonoBehaviour, IDeclareReferencedPrefabs, IConve
             // The referenced prefab will be converted due to DeclareReferencedPrefabs
             // Mapping the game object to an entity reference
             Prefab = conversionSystem.GetPrimaryEntity(Prefab),
-            CountX = CountX,
-            CountY = CountY
+            AmountToSpawn = AmountToSpawn
         };
 
         var borderData = new BorderComponent
         {
-            frontRight_x = frontRight_x, //134.838f,
-            frontLeft_x = frontLeft_x, //215.446f,
-            frontLeftRight_z = frontLeftRight_z, //367.907f,
-            backLeftRight_z = backLeftRight_z //506.695f
+            frontRight = new Vector3(frontRight.transform.position.x, frontRight.transform.position.y, frontRight.transform.position.z),
+            frontLeft = new Vector3(frontLeft.transform.position.x, frontLeft.transform.position.y, frontLeft.transform.position.z),
+            backRight = new Vector3(backRight.transform.position.x, backRight.transform.position.y, backRight.transform.position.z),
+            backLeft = new Vector3(backLeft.transform.position.x, backLeft.transform.position.y, backLeft.transform.position.z)
+        };
+
+        var inputData = new InputComponent
+        {
         };
 
         dstManager.AddComponentData(entity, spawnerData); // SYNC POINT // Just for the Entity Manager
         dstManager.AddComponentData(entity, borderData); // SYNC POINT // Just for the Entity Manager
+        dstManager.AddComponentData(entity, inputData); // SYNC POINT // Just for the Entity Manager
     }
 }

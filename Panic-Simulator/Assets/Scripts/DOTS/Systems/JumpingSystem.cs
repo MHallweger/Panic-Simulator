@@ -26,18 +26,6 @@ public class JumpingSystem : JobComponentSystem
             {
                 agentComponent.jumped = false;
             }
-
-            //if (translation.Value.y <= 0.5f)
-            //{
-            //    agentComponent.jumped = false;
-            //    agentComponent.hasTarget = false;
-            //}
-
-            //if (!agentComponent.jumped) // Agent dont have a target, actual AgentStatus is Dancing
-            //{
-            //    physicsVelocity.Linear.y = 3f;
-            //    agentComponent.jumped = true;
-            //}
         }
     }
 
@@ -50,7 +38,7 @@ public class JumpingSystem : JobComponentSystem
     {
         // Schedule moveJob
         var jumpingJob = new JumpingJob
-        {           
+        {
         }.Schedule(this, inputDeps);
 
         return jumpingJob;
