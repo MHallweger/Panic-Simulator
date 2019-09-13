@@ -9,8 +9,8 @@ public class ItemClickHandler : MonoBehaviour
     #region Variables
     [SerializeField] private KeyCode key;
     [SerializeField] private Button button;
-    [SerializeField] private GameObject barrierLeftWithPivot;
-    [SerializeField] private GameObject barrierRightWithPivot;
+    [SerializeField] private GameObject barrierLeftWithPivot; // hier
+    [SerializeField] private GameObject barrierRightWithPivot; // hier
     [SerializeField] private float rotationSpeed;
 
     [SerializeField] private GameObject[] additionalBarriersLeft; // Contains 4 additional Barriers on the left side
@@ -21,8 +21,22 @@ public class ItemClickHandler : MonoBehaviour
 
     [SerializeField] private GameObject[] additionalSpawnObjectsLeft; // Additional spawn places that can be used to increase the spawn area from the festival
     [SerializeField] private GameObject[] additionalSpawnObjectsRight; // Additional spawn places that can be used to increase the spawn area from the festival
+
+    // Effects
+    [SerializeField] private GameObject trussLights; // The GameObject that holds all lights on the stage
+    [SerializeField] private GameObject smoke; // The smoke GameObject
+    [SerializeField] private GameObject displays; // The GameObject that holds all displays
+    [SerializeField] private GameObject background; // The Background GameObject
+
     private static int increaseCounter = 0;
+    private int increaseAmount = 0;
+    [SerializeField] private GameObject crowdObject;
     #endregion // Variables
+
+    private void Start()
+    {
+        increaseAmount = crowdObject.GetComponent<UnitSpawnerProxy>().AmountToSpawn;
+    }
 
     /// <summary>
     /// Looks for key input and react on it. -> Change color and rotate barriers.
@@ -39,6 +53,7 @@ public class ItemClickHandler : MonoBehaviour
             FadeToColor(button.colors.normalColor);
         }
 
+
         if (Input.GetKey(KeyCode.Alpha3))
         {
             // For holding the button down
@@ -48,6 +63,29 @@ public class ItemClickHandler : MonoBehaviour
         else if (Input.GetKey(KeyCode.Alpha4))
         {
             OnButtonHoldingDownRotateIn();
+        }
+        else if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            UIHandler.instance.mode = "-";
+            Actions.instance.convertBarriers = false;
+            Actions.instance.fallingTruss = false;
+            Actions.instance.groundExplosion = false;
+        }
+        else if (Input.GetKeyDown(KeyCode.O))
+        {
+            EnableOrDisableLODFunction();
+        }
+        else if (Input.GetKeyDown(KeyCode.N))
+        {
+            EnableOrDisableNightMode(); // TODO implement
+        }
+        else if (Input.GetKeyDown(KeyCode.C))
+        {
+            EnableOrDisableOrbitCamera(); // TODO implement
+        }
+        else if (Input.GetKeyDown(KeyCode.L))
+        {
+            EnableOrDisableEffects();
         }
     }
 
@@ -67,14 +105,30 @@ public class ItemClickHandler : MonoBehaviour
     /// <param name="slotNumber"></param>
     public void OnButtonClicked(int slotNumber)
     {
-        if (slotNumber == 4) // Inspector Index is 3 for slot 4
+        switch (slotNumber)
         {
-            // Key 4 was pressed
-            AddNewSideBarrier();
-        }
-        else if (slotNumber == 5) // Inspector Index is 4 for slot 5
-        {
-            RemoveNewSideBarrier();
+            case 0:
+                // Inspector Index is 0 for slot 1
+                // Key 1 was pressed
+                Camera.main.GetComponent<UIHandler>().entityAmount += increaseAmount;
+                break;
+            case 1:
+                // Inspector Index is 1 for slot 2
+                // Key 2 was pressed
+                Camera.main.GetComponent<UIHandler>().entityAmount = 0;
+                break;
+            case 4:
+                // Inspector Index is 4 for slot 5
+                // Key 5 was pressed
+                AddNewSideBarrier();
+                break;
+            case 5:
+                // Inspector Index is 5 for slot 6
+                // Key 6 was pressed
+                RemoveNewSideBarrier();
+                break;
+            default:
+                break;
         }
     }
 
@@ -144,6 +198,94 @@ public class ItemClickHandler : MonoBehaviour
 
             increaseCounter--;
 
+        }
+    }
+
+    private void EnableOrDisableLODFunction()
+    {
+        LODGroup[] lodsLeft = barrierLeftWithPivot.GetComponentsInChildren<LODGroup>();
+        LODGroup[] lodsRight = barrierRightWithPivot.GetComponentsInChildren<LODGroup>();
+
+        foreach (LODGroup lodGroup in lodsLeft)
+        {
+            if (lodGroup.enabled)
+            {
+                lodGroup.enabled = false;
+            }
+            else
+            {
+                lodGroup.enabled = true;
+            }
+        }
+
+        foreach (LODGroup lodGroup in lodsRight)
+        {
+            if (lodGroup.enabled)
+            {
+                lodGroup.enabled = false;
+            }
+            else
+            {
+                lodGroup.enabled = true;
+            }
+        }
+    }
+
+    private void EnableOrDisableNightMode()
+    {
+        // TODO: implementing Disable or enable night mode function
+        // Dark atmosphere etc.
+    }
+
+    private void EnableOrDisableOrbitCamera()
+    {
+        // TODO: implement Disable or enable Orbit Camera function.
+        // Camera flying to different (random?) positions.
+        // Showing different things
+    }
+
+    private void EnableOrDisableEffects()
+    {
+        // TODO: implement disable or enable lights/smoke/effects function.
+        // This function turns on/off all effects.
+        // Truss Lights
+        if (trussLights.activeInHierarchy)
+        {
+            trussLights.SetActive(false);
+        }
+        else
+        {
+            trussLights.SetActive(true);
+        }
+
+        // Smoke
+        if (smoke.activeInHierarchy)
+        {
+            trussLights.SetActive(false);
+        }
+        else
+        {
+            smoke.SetActive(true);
+        }
+
+        // Displays
+        if (displays.activeInHierarchy)
+        {
+            trussLights.SetActive(false);
+        }
+        else
+        {
+            displays.SetActive(true);
+        }
+
+        // Background
+        if (background.activeInHierarchy)
+        {
+            trussLights.SetActive(false);
+        }
+        else
+        {
+            background.SetActive(true);
         }
     }
 }

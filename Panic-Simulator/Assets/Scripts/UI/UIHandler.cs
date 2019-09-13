@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using TMPro;
+using Unity.Entities;
 public class UIHandler : MonoBehaviour
 {
     #region Radial Menu UI
@@ -18,7 +19,7 @@ public class UIHandler : MonoBehaviour
     // Radial Menu UI
     public string title; // Label text
     public Action[] options;
-    [SerializeField] private TextMeshProUGUI fpsText;
+    [SerializeField] private TextMeshProUGUI infoText;
     private float deltaTime = 0.0f;
 
     // Camera
@@ -32,15 +33,22 @@ public class UIHandler : MonoBehaviour
     // FPS/ms/Entity/exits amount
     private float ms = 0.0f;
     private float fps = 0.0f;
-    [SerializeField] private GameObject crowdObject;
-    private int entityAmount;
-    private int exitsAmount;
+    [HideInInspector] public int entityAmount;
+    [HideInInspector] public int exitsAmount;
 
     // Information/Statistic Windows
     [SerializeField] private GameObject informationWindowPanel;
     [SerializeField] private GameObject statisticWindowPanel;
 
+    public static UIHandler instance;
+    public string mode = "-";
+
     #endregion // Variables
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     private void Start()
     {
@@ -48,9 +56,9 @@ public class UIHandler : MonoBehaviour
         {
             title = gameObject.name;
         }
-
         // Get Entity amount
-        entityAmount = crowdObject.GetComponent<UnitSpawnerProxy>().AmountToSpawn;
+
+
     }
 
     void Update()
@@ -58,6 +66,7 @@ public class UIHandler : MonoBehaviour
         HandleRadialMenuUI();
         HandleCamera();
 
+        CalculateEntityAmount();
         ShowFPS();
 
         WindowCheck();
@@ -77,7 +86,7 @@ public class UIHandler : MonoBehaviour
         deltaTime += (Time.unscaledDeltaTime - deltaTime) * 0.1f;
         ms = deltaTime * 1000.0f;
         fps = 1.0f / deltaTime;
-        fpsText.text = "ms: " + ms + "    FPS: " + Mathf.Ceil(fps).ToString() + "\n" + "Entitys: " + entityAmount + "    Exits: " + exitsAmount;
+        infoText.text = "ms: " + ms + "    FPS: " + Mathf.Ceil(fps).ToString() + "\n" + "Entitys: " + entityAmount + "    Exits: " + exitsAmount + "\n" + "Mode: " + mode;
     }
 
     /// <summary>
@@ -148,5 +157,11 @@ public class UIHandler : MonoBehaviour
                 statisticWindowPanel.SetActive(true);
             }
         }
+    }
+
+    private void CalculateEntityAmount()
+    {
+        // Variant for getting all entitys
+        //entityAmount = World.Active.EntityManager.GetAllEntities(Unity.Collections.Allocator.Temp).Length;
     }
 }

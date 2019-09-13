@@ -58,7 +58,9 @@ public class CalculateNewRandomPositionSystem : JobComponentSystem
                             bool s_de = (e.x - d.x) * as_z_ii - (e.z - d.z) * as_x_ii > 0; // Front.Right to Back.Right
 
                             if ((f.x - d.x) * as_z_ii - (d.z - d.z) * as_x_ii > 0 == s_de && (c.x - a.x) * as_z_i - (a.z - a.z) * as_x_i > 0 == s_ab
-                                && randomAgentPositionsArray[i].newRandomPosition.z >= _borderComponent.frontLeft.z)
+                                && randomAgentPositionsArray[i].newRandomPosition.z >= _borderComponent.frontLeft.z
+                                && randomAgentPositionsArray[i].newRandomPosition.x <= _borderComponent.backLeft.x
+                                && randomAgentPositionsArray[i].newRandomPosition.x >= _borderComponent.backRight.x)
                             {
                                 // If newRandomPosition is inside the festival area, move to this position
                                 // Set values like target and agentStatus
@@ -68,7 +70,9 @@ public class CalculateNewRandomPositionSystem : JobComponentSystem
                             }
                             else if ((f.x - e.x) * (randomAgentPositionsArray[i].newRandomPosition.z - e.z) - (d.z - e.z) * (randomAgentPositionsArray[i].newRandomPosition.x - e.x) > 0 != s_de
                                 && (c.x - b.x) * (randomAgentPositionsArray[i].newRandomPosition.z - b.z) - (a.z - b.z) * (randomAgentPositionsArray[i].newRandomPosition.x - b.x) > 0 != s_ab
-                                && randomAgentPositionsArray[i].newRandomPosition.z >= _borderComponent.frontLeft.z)
+                                && randomAgentPositionsArray[i].newRandomPosition.z >= _borderComponent.frontLeft.z
+                                && randomAgentPositionsArray[i].newRandomPosition.x <= _borderComponent.backLeft.x
+                                && randomAgentPositionsArray[i].newRandomPosition.x >= _borderComponent.backRight.x)
                             {
                                 // If newRandomPosition is inside the festival area, move to this position
                                 // Set values like target and agentStatus
