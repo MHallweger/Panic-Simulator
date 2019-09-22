@@ -2,9 +2,8 @@
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
-using Unity.Mathematics;
 using Unity.Transforms;
-using Unity.Rendering;
+using Unity.Mathematics;
 
 /// <summary>
 /// JobComponentSystem that runs on worker threads.
@@ -12,6 +11,16 @@ using Unity.Rendering;
 /// </summary>
 public class CalculateNewRandomPositionSystem : JobComponentSystem
 {
+    EndSimulationEntityCommandBufferSystem m_EntityCommandBufferSystem; // For creating the commandBuffer
+
+    /// <summary>
+    /// Initialize The EndSimulationEntityCommandBufferSystem commandBufferSystem.
+    /// </summary>
+    protected override void OnCreate()
+    {
+        m_EntityCommandBufferSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+    }
+
     // Struct for storing the entity and a new random position
     private struct EntityWithRandomPositions
     {
@@ -20,94 +29,79 @@ public class CalculateNewRandomPositionSystem : JobComponentSystem
     }
 
     [BurstCompile]
-    struct CalculateNewRandomPositionJob : IJobForEachWithEntity<Translation, AgentComponent, BorderComponent>
+    struct CalculateNewRandomPositionBurstJob : IJobForEachWithEntity<Translation, AgentComponent, BorderComponent>
     {
+        [NativeDisableParallelForRestriction]
         [DeallocateOnJobCompletion]
-        [ReadOnly] public NativeArray<EntityWithRandomPositions> randomAgentPositionsArray; // Array with EntityWithRandomPositions Strcut values. They include the specified entity + newPosition
+        public NativeArray<Random> RandomGenerator;
 
-        public float dice;
-        public void Execute(Entity entity, int index, ref Translation _translation, ref AgentComponent _agentComponent, [ReadOnly] ref BorderComponent _borderComponent)
+        [Unity.Collections.LowLevel.Unsafe.NativeSetThreadIndex]
+        private int threadIndex;
+
+        public void Execute(Entity entity, int index, ref Translation _translation, ref AgentComponent _agentComponent, ref BorderComponent _borderComponent)
         {
-            if (!_agentComponent.hasTarget) // Agent dont have a target
+            if (!_agentComponent.hasTarget && _agentComponent.agentStatus == AgentStatus.Moving)
             {
-                for (int i = 0; i < randomAgentPositionsArray.Length; i++)
+                var rnd = RandomGenerator[threadIndex - 1];
+                var calculatedRandomPosition = new float3(
+                    rnd.NextFloat((_translation.Value.x - 3f), (_translation.Value.x + 3f)),
+                    .5f,
+                    rnd.NextFloat((_translation.Value.z - 3f), (_translation.Value.z + 3f)));
+
+                RandomGenerator[threadIndex - 1] = rnd; //This is necessary to update the state of the element inside the array.
+
+                float3 a = _borderComponent.frontLeft;
+                float3 b = _borderComponent.backLeft;
+                float3 c = _borderComponent.backLeft;
+
+                float3 d = _borderComponent.frontRight;
+                float3 e = _borderComponent.backRight;
+                float3 f = _borderComponent.backRight;
+
+                // Left Triangle
+                float as_x_i = calculatedRandomPosition.x - a.x;
+                float as_z_i = calculatedRandomPosition.z - a.z;
+
+                // Right Triangle
+                float as_x_ii = calculatedRandomPosition.x - d.x;
+                float as_z_ii = calculatedRandomPosition.z - d.z;
+
+                bool s_ab = (b.x - a.x) * as_z_i - (b.z - a.z) * as_x_i > 0; // Front.Left to Back.Left
+                bool s_de = (e.x - d.x) * as_z_ii - (e.z - d.z) * as_x_ii > 0; // Front.Right to Back.Right
+
+                if ((f.x - d.x) * as_z_ii - (d.z - d.z) * as_x_ii > 0 == s_de && (c.x - a.x) * as_z_i - (a.z - a.z) * as_x_i > 0 == s_ab
+                    && calculatedRandomPosition.z >= _borderComponent.frontLeft.z
+                    && calculatedRandomPosition.x <= _borderComponent.backLeft.x
+                    && calculatedRandomPosition.x >= _borderComponent.backRight.x)
                 {
-                    Entity agent = randomAgentPositionsArray[i].entity; // Get the Entity
-
-                    if (agent == entity) // Check if its the same agent
-                    {
-                        if (dice % 2 == 0 && dice >= 45f && dice <= 65)
-                        {
-                            float3 a = _borderComponent.frontLeft;
-                            float3 b = _borderComponent.backLeft;
-                            float3 c = _borderComponent.backLeft;
-
-                            float3 d = _borderComponent.frontRight;
-                            float3 e = _borderComponent.backRight;
-                            float3 f = _borderComponent.backRight;
-
-                            // Left Triangle
-                            float as_x_i = randomAgentPositionsArray[i].newRandomPosition.x - a.x;
-                            float as_z_i = randomAgentPositionsArray[i].newRandomPosition.z - a.z;
-
-                            // Right Triangle
-                            float as_x_ii = randomAgentPositionsArray[i].newRandomPosition.x - d.x;
-                            float as_z_ii = randomAgentPositionsArray[i].newRandomPosition.z - d.z;
-
-                            bool s_ab = (b.x - a.x) * as_z_i - (b.z - a.z) * as_x_i > 0; // Front.Left to Back.Left
-                            bool s_de = (e.x - d.x) * as_z_ii - (e.z - d.z) * as_x_ii > 0; // Front.Right to Back.Right
-
-                            if ((f.x - d.x) * as_z_ii - (d.z - d.z) * as_x_ii > 0 == s_de && (c.x - a.x) * as_z_i - (a.z - a.z) * as_x_i > 0 == s_ab
-                                && randomAgentPositionsArray[i].newRandomPosition.z >= _borderComponent.frontLeft.z
-                                && randomAgentPositionsArray[i].newRandomPosition.x <= _borderComponent.backLeft.x
-                                && randomAgentPositionsArray[i].newRandomPosition.x >= _borderComponent.backRight.x)
-                            {
-                                // If newRandomPosition is inside the festival area, move to this position
-                                // Set values like target and agentStatus
-                                _agentComponent.target = randomAgentPositionsArray[i].newRandomPosition;
-                                _agentComponent.agentStatus = AgentStatus.Moving;
-                                _agentComponent.hasTarget = true;
-                            }
-                            else if ((f.x - e.x) * (randomAgentPositionsArray[i].newRandomPosition.z - e.z) - (d.z - e.z) * (randomAgentPositionsArray[i].newRandomPosition.x - e.x) > 0 != s_de
-                                && (c.x - b.x) * (randomAgentPositionsArray[i].newRandomPosition.z - b.z) - (a.z - b.z) * (randomAgentPositionsArray[i].newRandomPosition.x - b.x) > 0 != s_ab
-                                && randomAgentPositionsArray[i].newRandomPosition.z >= _borderComponent.frontLeft.z
-                                && randomAgentPositionsArray[i].newRandomPosition.x <= _borderComponent.backLeft.x
-                                && randomAgentPositionsArray[i].newRandomPosition.x >= _borderComponent.backRight.x)
-                            {
-                                // If newRandomPosition is inside the festival area, move to this position
-                                // Set values like target and agentStatus
-                                _agentComponent.target = randomAgentPositionsArray[i].newRandomPosition;
-                                _agentComponent.agentStatus = AgentStatus.Moving;
-                                _agentComponent.hasTarget = true;
-                            }
-                            else
-                            {
-                                // Else if newRandomPosition is outside the festival area, stay with AgentStatus.Idle
-                                _agentComponent.target = _translation.Value;
-                                _agentComponent.agentStatus = AgentStatus.Dancing;
-                                _agentComponent.hasTarget = false;
-                            }
-                        }
-                        else if (dice % 2 == 0 && dice >= 430 && dice <= 450)
-                        {
-                            if (!_agentComponent.jumped) // prevent from beeing idle when jumping, in der luft stehen bleiben
-                            {
-                                _agentComponent.target = _translation.Value;
-                                _agentComponent.agentStatus = AgentStatus.Idle;
-                                _agentComponent.hasTarget = false;
-                            }
-                        }
-                        else if (dice % 2 == 0 && dice >= 630 && dice <= 650)
-                        {
-                            _agentComponent.target = _translation.Value;
-                            _agentComponent.agentStatus = AgentStatus.Dancing;
-                            _agentComponent.hasTarget = false;
-                        }
-                    }
+                    // If newRandomPosition is inside the festival area, move to this position
+                    // Set values like target and agentStatus
+                    _agentComponent.target = calculatedRandomPosition;
+                    _agentComponent.hasTarget = true;
+                }
+                else if ((f.x - e.x) * (calculatedRandomPosition.z - e.z) - (d.z - e.z) * (calculatedRandomPosition.x - e.x) > 0 != s_de
+                    && (c.x - b.x) * (calculatedRandomPosition.z - b.z) - (a.z - b.z) * (calculatedRandomPosition.x - b.x) > 0 != s_ab
+                    && calculatedRandomPosition.z >= _borderComponent.frontLeft.z
+                    && calculatedRandomPosition.x <= _borderComponent.backLeft.x
+                    && calculatedRandomPosition.x >= _borderComponent.backRight.x)
+                {
+                    // If newRandomPosition is inside the festival area, move to this position
+                    // Set values like target and agentStatus
+                    _agentComponent.target = calculatedRandomPosition;
+                    _agentComponent.hasTarget = true;
+                }
+                else
+                {
+                    // Else if newRandomPosition is outside the festival area, stay with AgentStatus.Idle
+                    _agentComponent.target = _translation.Value;
+                    _agentComponent.hasTarget = false;
                 }
             }
         }
     }
+
+    Random Rnd = new Random(1);
+    NativeArray<Random> RandomGenerator;
 
     /// <summary>
     /// Runs on main thread, 1 times per frame
@@ -116,46 +110,22 @@ public class CalculateNewRandomPositionSystem : JobComponentSystem
     /// <returns></returns>
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
-        // Create Query for array creation (next steps)
-        EntityQuery agentQuery = GetEntityQuery(typeof(AgentComponent), ComponentType.ReadOnly<Translation>());
+        RandomGenerator = new NativeArray<Random>(System.Environment.ProcessorCount, Allocator.TempJob);
 
-        // Get all agents (entitys)
-        NativeArray<Entity> agentEntityArray = agentQuery.ToEntityArray(Allocator.TempJob);
-
-        // Get all translation components of the agents
-        NativeArray<Translation> agentTranslationArray = agentQuery.ToComponentDataArray<Translation>(Allocator.TempJob);
-
-        // Create The EntityWithRandomPosition Array for the jobs
-        NativeArray<EntityWithRandomPositions> randomPositionsArray = new NativeArray<EntityWithRandomPositions>(agentTranslationArray.Length, Allocator.TempJob);
-
-        // Loop through the translation components
-        for (int i = 0; i < agentTranslationArray.Length; i++)
+        for (int i = 0; i < RandomGenerator.Length; i++)
         {
-            // Fill the randomPositionsArray with randomPositions, based on the actual translation.value. The entity helps to identify later.
-            randomPositionsArray[i] = new EntityWithRandomPositions
-            {
-                entity = agentEntityArray[i],
-                newRandomPosition = new float3(
-                UnityEngine.Random.Range(agentTranslationArray[i].Value.x - 10, agentTranslationArray[i].Value.x + 10), // TODO: radius als/in Component darstellen.
-                0.5f,
-                UnityEngine.Random.Range(agentTranslationArray[i].Value.z - 10, agentTranslationArray[i].Value.z + 10))
-            };
+            RandomGenerator[i] = new Random((uint)Rnd.NextInt());
         }
-
-        //var test = EntityManager.GetSharedComponentData<RenderMesh>(agentEntityArray[0]);
-
-        //UnityEngine.Debug.Log(test.material);
         // Schedule job for passing the newPosition to each entity
-        var calculateNewRandomPositionjob = new CalculateNewRandomPositionJob
+        var calculateNewRandomPositionBurstjob = new CalculateNewRandomPositionBurstJob
         {
-            randomAgentPositionsArray = randomPositionsArray,
-            dice = UnityEngine.Random.Range(1, 1000)
-        }.Schedule(this, inputDeps);
+            RandomGenerator = RandomGenerator
+        };
 
-        // Disposing NativeArrays
-        agentEntityArray.Dispose();
-        agentTranslationArray.Dispose();
+        JobHandle jobHandle = calculateNewRandomPositionBurstjob.Schedule(this, inputDeps);
 
-        return calculateNewRandomPositionjob;
+        m_EntityCommandBufferSystem.AddJobHandleForProducer(jobHandle); // Execute the commandBuffer commands when spawnJob is finished
+
+        return jobHandle;
     }
 }

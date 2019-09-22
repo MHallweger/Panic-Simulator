@@ -7,4 +7,5 @@ public struct MoveSpeedComponent : IComponentData
 {
     public float moveSpeed; // Speed for normal moving state
     public float runningSpeed; // Speed for panic situation
+    public float jumpSpeed; // Spped for jumping
 }

@@ -17,6 +17,7 @@ public class Actions : MonoBehaviour
     public bool createExits = false; // Bool for activating the convertBarriers action/effect
     public bool dropSoundSystem = false; // Bool for creating a sound System object on the mouse position
     public bool fire = false; // Bool for activating the fire action/effect
+    public bool actionEnabled; // Bool for checking if an action is selected (needed in InputSystem, DOTS) // TODO seperate between different states
     private float fireBurnTime = 30f; // Float that controls the amount of time the fire burns
     public static Actions instance; // Instance Variable for access
 
@@ -111,6 +112,9 @@ public class Actions : MonoBehaviour
 
                         // Disable barrier GameObject
                         hit.collider.gameObject.transform.parent.gameObject.SetActive(false);
+
+                        // Increase Exits Amount
+                        UIHandler.instance.InCreaseExitsAmount();
                     }
                 }
             }

@@ -28,6 +28,7 @@ public class UnitSpawnerSystem : JobComponentSystem
     {
         public EntityCommandBuffer.Concurrent CommandBuffer; // instantiating and deleting of Entitys can only gets done on the main thread, save commands in buffer for main thread
         public uint BaseSeed; // For generating random values with Unity.Mathematics.Random.NextFloat()
+
         [DeallocateOnJobCompletion]
         [ReadOnly]
         public NativeArray<float3> randomPositions;
@@ -123,7 +124,7 @@ public class UnitSpawnerSystem : JobComponentSystem
                                 CommandBuffer.AddComponent(index, instance, new AgentComponent
                                 {
                                     hasTarget = false,
-                                    target = rndPos,
+                                    target = randomPositions[i + loopIndex],
                                     agentStatus = AgentStatus.Idle
                                 });
                             }
@@ -134,7 +135,8 @@ public class UnitSpawnerSystem : JobComponentSystem
                     CommandBuffer.AddComponent(index, instance, new MoveSpeedComponent
                     {
                         moveSpeed = 4.0f,
-                        runningSpeed = 7.0f
+                        runningSpeed = 7.0f,
+                        jumpSpeed = 2.0f
                     }); // TODO randomize
 
                     CommandBuffer.AddComponent(index, instance, new BorderComponent
@@ -146,9 +148,9 @@ public class UnitSpawnerSystem : JobComponentSystem
                     });
                     CommandBuffer.AddComponent(index, instance, new InputComponent { });
                 }
-                // Destory spawner, so the system only runs once
-                //CommandBuffer.DestroyEntity(index, entity);
-                //CommandBuffer.RemoveComponent(index, entity, typeof(AllowToSpawnTag));
+                //// Create Dummy Entity:
+                //Entity dummyEntity = CommandBuffer.CreateEntity(index);
+                //CommandBuffer.AddComponent(index, dummyEntity, new DummyComponent { });
 
                 // Disable this system to save performance. Otherwise this system will recreate n Agents again and again.
                 // This system will be enabled when pressing the "1" key down (see ManagerSystem).
@@ -199,7 +201,6 @@ public class UnitSpawnerSystem : JobComponentSystem
 
         agentEntityBorderComponentArray.Dispose();
         crowdEntityUnitSpawnerComponentArray.Dispose();
-        //randomPositions.Dispose(); // Needs to be disposed twice because the job code only runs when pressing key "1"
 
         m_EntityCommandBufferSystem.AddJobHandleForProducer(spawnJob); // Execute the commandBuffer commands when spawnJob is finished
         return spawnJob;

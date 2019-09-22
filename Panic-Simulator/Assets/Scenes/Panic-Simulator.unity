@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2216,7 +2216,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &49819152
 Transform:
   m_ObjectHideFlags: 0
@@ -8580,7 +8580,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &253268018
 Transform:
   m_ObjectHideFlags: 0
@@ -8853,7 +8853,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &263276549
 Transform:
   m_ObjectHideFlags: 0
@@ -16378,7 +16378,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &472995181
 Transform:
   m_ObjectHideFlags: 0
@@ -16917,7 +16917,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &487529376
 Transform:
   m_ObjectHideFlags: 0
@@ -19644,7 +19644,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &542722892
 Transform:
   m_ObjectHideFlags: 0
@@ -34505,8 +34505,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: -0.009777979, y: 0.9719712, z: -0.040838365, w: -0.2313192}
-  m_LocalPosition: {x: 211.0897, y: 9.628907, z: 412.79172}
+  m_LocalRotation: {x: -0.09704988, y: 0.11052071, z: -0.010844817, w: -0.9890647}
+  m_LocalPosition: {x: 200.44283, y: 6.091934, z: 383.35736}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -34568,6 +34568,7 @@ MonoBehaviour:
   - {fileID: 820638255}
   - {fileID: 261283895}
   - {fileID: 1103703435}
+  enableArrows: 0
 --- !u!1 &963237125
 GameObject:
   m_ObjectHideFlags: 0
@@ -37117,6 +37118,7 @@ MonoBehaviour:
   createExits: 0
   dropSoundSystem: 0
   fire: 0
+  actionEnabled: 0
 --- !u!4 &1040146664
 Transform:
   m_ObjectHideFlags: 0
@@ -42058,7 +42060,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1157199326
 Transform:
   m_ObjectHideFlags: 0
@@ -68685,7 +68687,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1887246741
 Transform:
   m_ObjectHideFlags: 0
@@ -70013,7 +70015,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1912625083
 Transform:
   m_ObjectHideFlags: 0
@@ -83017,6 +83019,7 @@ GameObject:
   - component: {fileID: 912939839}
   - component: {fileID: 901589020}
   - component: {fileID: 1944125577859265}
+  - component: {fileID: 1944125577859266}
   m_Layer: 0
   m_Name: Truss_audio_left 2
   m_TagString: Truss
@@ -83039,6 +83042,18 @@ MonoBehaviour:
   explosionPrefab: {fileID: 1882985623878075490, guid: a4bd4f56d4af9f746980001815d96190,
     type: 3}
   firePrefab: {fileID: 1956197547661106, guid: f293a2dcc753a4a489fefe7f8f312d69, type: 3}
+--- !u!114 &1944125577859266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1944125577859264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02bc180f133e9b449b607834441d0d5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1944125604240890
 GameObject:
   m_ObjectHideFlags: 0
@@ -83051,6 +83066,7 @@ GameObject:
   - component: {fileID: 806868485}
   - component: {fileID: 868263206}
   - component: {fileID: 1944125604240891}
+  - component: {fileID: 1944125604240892}
   m_Layer: 0
   m_Name: Truss_audio_left 2
   m_TagString: Truss
@@ -83073,6 +83089,18 @@ MonoBehaviour:
   explosionPrefab: {fileID: 1882985623878075490, guid: a4bd4f56d4af9f746980001815d96190,
     type: 3}
   firePrefab: {fileID: 1956197547661106, guid: f293a2dcc753a4a489fefe7f8f312d69, type: 3}
+--- !u!114 &1944125604240892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1944125604240890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02bc180f133e9b449b607834441d0d5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1944125982536292
 GameObject:
   m_ObjectHideFlags: 0
@@ -83085,6 +83113,7 @@ GameObject:
   - component: {fileID: 780908955}
   - component: {fileID: 761055928}
   - component: {fileID: 1944125982536293}
+  - component: {fileID: 1944125982536294}
   m_Layer: 0
   m_Name: Truss_audio_left 2
   m_TagString: Truss
@@ -83107,6 +83136,18 @@ MonoBehaviour:
   explosionPrefab: {fileID: 1882985623878075490, guid: a4bd4f56d4af9f746980001815d96190,
     type: 3}
   firePrefab: {fileID: 1956197547661106, guid: f293a2dcc753a4a489fefe7f8f312d69, type: 3}
+--- !u!114 &1944125982536294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1944125982536292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02bc180f133e9b449b607834441d0d5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1944126262988309
 GameObject:
   m_ObjectHideFlags: 0
@@ -83172,6 +83213,7 @@ GameObject:
   - component: {fileID: 532710987}
   - component: {fileID: 471332200}
   - component: {fileID: 1944126272392629}
+  - component: {fileID: 1944126272392630}
   m_Layer: 0
   m_Name: Truss_audio_right 4
   m_TagString: Truss
@@ -83194,6 +83236,18 @@ MonoBehaviour:
   explosionPrefab: {fileID: 1882985623878075490, guid: a4bd4f56d4af9f746980001815d96190,
     type: 3}
   firePrefab: {fileID: 1956197547661106, guid: f293a2dcc753a4a489fefe7f8f312d69, type: 3}
+--- !u!114 &1944126272392630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1944126272392628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02bc180f133e9b449b607834441d0d5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1944126292069011
 GameObject:
   m_ObjectHideFlags: 0
@@ -83206,6 +83260,7 @@ GameObject:
   - component: {fileID: 420757868}
   - component: {fileID: 449000015}
   - component: {fileID: 1944126292069012}
+  - component: {fileID: 1944126292069013}
   m_Layer: 0
   m_Name: Truss_audio_left 2
   m_TagString: Truss
@@ -83228,6 +83283,18 @@ MonoBehaviour:
   explosionPrefab: {fileID: 1882985623878075490, guid: a4bd4f56d4af9f746980001815d96190,
     type: 3}
   firePrefab: {fileID: 1956197547661106, guid: f293a2dcc753a4a489fefe7f8f312d69, type: 3}
+--- !u!114 &1944126292069013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1944126292069011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02bc180f133e9b449b607834441d0d5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1944126433208377
 GameObject:
   m_ObjectHideFlags: 0
@@ -83240,6 +83307,7 @@ GameObject:
   - component: {fileID: 24044486}
   - component: {fileID: 45715685}
   - component: {fileID: 1944126433208378}
+  - component: {fileID: 1944126433208379}
   m_Layer: 0
   m_Name: Truss_audio_left 2
   m_TagString: Truss
@@ -83262,6 +83330,18 @@ MonoBehaviour:
   explosionPrefab: {fileID: 1882985623878075490, guid: a4bd4f56d4af9f746980001815d96190,
     type: 3}
   firePrefab: {fileID: 1956197547661106, guid: f293a2dcc753a4a489fefe7f8f312d69, type: 3}
+--- !u!114 &1944126433208379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1944126433208377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02bc180f133e9b449b607834441d0d5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1944126754311987
 GameObject:
   m_ObjectHideFlags: 0
@@ -83292,6 +83372,7 @@ GameObject:
   - component: {fileID: 2127169351}
   - component: {fileID: 2099082340}
   - component: {fileID: 1944126792125625}
+  - component: {fileID: 1944126792125626}
   m_Layer: 0
   m_Name: Truss_audio_right 5
   m_TagString: Truss
@@ -83314,6 +83395,18 @@ MonoBehaviour:
   explosionPrefab: {fileID: 1882985623878075490, guid: a4bd4f56d4af9f746980001815d96190,
     type: 3}
   firePrefab: {fileID: 1956197547661106, guid: f293a2dcc753a4a489fefe7f8f312d69, type: 3}
+--- !u!114 &1944126792125626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1944126792125624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02bc180f133e9b449b607834441d0d5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1944126892704429
 GameObject:
   m_ObjectHideFlags: 0
@@ -83326,6 +83419,7 @@ GameObject:
   - component: {fileID: 1691044178}
   - component: {fileID: 1729903217}
   - component: {fileID: 1944126892704430}
+  - component: {fileID: 1944126892704431}
   m_Layer: 0
   m_Name: Truss_audio_right 1
   m_TagString: Truss
@@ -83348,6 +83442,18 @@ MonoBehaviour:
   explosionPrefab: {fileID: 1882985623878075490, guid: a4bd4f56d4af9f746980001815d96190,
     type: 3}
   firePrefab: {fileID: 1956197547661106, guid: f293a2dcc753a4a489fefe7f8f312d69, type: 3}
+--- !u!114 &1944126892704431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1944126892704429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02bc180f133e9b449b607834441d0d5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1944127016807944
 GameObject:
   m_ObjectHideFlags: 0
@@ -83378,6 +83484,7 @@ GameObject:
   - component: {fileID: 1377244217}
   - component: {fileID: 1371563802}
   - component: {fileID: 1944127248457671}
+  - component: {fileID: 1944127248457672}
   m_Layer: 0
   m_Name: Truss_audio_right 2
   m_TagString: Truss
@@ -83400,6 +83507,18 @@ MonoBehaviour:
   explosionPrefab: {fileID: 1882985623878075490, guid: a4bd4f56d4af9f746980001815d96190,
     type: 3}
   firePrefab: {fileID: 1956197547661106, guid: f293a2dcc753a4a489fefe7f8f312d69, type: 3}
+--- !u!114 &1944127248457672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1944127248457670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02bc180f133e9b449b607834441d0d5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1944127572367421
 GameObject:
   m_ObjectHideFlags: 0
@@ -83412,6 +83531,7 @@ GameObject:
   - component: {fileID: 1296339906}
   - component: {fileID: 1318314209}
   - component: {fileID: 1944127572367422}
+  - component: {fileID: 1944127572367423}
   m_Layer: 0
   m_Name: Truss_audio_right 3
   m_TagString: Truss
@@ -83434,6 +83554,18 @@ MonoBehaviour:
   explosionPrefab: {fileID: 1882985623878075490, guid: a4bd4f56d4af9f746980001815d96190,
     type: 3}
   firePrefab: {fileID: 1956197547661106, guid: f293a2dcc753a4a489fefe7f8f312d69, type: 3}
+--- !u!114 &1944127572367423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1944127572367421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02bc180f133e9b449b607834441d0d5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1956869322670599
 GameObject:
   m_ObjectHideFlags: 0
@@ -108382,7 +108514,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!95 &5366056878668461960
 Animator:
   serializedVersion: 3

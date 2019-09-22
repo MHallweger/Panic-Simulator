@@ -101,11 +101,19 @@ public class RadialMenu : MonoBehaviour
                     actions.bigGroundExplosion = false;
                     actions.fire = false;
                     UIHandler.instance.mode = "Create Exits";
+
+                    // Set bool true that will be used in the animator script
+                    UIHandler.instance.enableArrows = false;
+
+                    // Set bool in UI Handler (Synch Point) -> Triggers DOTS script to enable the panic System
+
                 }
                 else if (selected.title == "Small Explosion")
                 {
                     // Small Explosion Button choosen
                     actions.smallGroundExplosion = true;
+                    actions.actionEnabled = true;
+
                     actions.mediumGroundExplosion = false;
                     actions.bigGroundExplosion = false;
                     actions.createExits = false;
@@ -113,11 +121,16 @@ public class RadialMenu : MonoBehaviour
                     actions.dropSoundSystem = false;
                     actions.fire = false;
                     UIHandler.instance.mode = "Small Explosions";
+
+                    // Set bool true that will be used in the animator script
+                    UIHandler.instance.enableArrows = false;
                 }
                 else if (selected.title == "Medium Explosion")
                 {
                     // Medium Explosion Button choosen
                     actions.mediumGroundExplosion = true;
+                    actions.actionEnabled = true;
+
                     actions.smallGroundExplosion = false;
                     actions.bigGroundExplosion = false;
                     actions.createExits = false;
@@ -125,11 +138,16 @@ public class RadialMenu : MonoBehaviour
                     actions.dropSoundSystem = false;
                     actions.fire = false;
                     UIHandler.instance.mode = "Medium Explosions";
+
+                    // Set bool true that will be used in the animator script
+                    UIHandler.instance.enableArrows = false;
                 }
                 else if (selected.title == "Big Explosion")
                 {
                     // Big Explosion Button choosen
                     actions.bigGroundExplosion = true;
+                    actions.actionEnabled = true;
+
                     actions.mediumGroundExplosion = false;
                     actions.smallGroundExplosion = false;
                     actions.createExits = false;
@@ -137,11 +155,16 @@ public class RadialMenu : MonoBehaviour
                     actions.dropSoundSystem = false;
                     actions.fire = false;
                     UIHandler.instance.mode = "Big Explosion";
+
+                    // Set bool true that will be used in the animator script
+                    UIHandler.instance.enableArrows = false;
                 }
                 else if (selected.title == "Falling Truss")
                 {
                     // Falling Truss Button choosen
                     actions.fallingTruss = true;
+                    actions.actionEnabled = true;
+
                     actions.createExits = false;
                     actions.dropSoundSystem = false;
                     actions.smallGroundExplosion = false;
@@ -149,6 +172,9 @@ public class RadialMenu : MonoBehaviour
                     actions.bigGroundExplosion = false;
                     actions.fire = false;
                     UIHandler.instance.mode = "Falling Truss";
+
+                    // Set bool true that will be used in the animator script
+                    UIHandler.instance.enableArrows = true;
                 }
                 else if (selected.title == "Drop Sound System")
                 {
@@ -161,11 +187,16 @@ public class RadialMenu : MonoBehaviour
                     actions.bigGroundExplosion = false;
                     actions.fire = false;
                     UIHandler.instance.mode = "Create Sound System";
+
+                    // Set bool true that will be used in the animator script
+                    UIHandler.instance.enableArrows = false;
                 }
                 else if (selected.title == "Fire")
                 {
                     // Fire Button choosen
                     actions.fire = true;
+                    actions.actionEnabled = true;
+
                     actions.dropSoundSystem = false;
                     actions.fallingTruss = false;
                     actions.createExits = false;
@@ -173,6 +204,9 @@ public class RadialMenu : MonoBehaviour
                     actions.mediumGroundExplosion = false;
                     actions.bigGroundExplosion = false;
                     UIHandler.instance.mode = "Fire";
+
+                    // Set bool true that will be used in the animator script
+                    UIHandler.instance.enableArrows = false;
                 }
             }
             // A button was choosen so the Radial Menu is not needed anymore

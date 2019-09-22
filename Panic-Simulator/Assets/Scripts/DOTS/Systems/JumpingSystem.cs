@@ -11,21 +11,49 @@ using Unity.Physics;
 /// </summary>
 public class JumpingSystem : JobComponentSystem
 {
+    //[RequireComponentTag(typeof(DancingTag))]
+    //[ExcludeComponent(typeof(IdleTag), typeof(MovingTag), typeof(RunningTag))]
     [BurstCompile]
-    public struct JumpingJob : IJobForEachWithEntity<Translation, AgentComponent, PhysicsVelocity>
+    public struct JumpingJob : IJobForEachWithEntity<Translation, MoveSpeedComponent, AgentComponent>
     {
-        public void Execute(Entity entity, int index, ref Translation translation, ref AgentComponent agentComponent, ref PhysicsVelocity physicsVelocity)
+        public float deltaTime;
+
+        public void Execute(Entity entity, int index, ref Translation translation, ref MoveSpeedComponent moveSpeedComponent, ref AgentComponent agentComponent)
         {
-            if (!agentComponent.hasTarget && agentComponent.agentStatus == AgentStatus.Dancing && agentComponent.jumped == false) // Agent dont have a target, actual AgentStatus is Dancing
+            if (!agentComponent.hasTarget && agentComponent.agentStatus == AgentStatus.Dancing)
             {
-                physicsVelocity.Linear.y = 3f;
-                agentComponent.jumped = true;
+                translation.Value.y += moveSpeedComponent.jumpSpeed * deltaTime;
+
+                if (translation.Value.y > .9f)
+                {
+                    moveSpeedComponent.jumpSpeed = -math.abs(moveSpeedComponent.jumpSpeed);
+                }
+                if (translation.Value.y < .5f)
+                {
+                    moveSpeedComponent.jumpSpeed = +math.abs(moveSpeedComponent.jumpSpeed);
+                }
             }
 
-            if (translation.Value.y == 0.5f)
+            if ((agentComponent.agentStatus == AgentStatus.Idle || agentComponent.agentStatus == AgentStatus.Moving || agentComponent.agentStatus == AgentStatus.Running)
+                && translation.Value.y > .5f)
             {
-                agentComponent.jumped = false;
+                // Go back to normal position (Y value .5f)
+                // Prevent from beeing in y > .5f while moving/running
+                translation.Value.y -= 5f * deltaTime;
             }
+
+            #region Old Version (Physics version. Much influence on performance. Physics Scripts on Human Prefab needs to be enabled.)
+            //if (!agentComponent.hasTarget && agentComponent.agentStatus == AgentStatus.Dancing && agentComponent.jumped == false) // Agent dont have a target, actual AgentStatus is Dancing
+            //{
+            //    physicsVelocity.Linear.y = 3f;
+            //    agentComponent.jumped = true;
+            //} 
+
+            //if (translation.Value.y == 0.5f)
+            //{
+            //    agentComponent.jumped = false;
+            //}
+            #endregion // Old Version (Physics version. Much influence on performance. Physics Scripts on Human Prefab needs to be enabled.)
         }
     }
 
@@ -39,6 +67,7 @@ public class JumpingSystem : JobComponentSystem
         // Schedule moveJob
         var jumpingJob = new JumpingJob
         {
+            deltaTime = UnityEngine.Time.deltaTime
         }.Schedule(this, inputDeps);
 
         return jumpingJob;

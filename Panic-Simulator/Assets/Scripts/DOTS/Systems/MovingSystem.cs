@@ -11,13 +11,13 @@ using Unity.Burst;
 public class MovingSystem : JobComponentSystem
 {
     [BurstCompile]
-    public struct MovementJob : IJobForEachWithEntity<Translation, AgentComponent, MoveSpeedComponent>
+    public struct MovementBurstJob : IJobForEachWithEntity<Translation, AgentComponent, MoveSpeedComponent>
     {
         public float deltaTime;
 
         public void Execute(Entity entity, int index, ref Translation translation, ref AgentComponent agentComponent, [ReadOnly] ref MoveSpeedComponent moveSpeedComponent)
         {
-            if (agentComponent.hasTarget && agentComponent.agentStatus == AgentStatus.Moving && !(agentComponent.agentStatus == AgentStatus.Dancing)) // Agent has the correct conditions?
+            if (agentComponent.hasTarget && agentComponent.agentStatus == AgentStatus.Moving)
             {
                 // Calculations for checking conditions and calculating the new translation.value
                 float3 direction = math.normalize(agentComponent.target - translation.Value);
@@ -29,13 +29,14 @@ public class MovingSystem : JobComponentSystem
                 }
                 else if (distance < .5f) // closer/close
                 {
-                    agentComponent.hasTarget = false; // Triggers the CalculateNewRandomPositionSystem to set a new position to each agent
-                    //agentComponent.agentStatus = AgentStatus.Idle;
+                    agentComponent.hasTarget = false;
                 }
             }
-            else if (!agentComponent.hasTarget && agentComponent.agentStatus == AgentStatus.Idle)
+
+            if (/*!agentComponent.hasTarget && */agentComponent.agentStatus == AgentStatus.Idle && translation.Value.y > .5f)
             {
-                translation.Value = agentComponent.target;
+                // Agent do not have a target [IDLE]
+                translation.Value.y -= 1f * deltaTime;
             }
         }
     }
@@ -47,12 +48,12 @@ public class MovingSystem : JobComponentSystem
     /// <returns></returns>
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
-        // Schedule moveJob
-        var moveJob = new MovementJob
+        var moveBurstJob = new MovementBurstJob
         {
-            deltaTime = UnityEngine.Time.deltaTime,
-        }.Schedule(this, inputDeps);
+            deltaTime = UnityEngine.Time.deltaTime
+        };
+        JobHandle jobHandle = moveBurstJob.Schedule(this, inputDeps);
 
-        return moveJob;
+        return jobHandle;
     }
 }

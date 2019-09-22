@@ -61,6 +61,9 @@ public class UIHandler : MonoBehaviour
     [SerializeField] private GameObject barrierLeftWithPivot; // First barrier left
     [SerializeField] private GameObject barrierRightWithPivot; // First barrier right
     [SerializeField] private GameObject[] additionalSoundSystems; // Contains 4 additional Sound Systems
+
+    // Animations
+    [HideInInspector] public bool enableArrows = false; // Bool that allows the animation script on the Information Arrow GameObhects to animate
     #endregion // Variables
 
     /// <summary>
@@ -127,6 +130,11 @@ public class UIHandler : MonoBehaviour
         {
             EnableOrDisableEffects();
         }
+    }
+
+    public void InCreaseExitsAmount()
+    {
+        exitsAmount += 1;
     }
 
     /// <summary>
