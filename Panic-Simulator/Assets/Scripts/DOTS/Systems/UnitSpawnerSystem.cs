@@ -32,8 +32,20 @@ public class UnitSpawnerSystem : JobComponentSystem
         [DeallocateOnJobCompletion]
         [ReadOnly]
         public NativeArray<float3> randomPositions;
+
+        [NativeDisableParallelForRestriction]
+        [DeallocateOnJobCompletion]
+        public NativeArray<Random> RandomGenerator;
+
+        [Unity.Collections.LowLevel.Unsafe.NativeSetThreadIndex]
+        private int threadIndex;
+
         public void Execute(Entity entity, int index, [ReadOnly] ref UnitSpawnerComponent _spawner, [ReadOnly] ref BorderComponent _borderComponent, [ReadOnly] ref InputComponent _inputComponent)
         {
+            var randomGenerator = RandomGenerator[threadIndex - 1];
+
+            RandomGenerator[threadIndex - 1] = randomGenerator; //This is necessary to update the state of the element inside the array.
+
             if (_inputComponent.keyOnePressedUp)
             {
                 var seed = (uint)(BaseSeed + index); // For Unity.Mathematics.Random --Slightly useless here because there is only one entity which calls this Execute()
@@ -78,7 +90,9 @@ public class UnitSpawnerSystem : JobComponentSystem
                             {
                                 hasTarget = false,
                                 target = randomPositions[i + loopIndex],
-                                agentStatus = AgentStatus.Idle
+                                agentStatus = AgentStatus.Idle,
+                                exitPointReached = false
+                                // TODO test jumped here
                             });
 
                             setPosition = true;
@@ -95,7 +109,10 @@ public class UnitSpawnerSystem : JobComponentSystem
                             {
                                 hasTarget = false,
                                 target = randomPositions[i + loopIndex],
-                                agentStatus = AgentStatus.Idle
+                                agentStatus = AgentStatus.Idle,
+                                exitPointReached = false
+                                // TODO test jumped here
+
                             });
 
                             setPosition = true;
@@ -125,7 +142,9 @@ public class UnitSpawnerSystem : JobComponentSystem
                                 {
                                     hasTarget = false,
                                     target = randomPositions[i + loopIndex],
-                                    agentStatus = AgentStatus.Idle
+                                    agentStatus = AgentStatus.Idle,
+                                    exitPointReached = false 
+                                    // TODO test jumped here
                                 });
                             }
                         }
@@ -134,10 +153,11 @@ public class UnitSpawnerSystem : JobComponentSystem
                     // Adding Components to every single Entity
                     CommandBuffer.AddComponent(index, instance, new MoveSpeedComponent
                     {
-                        moveSpeed = 4.0f,
-                        runningSpeed = 7.0f,
-                        jumpSpeed = 2.0f
-                    }); // TODO randomize
+                        moveSpeed = rnd.NextFloat(4.0f, 5.0f),
+                        runningSpeed = rnd.NextFloat(3.0f,4.0f), // before (7.0,9.0)
+                        jumpSpeed = rnd.NextFloat(2.0f, 4.0f),
+                        panicJumpSpeed = rnd.NextFloat(4.0f, 5.0f)
+                    });
 
                     CommandBuffer.AddComponent(index, instance, new BorderComponent
                     {
@@ -159,6 +179,10 @@ public class UnitSpawnerSystem : JobComponentSystem
         }
     }
 
+
+    Random Rnd = new Random(1);
+    NativeArray<Random> RandomGenerator;
+
     /// <summary>
     /// Runs on main thread, 1 times per frame. Stops when entity (dstManger) is destroyed.
     /// </summary>
@@ -166,6 +190,13 @@ public class UnitSpawnerSystem : JobComponentSystem
     /// <returns></returns>
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
+        RandomGenerator = new NativeArray<Random>(System.Environment.ProcessorCount, Allocator.TempJob);
+
+        for (int i = 0; i < RandomGenerator.Length; i++)
+        {
+            RandomGenerator[i] = new Random((uint)Rnd.NextInt());
+        }
+
         // Create Query for array creation (next steps)
         // Get crowd GameObject as an eneity.
         EntityQuery crowdEntity = GetEntityQuery(ComponentType.ReadOnly<UnitSpawnerComponent>());
@@ -196,7 +227,8 @@ public class UnitSpawnerSystem : JobComponentSystem
         {
             CommandBuffer = m_EntityCommandBufferSystem.CreateCommandBuffer().ToConcurrent(), // Create the commandBuffer
             randomPositions = randomPositions,
-            BaseSeed = BaseSeed
+            BaseSeed = BaseSeed,
+            RandomGenerator = RandomGenerator
         }.Schedule(this, inputDeps);
 
         agentEntityBorderComponentArray.Dispose();

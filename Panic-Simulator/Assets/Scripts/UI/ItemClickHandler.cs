@@ -49,7 +49,7 @@ public class ItemClickHandler : MonoBehaviour
         if (Input.GetKeyDown(key))
         {
             // Color Fade effect (blue) when pressing or hovering over the different slots
-            FadeToColor(button.colors.highlightedColor); 
+            FadeToColor(button.colors.highlightedColor);
             button.onClick.Invoke();
         }
         else if (Input.GetKeyUp(key))

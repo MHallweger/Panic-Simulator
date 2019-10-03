@@ -94,6 +94,7 @@ public class RadialMenu : MonoBehaviour
                 {
                     // Create Exits Button choosen
                     actions.createExits = true;
+                    actions.actionEnabled = false;
                     actions.fallingTruss = false;
                     actions.dropSoundSystem = false;
                     actions.smallGroundExplosion = false;

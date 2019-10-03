@@ -14,6 +14,7 @@ public class Actions : MonoBehaviour
     public bool mediumGroundExplosion = false; // Bool for activating the medium ground Explosion action/effect
     public bool bigGroundExplosion = false; // Bool for activating the big ground Explosion action/effect
     public bool fallingTruss = false; // Bool for activating the fallingTruss action/effect
+    public bool trussHasFallen = false; // Bool for checking if a truss fallen and touched the ground. Helps for enabling panic mode on agents
     public bool createExits = false; // Bool for activating the convertBarriers action/effect
     public bool dropSoundSystem = false; // Bool for creating a sound System object on the mouse position
     public bool fire = false; // Bool for activating the fire action/effect
@@ -104,6 +105,7 @@ public class Actions : MonoBehaviour
                     if (hit.collider != null && hit.collider.gameObject.name != "ColliderGround" && hit.collider.gameObject.tag != "Truss")
                     {
                         GameObject pinGo = Instantiate(pinPrefab, hit.collider.gameObject.transform.position, Quaternion.identity);
+                        pinGo.transform.SetParent(hit.transform.parent);
                         Vector3 newPinPosition = new Vector3(
                             hit.collider.gameObject.transform.position.x,
                             0.0f,
@@ -111,7 +113,7 @@ public class Actions : MonoBehaviour
                         pinGo.transform.position = newPinPosition;
 
                         // Disable barrier GameObject
-                        hit.collider.gameObject.transform.parent.gameObject.SetActive(false);
+                        // <moved to Input System>
 
                         // Increase Exits Amount
                         UIHandler.instance.InCreaseExitsAmount();

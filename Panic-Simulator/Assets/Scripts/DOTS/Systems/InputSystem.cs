@@ -42,6 +42,8 @@ public class InputSystem : JobComponentSystem
         public bool keyFourPressedUp; // Bool for lifting finger from key 4 when rotating barriers inside
         public bool keyFivePressedUp;
         public bool keySixPressedUp;
+        public bool keySevenPressedDown;
+        public bool keySevenPressedUp;
 
         public void Execute(ref InputComponent _inputComponent)
         {
@@ -55,9 +57,12 @@ public class InputSystem : JobComponentSystem
             _inputComponent.keyFourPressedUp = keyFourPressedUp;
             _inputComponent.keyFivePressedUp = keyFivePressedUp;
             _inputComponent.keySixPressedUp = keySixPressedUp;
+            _inputComponent.keySevenPressedDown = keySevenPressedDown;
+            _inputComponent.keySevenPressedUp = keySevenPressedUp;
         }
     }
 
+    // TODO BURST: Create a job that only handles the CommandBuffer and World. Active things
     struct CreateExitEntitys : IJobForEachWithEntity<DummyComponent>
     {
         public EntityCommandBuffer.Concurrent CommandBuffer; // instantiating and deleting of Entitys can only gets done on the main thread, save commands in buffer for main thread
@@ -68,6 +73,9 @@ public class InputSystem : JobComponentSystem
             Entity exitEntity = CommandBuffer.CreateEntity(index);
             CommandBuffer.AddComponent(index, exitEntity, new Translation { Value = positionForExitEntity });
             CommandBuffer.AddComponent(index, exitEntity, new ExitComponent { });
+
+            // Disable Remove Exits System, otherwise the exit entity will instantly removed
+            World.Active.GetExistingSystem<RemoveExitsSystem>().Enabled = false;
         }
     }
 
@@ -86,8 +94,9 @@ public class InputSystem : JobComponentSystem
             keyThreePressedUp = UnityEngine.Input.GetKeyUp(UnityEngine.KeyCode.Alpha3),
             keyFourPressedUp = UnityEngine.Input.GetKeyUp(UnityEngine.KeyCode.Alpha4),
             keyFivePressedUp = UnityEngine.Input.GetKeyUp(UnityEngine.KeyCode.Alpha5),
-            keySixPressedUp = UnityEngine.Input.GetKeyUp(UnityEngine.KeyCode.Alpha6)
-
+            keySixPressedUp = UnityEngine.Input.GetKeyUp(UnityEngine.KeyCode.Alpha6),
+            keySevenPressedDown = UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.Alpha7),
+            keySevenPressedUp = UnityEngine.Input.GetKeyUp(UnityEngine.KeyCode.Alpha7)
         };
 
         JobHandle jobHandle = inputJob.Schedule(this, inputDeps);
@@ -103,9 +112,9 @@ public class InputSystem : JobComponentSystem
                 UnityEngine.Ray ray = UnityEngine.Camera.main.ScreenPointToRay(exitPosition);
                 if (UnityEngine.Physics.Raycast(ray, out UnityEngine.RaycastHit hit))
                 {
-                    if (hit.collider != null)
+                    if (hit.collider != null && hit.collider.gameObject.name != "ColliderGround" && hit.collider.gameObject.tag != "Truss")
                     {
-                        exitPosition = new float3(hit.point.x, 0.5f, hit.point.z);
+                        exitPosition = new float3(hit.collider.gameObject.transform.position.x, 0.5f, hit.collider.gameObject.transform.position.z);
 
                         var createExitEntitysJob = new CreateExitEntitys
                         {
@@ -113,12 +122,21 @@ public class InputSystem : JobComponentSystem
                             positionForExitEntity = exitPosition
                         };
 
+                        // Disable barrier GameObject
+                        //hit.collider.gameObject.transform.parent.gameObject.SetActive(false);
+                        // Not the best implementation but there is no better solution inside ECS
+                        // This code only runs shortly in the frame frame where the left mouse button is pressed down
+                        // Disable the MeshRenderer of the first Child of the parent of the pin GameObject to disable the GameObjects visible 
+                        // SetActive does not work for this situation
+                        hit.collider.gameObject.transform.parent.gameObject.transform.GetChild(0).GetComponent<UnityEngine.MeshRenderer>().enabled = false;
+
                         // Schedule this job when an exit spot is created with Mono behavior and the position is spotted here
                         jobHandle = createExitEntitysJob.Schedule(this, jobHandle);
                     }
                 }
             }
         }
+
         m_EntityCommandBufferSystem.AddJobHandleForProducer(jobHandle); // Execute the commandBuffer commands when spawnJob is finished
         return jobHandle;
     }

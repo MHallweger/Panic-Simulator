@@ -20,4 +20,6 @@ public struct InputComponent : IComponentData
     public bool keyFivePressedUp;
     public bool keySixPressedDown;
     public bool keySixPressedUp;
+    public bool keySevenPressedDown;
+    public bool keySevenPressedUp;
 }

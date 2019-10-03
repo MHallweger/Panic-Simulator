@@ -4,6 +4,7 @@ using Unity.Mathematics;
 using Unity.Collections;
 using Unity.Transforms;
 using Unity.Burst;
+
 [UpdateBefore(typeof(MovingSystem))]
 [UpdateBefore(typeof(ManagerSystem))]
 [UpdateBefore(typeof(JumpingSystem))]
@@ -13,51 +14,146 @@ using Unity.Burst;
 /// </summary>
 public class PanicSystem : JobComponentSystem
 {
-    EndSimulationEntityCommandBufferSystem m_EntityCommandBufferSystem; // For creating the commandBuffer
-
-    /// <summary>
-    /// Initialize The EndSimulationEntityCommandBufferSystem commandBufferSystem.
-    /// </summary>
-    protected override void OnCreate()
+    public static void CalculateNearestExitPoint(float3 agentPosition, float3 actionPosition, float panicRadius, ref AgentComponent agentComponent,
+        NativeArray<Translation> exitsTranslations)
     {
-        m_EntityCommandBufferSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+        if (math.distance(agentPosition, actionPosition) <= panicRadius)
+        {
+            if (!agentComponent.exitPointReached)
+            {
+                float3 closestExitTarget = float3.zero;
+
+                for (int i = 0; i < exitsTranslations.Length; i++)
+                {
+                    if (closestExitTarget.Equals(float3.zero))
+                    {
+                        // No target
+                        closestExitTarget = exitsTranslations[i].Value;
+                    }
+                    else
+                    {
+                        if (math.distance(agentPosition, exitsTranslations[i].Value) < math.distance(agentPosition, closestExitTarget))
+                        {
+                            closestExitTarget = exitsTranslations[i].Value;
+                        }
+                    }
+                }
+                agentComponent.target = closestExitTarget;
+                agentComponent.agentStatus = AgentStatus.Running;
+                agentComponent.hasTarget = true;
+            }
+        }
     }
 
     [BurstCompile]
     public struct PanicJob : IJobForEachWithEntity<Translation, AgentComponent>
     {
-        public EntityCommandBuffer.Concurrent CommandBuffer; // instantiating and deleting of Entitys can only gets done on the main thread, save commands in buffer for main thread
+        [ReadOnly] public NativeArray<Translation> exitsTranslations;
 
-        [DeallocateOnJobCompletion]
-        [ReadOnly] public NativeArray<float3> exitsTranslations;
+        public float3 actionPosition; // The spot where the action arised
+        public int actionMode; // The mode which was used
 
         public void Execute(Entity entity, int index, [ReadOnly] ref Translation translation, ref AgentComponent agentComponent)
         {
-            float3 closestExitTarget = float3.zero;
-            float3 agentPosition = translation.Value;
+            float panicRadius = 0.0f;
 
-            for (int i = 0; i < exitsTranslations.Length; i++)
+            switch (actionMode)
             {
-                if (closestExitTarget.Equals(float3.zero))
-                {
-                    // No target
-                    closestExitTarget = exitsTranslations[i];
-                }
-                else
-                {
-                    if (math.distance(agentPosition, exitsTranslations[i]) < math.distance(agentPosition, closestExitTarget))
-                    {
-                        closestExitTarget = exitsTranslations[i];
-                    }
-                }
+                case 0:
+                    // No action created
+                    break;
+                case 1:
+                    // Small Explosion created
+                    panicRadius = 5.0f;
+                    CalculateNearestExitPoint(translation.Value, actionPosition, panicRadius, ref agentComponent, exitsTranslations);
+                    break;
+                case 2:
+                    //  Medium Explosion created
+                    panicRadius = 10.0f;
+                    CalculateNearestExitPoint(translation.Value, actionPosition, panicRadius, ref agentComponent, exitsTranslations);
+                    break;
+                case 3:
+                    // Big Explosion created
+                    panicRadius = 15.0f;
+                    CalculateNearestExitPoint(translation.Value, actionPosition, panicRadius, ref agentComponent, exitsTranslations);
+                    break;
+                case 4:
+                    // Falling Truss created
+                    panicRadius = 10.0f;
+                    CalculateNearestExitPoint(translation.Value, actionPosition, panicRadius, ref agentComponent, exitsTranslations);
+                    break;
+                case 5:
+                    // Fire created
+                    panicRadius = 10.0f;
+                    CalculateNearestExitPoint(translation.Value, actionPosition, panicRadius, ref agentComponent, exitsTranslations);
+                    break;
+                default:
+                    panicRadius = 10.0f;
+                    CalculateNearestExitPoint(translation.Value, actionPosition, panicRadius, ref agentComponent, exitsTranslations);
+                    break;
             }
-            agentComponent.target = closestExitTarget;
-            agentComponent.agentStatus = AgentStatus.Running;
-            agentComponent.hasTarget = true;
         }
     }
-    NativeArray<Translation> exitsTranslations;
-    NativeArray<float3> finalExitPositions;
+
+    /// <summary>
+    /// Job that handles the reaction of an agent when beeing in near of an agent that has panic and is in running mode.
+    /// </summary>
+    [BurstCompile]
+    public struct ReactOnPanicInsideQuadrantJob : IJobForEachWithEntity<Translation, AgentComponent>
+    {
+        [ReadOnly]
+        public NativeMultiHashMap<int, QuadrantData> quadrantMultiHashMap;
+
+        [ReadOnly]
+        public NativeArray<Translation> exitsTranslations;
+
+        public void Execute(Entity entity, int index, [ReadOnly] ref Translation translation, ref AgentComponent agentComponent)
+        {
+            int hashMapKey = QuadrantSystem.GetPositionHashMapKey(translation.Value); // Calculate the correct quadrant for this agent
+            CalculatePanicReaction(hashMapKey, ref translation, ref agentComponent); // This quadrant itself (mid)
+            CalculatePanicReaction(hashMapKey + 1, ref translation, ref agentComponent); // Right quadrant
+            CalculatePanicReaction(hashMapKey - 1, ref translation, ref agentComponent); // Left quadrant
+            CalculatePanicReaction(hashMapKey + QuadrantSystem.quadrantYMultiplier, ref translation, ref agentComponent); // Above quadrant
+            CalculatePanicReaction(hashMapKey - QuadrantSystem.quadrantYMultiplier, ref translation, ref agentComponent); // Below quadrant
+
+            CalculatePanicReaction(hashMapKey + 1 + QuadrantSystem.quadrantYMultiplier, ref translation, ref agentComponent); // Corner Top Right
+            CalculatePanicReaction(hashMapKey - 1 + QuadrantSystem.quadrantYMultiplier, ref translation, ref agentComponent); // Corner Top Left
+            CalculatePanicReaction(hashMapKey + 1 - QuadrantSystem.quadrantYMultiplier, ref translation, ref agentComponent); // Corner Bottom Right
+            CalculatePanicReaction(hashMapKey - 1 - QuadrantSystem.quadrantYMultiplier, ref translation, ref agentComponent); // Corner Bottom Left
+
+        }
+
+        private void CalculatePanicReaction(int hashMapKey, ref Translation translation, ref AgentComponent agentComponent)
+        {
+            // Cycling through all entitys/agents inside this quadrant
+            // Check if you as an agent sees an agent with panic running to you (5f)
+            // You see that he has panic so you will have panic to.
+            // You adept his target because you want to run to the same place
+            // You start running
+            QuadrantData quadrantData;
+            NativeMultiHashMapIterator<int> nativeMultiHashMapIterator;
+            if (quadrantMultiHashMap.TryGetFirstValue(hashMapKey, out quadrantData, out nativeMultiHashMapIterator))
+            {
+                do
+                {
+                    if (math.distance(translation.Value, quadrantData.position) <= 5.0f
+                        && !quadrantData.agentComponent.exitPointReached
+                        && !agentComponent.exitPointReached)
+                    {
+                        if (quadrantData.agentComponent.agentStatus == AgentStatus.Running)
+                        {
+                            CalculateNearestExitPoint(translation.Value, quadrantData.position, 5f, ref agentComponent, exitsTranslations);
+                            agentComponent.agentStatus = AgentStatus.Running;
+                            agentComponent.hasTarget = true;
+                        }
+                    }
+                } while (quadrantMultiHashMap.TryGetNextValue(out quadrantData, ref nativeMultiHashMapIterator));
+            }
+        }
+    }
+
+    float3 actionPosition;
+    int actionMode;
 
     /// <summary>
     /// Runs on main thread, 1 times per frame
@@ -70,31 +166,65 @@ public class PanicSystem : JobComponentSystem
 
         if (Actions.instance.actionEnabled) // If action is enabled, get all exits and calculate the closest position
         {
+            EntityQuery exitQuery = GetEntityQuery(typeof(ExitComponent), ComponentType.ReadOnly<Translation>());
+
+            NativeArray<Translation> exitsTranslations = exitQuery.ToComponentDataArray<Translation>(Allocator.TempJob);
+
+            if (Actions.instance.smallGroundExplosion)
+            {
+                actionMode = 1;
+            }
+            else if (Actions.instance.mediumGroundExplosion)
+            {
+                actionMode = 2;
+            }
+            else if (Actions.instance.bigGroundExplosion)
+            {
+                actionMode = 3;
+            }
+            else if (Actions.instance.trussHasFallen)
+            {
+                actionMode = 4;
+            }
+            else if (Actions.instance.fire)
+            {
+                actionMode = 5;
+            }
+            else
+            {
+                actionMode = 0;
+            }
+
             if (UnityEngine.Input.GetMouseButtonDown(0))
             {
-                EntityQuery agentQuery = GetEntityQuery(typeof(ExitComponent), ComponentType.ReadOnly<Translation>());
-
-                exitsTranslations = new NativeArray<Translation>(agentQuery.CalculateEntityCount(), Allocator.TempJob);
-                exitsTranslations = agentQuery.ToComponentDataArray<Translation>(Allocator.TempJob);
-
-                finalExitPositions = new NativeArray<float3>(agentQuery.CalculateChunkCount(), Allocator.TempJob);
-                for (int i = 0; i < exitsTranslations.Length - 1; i++)
+                // Small Explosions in Radial menu was selected
+                actionPosition = UnityEngine.Input.mousePosition;
+                UnityEngine.Ray ray = UnityEngine.Camera.main.ScreenPointToRay(actionPosition);
+                if (UnityEngine.Physics.Raycast(ray, out UnityEngine.RaycastHit hit))
                 {
-                    finalExitPositions[i] = exitsTranslations[i].Value;
+                    if (hit.collider != null)
+                    {
+                        actionPosition = new float3(hit.point.x, .5f, hit.point.z);
+                    }
                 }
-                var panicJob = new PanicJob
+
+                PanicJob panicJob = new PanicJob
                 {
-                    CommandBuffer = m_EntityCommandBufferSystem.CreateCommandBuffer().ToConcurrent(),
-                    exitsTranslations = finalExitPositions
+                    exitsTranslations = exitsTranslations,
+                    actionPosition = actionPosition,
+                    actionMode = actionMode
                 };
-
                 jobHandle = panicJob.Schedule(this, inputDeps);
-                exitsTranslations.Dispose();
-
             }
-        }
+            // Only React on panic when panic action is enabled
+            ReactOnPanicInsideQuadrantJob reactOnPanicInsideQuadrantJob = new ReactOnPanicInsideQuadrantJob
+            {
+                quadrantMultiHashMap = QuadrantSystem.quadrantMultiHashMap,
+                exitsTranslations = exitsTranslations
+            };
 
-        m_EntityCommandBufferSystem.AddJobHandleForProducer(jobHandle); // Execute the commandBuffer commands when spawnJob is finished
+            jobHandle = reactOnPanicInsideQuadrantJob.Schedule(this, jobHandle);
+        }
         return jobHandle;
     }
 }

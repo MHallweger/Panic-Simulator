@@ -64,6 +64,7 @@ public class UIHandler : MonoBehaviour
 
     // Animations
     [HideInInspector] public bool enableArrows = false; // Bool that allows the animation script on the Information Arrow GameObhects to animate
+
     #endregion // Variables
 
     /// <summary>

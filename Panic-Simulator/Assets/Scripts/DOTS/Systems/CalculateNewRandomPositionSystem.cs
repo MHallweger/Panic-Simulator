@@ -21,13 +21,6 @@ public class CalculateNewRandomPositionSystem : JobComponentSystem
         m_EntityCommandBufferSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
     }
 
-    // Struct for storing the entity and a new random position
-    private struct EntityWithRandomPositions
-    {
-        public Entity entity;
-        public float3 newRandomPosition;
-    }
-
     [BurstCompile]
     struct CalculateNewRandomPositionBurstJob : IJobForEachWithEntity<Translation, AgentComponent, BorderComponent>
     {
@@ -43,10 +36,36 @@ public class CalculateNewRandomPositionSystem : JobComponentSystem
             if (!_agentComponent.hasTarget && _agentComponent.agentStatus == AgentStatus.Moving)
             {
                 var rnd = RandomGenerator[threadIndex - 1];
-                var calculatedRandomPosition = new float3(
+                float3 calculatedRandomPosition = float3.zero;
+
+                if (_agentComponent.exitPointReached)
+                {
+                    if (_translation.Value.x >= 180f)
+                    {
+                        // Agent is on a right exit spot
+                        // Calculate a random Position that points to the right side
+                        calculatedRandomPosition = new float3(
+                            rnd.NextFloat(_translation.Value.x + rnd.NextFloat(10f, 50f), _translation.Value.x + rnd.NextFloat(10f, 50f)),
+                            .5f,
+                            rnd.NextFloat(_translation.Value.z - rnd.NextFloat(10f, 50f), _translation.Value.z + rnd.NextFloat(10f, 50f)));
+                    }
+                    else
+                    {
+                        // Agent is on a left exit spot
+                        // Calculate a random Position that points to the left side
+                        calculatedRandomPosition = new float3(
+                            rnd.NextFloat(_translation.Value.x - rnd.NextFloat(10f, 50f), _translation.Value.x - rnd.NextFloat(10f, 50f)),
+                            .5f,
+                            rnd.NextFloat(_translation.Value.z - rnd.NextFloat(10f, 50f), _translation.Value.z + rnd.NextFloat(10f, 50f)));
+                    }
+                }
+                else
+                {
+                    calculatedRandomPosition = new float3(
                     rnd.NextFloat((_translation.Value.x - 3f), (_translation.Value.x + 3f)),
                     .5f,
                     rnd.NextFloat((_translation.Value.z - 3f), (_translation.Value.z + 3f)));
+                }
 
                 RandomGenerator[threadIndex - 1] = rnd; //This is necessary to update the state of the element inside the array.
 
@@ -66,35 +85,79 @@ public class CalculateNewRandomPositionSystem : JobComponentSystem
                 float as_x_ii = calculatedRandomPosition.x - d.x;
                 float as_z_ii = calculatedRandomPosition.z - d.z;
 
-                bool s_ab = (b.x - a.x) * as_z_i - (b.z - a.z) * as_x_i > 0; // Front.Left to Back.Left
+                bool s_ab = (b.x - a.x) * as_z_i - (b.z - a.z) * as_x_i > 0; // Front.Left to Back.Left 
                 bool s_de = (e.x - d.x) * as_z_ii - (e.z - d.z) * as_x_ii > 0; // Front.Right to Back.Right
 
-                if ((f.x - d.x) * as_z_ii - (d.z - d.z) * as_x_ii > 0 == s_de && (c.x - a.x) * as_z_i - (a.z - a.z) * as_x_i > 0 == s_ab
-                    && calculatedRandomPosition.z >= _borderComponent.frontLeft.z
-                    && calculatedRandomPosition.x <= _borderComponent.backLeft.x
-                    && calculatedRandomPosition.x >= _borderComponent.backRight.x)
+                if ((f.x - d.x) * as_z_ii - (d.z - d.z) * as_x_ii > 0 == s_de && (c.x - a.x) * as_z_i - (a.z - a.z) * as_x_i > 0 == s_ab)
                 {
-                    // If newRandomPosition is inside the festival area, move to this position
-                    // Set values like target and agentStatus
-                    _agentComponent.target = calculatedRandomPosition;
-                    _agentComponent.hasTarget = true;
+                    if (_agentComponent.exitPointReached)
+                    {
+                        _agentComponent.target = calculatedRandomPosition;
+                        _agentComponent.hasTarget = true;
+                    }
+                    else
+                    {
+                        // Outside festival area
+                        // Exit point not reached
+                        // Else if newRandomPosition is outside the festival area, stay with AgentStatus.Idle
+                        _agentComponent.target = _translation.Value;
+                        _agentComponent.hasTarget = false;
+                    }
+
+                    if (calculatedRandomPosition.z >= _borderComponent.frontLeft.z
+                    && calculatedRandomPosition.x <= _borderComponent.backLeft.x
+                    && calculatedRandomPosition.x >= _borderComponent.backRight.x
+                    && !_agentComponent.exitPointReached)
+                    {
+                        // If newRandomPosition is inside the festival area, move to this position TODO kommentieren mehr
+                        // Set values like target and agentStatus
+                        _agentComponent.target = calculatedRandomPosition;
+                        _agentComponent.hasTarget = true;
+                    }
                 }
                 else if ((f.x - e.x) * (calculatedRandomPosition.z - e.z) - (d.z - e.z) * (calculatedRandomPosition.x - e.x) > 0 != s_de
-                    && (c.x - b.x) * (calculatedRandomPosition.z - b.z) - (a.z - b.z) * (calculatedRandomPosition.x - b.x) > 0 != s_ab
-                    && calculatedRandomPosition.z >= _borderComponent.frontLeft.z
-                    && calculatedRandomPosition.x <= _borderComponent.backLeft.x
-                    && calculatedRandomPosition.x >= _borderComponent.backRight.x)
+                    && (c.x - b.x) * (calculatedRandomPosition.z - b.z) - (a.z - b.z) * (calculatedRandomPosition.x - b.x) > 0 != s_ab)
                 {
-                    // If newRandomPosition is inside the festival area, move to this position
-                    // Set values like target and agentStatus
-                    _agentComponent.target = calculatedRandomPosition;
-                    _agentComponent.hasTarget = true;
+                    if (_agentComponent.exitPointReached)
+                    {
+                        _agentComponent.target = calculatedRandomPosition;
+                        _agentComponent.hasTarget = true;
+                    }
+                    else
+                    {
+                        // Outside festival area
+                        // Exit point not reached
+                        // Else if newRandomPosition is outside the festival area, stay with AgentStatus.Idle
+                        _agentComponent.target = _translation.Value;
+                        _agentComponent.hasTarget = false;
+                    }
+
+                    if (calculatedRandomPosition.z >= _borderComponent.frontLeft.z
+                    && calculatedRandomPosition.x <= _borderComponent.backLeft.x
+                    && calculatedRandomPosition.x >= _borderComponent.backRight.x
+                    && !_agentComponent.exitPointReached)
+                    {
+                        // If newRandomPosition is inside the festival area, move to this position
+                        // Set values like target and agentStatus
+                        _agentComponent.target = calculatedRandomPosition;
+                        _agentComponent.hasTarget = true;
+                    }
                 }
                 else
                 {
-                    // Else if newRandomPosition is outside the festival area, stay with AgentStatus.Idle
-                    _agentComponent.target = _translation.Value;
-                    _agentComponent.hasTarget = false;
+                    //if (_agentComponent.exitPointReached)
+                    //{
+                    //    _agentComponent.target = calculatedRandomPosition;
+                    //    _agentComponent.hasTarget = true;
+                    //}
+                    //else
+                    //{
+                    //    // Outside festival area
+                    //    // Exit point not reached
+                    //    // Else if newRandomPosition is outside the festival area, stay with AgentStatus.Idle
+                    //    _agentComponent.target = _translation.Value;
+                    //    _agentComponent.hasTarget = false;
+                    //}
                 }
             }
         }
