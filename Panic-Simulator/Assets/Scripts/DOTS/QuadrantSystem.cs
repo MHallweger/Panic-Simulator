@@ -19,7 +19,7 @@ public class QuadrantSystem : ComponentSystem
 {
     public static NativeMultiHashMap<int, QuadrantData> quadrantMultiHashMap;
     public const int quadrantYMultiplier = 1000; // Enough for this level/Simulation size
-    private const int quadrantCellSize = 3;
+    private const int quadrantCellSize = 2;
 
     public static int GetPositionHashMapKey(float3 position)
     {

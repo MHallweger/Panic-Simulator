@@ -96,6 +96,7 @@ public class RadialMenu : MonoBehaviour
                     actions.createExits = true;
                     actions.actionEnabled = false;
                     actions.fallingTruss = false;
+                    actions.trussHasFallen = false;
                     actions.dropSoundSystem = false;
                     actions.smallGroundExplosion = false;
                     actions.mediumGroundExplosion = false;
@@ -119,6 +120,7 @@ public class RadialMenu : MonoBehaviour
                     actions.bigGroundExplosion = false;
                     actions.createExits = false;
                     actions.fallingTruss = false;
+                    actions.trussHasFallen = false;
                     actions.dropSoundSystem = false;
                     actions.fire = false;
                     UIHandler.instance.mode = "Small Explosions";
@@ -136,6 +138,7 @@ public class RadialMenu : MonoBehaviour
                     actions.bigGroundExplosion = false;
                     actions.createExits = false;
                     actions.fallingTruss = false;
+                    actions.trussHasFallen = false;
                     actions.dropSoundSystem = false;
                     actions.fire = false;
                     UIHandler.instance.mode = "Medium Explosions";
@@ -153,6 +156,7 @@ public class RadialMenu : MonoBehaviour
                     actions.smallGroundExplosion = false;
                     actions.createExits = false;
                     actions.fallingTruss = false;
+                    actions.trussHasFallen = false;
                     actions.dropSoundSystem = false;
                     actions.fire = false;
                     UIHandler.instance.mode = "Big Explosion";
@@ -182,6 +186,7 @@ public class RadialMenu : MonoBehaviour
                     // Drop Sound System Button choosen
                     actions.dropSoundSystem = true;
                     actions.fallingTruss = false;
+                    actions.trussHasFallen = false;
                     actions.createExits = false;
                     actions.smallGroundExplosion = false;
                     actions.mediumGroundExplosion = false;
@@ -200,6 +205,7 @@ public class RadialMenu : MonoBehaviour
 
                     actions.dropSoundSystem = false;
                     actions.fallingTruss = false;
+                    actions.trussHasFallen = false;
                     actions.createExits = false;
                     actions.smallGroundExplosion = false;
                     actions.mediumGroundExplosion = false;

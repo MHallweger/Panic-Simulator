@@ -37328,6 +37328,7 @@ MonoBehaviour:
   mediumGroundExplosion: 0
   bigGroundExplosion: 0
   fallingTruss: 0
+  trussHasFallen: 0
   createExits: 0
   dropSoundSystem: 0
   fire: 0

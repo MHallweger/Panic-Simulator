@@ -21,6 +21,51 @@ public class CalculateNewRandomPositionSystem : JobComponentSystem
         m_EntityCommandBufferSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
     }
 
+    public static bool IsInsideFestivalArea(ref BorderComponent _borderComponent, float3 testPosition)
+    {
+        float3 a = _borderComponent.frontLeft;
+        float3 b = _borderComponent.backLeft;
+        float3 c = _borderComponent.backLeft;
+
+        float3 d = _borderComponent.frontRight;
+        float3 e = _borderComponent.backRight;
+        float3 f = _borderComponent.backRight;
+
+        // Left Triangle
+        float as_x_i = testPosition.x - a.x;
+        float as_z_i = testPosition.z - a.z;
+
+        // Right Triangle
+        float as_x_ii = testPosition.x - d.x;
+        float as_z_ii = testPosition.z - d.z;
+
+        bool s_ab = (b.x - a.x) * as_z_i - (b.z - a.z) * as_x_i > 0; // Front.Left to Back.Left 
+        bool s_de = (e.x - d.x) * as_z_ii - (e.z - d.z) * as_x_ii > 0; // Front.Right to Back.Right
+
+        if ((f.x - d.x) * as_z_ii - (d.z - d.z) * as_x_ii > 0 == s_de && (c.x - a.x) * as_z_i - (a.z - a.z) * as_x_i > 0 == s_ab)
+        {
+            if (testPosition.z >= _borderComponent.frontLeft.z
+            && testPosition.x <= _borderComponent.backLeft.x
+            && testPosition.x >= _borderComponent.backRight.x)
+            {
+                // If newRandomPosition is inside the festival area
+                return true;
+            }
+        }
+        else if ((f.x - e.x) * (testPosition.z - e.z) - (d.z - e.z) * (testPosition.x - e.x) > 0 != s_de
+            && (c.x - b.x) * (testPosition.z - b.z) - (a.z - b.z) * (testPosition.x - b.x) > 0 != s_ab)
+        {
+            if (testPosition.z >= _borderComponent.frontLeft.z
+            && testPosition.x <= _borderComponent.backLeft.x
+            && testPosition.x >= _borderComponent.backRight.x)
+            {
+                // If newRandomPosition is inside the festival area, move to this position
+                return true;
+            }
+        }
+        return false;
+    }
+
     [BurstCompile]
     struct CalculateNewRandomPositionBurstJob : IJobForEachWithEntity<Translation, AgentComponent, BorderComponent>
     {

@@ -77,10 +77,9 @@ public class ActionAfterFalling : MonoBehaviour
         Destroy(fireThree, timeThatFireBurns);
     }
 
-    public IEnumerator EnableTrussHasFallenBool()
+    private IEnumerator EnableTrussHasFallenBool()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(.2f);
         Actions.instance.trussHasFallen = true;
-        Debug.Log("Bool angepasst!");
     }
 }

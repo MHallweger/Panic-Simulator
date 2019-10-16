@@ -14,83 +14,191 @@ using Unity.Burst;
 /// </summary>
 public class PanicSystem : JobComponentSystem
 {
-    public static void CalculateNearestExitPoint(float3 agentPosition, float3 actionPosition, float panicRadius, ref AgentComponent agentComponent,
-        NativeArray<Translation> exitsTranslations)
+    public static void CalculateNearestExitPoint(float3 agentPosition/*, float3 collisionPosition, float panicRadius*/, ref AgentComponent agentComponent,
+        NativeArray<Translation> exitsTranslations, float3 actionPosition)
     {
-        if (math.distance(agentPosition, actionPosition) <= panicRadius)
+        //var test = math.distance(agentPosition, collisionPosition);
+        //if (test <= panicRadius)
+        //{
+        if (!agentComponent.exitPointReached)
         {
-            if (!agentComponent.exitPointReached)
+            float3 closestExitTarget = float3.zero;
+
+            // Calculate optimal exit dependencies
+            if (agentPosition.x <= actionPosition.x && agentPosition.z >= actionPosition.z)
             {
-                float3 closestExitTarget = float3.zero;
+                // Agent is in the top left corner with actionPosition as center
+                // Only use exits in the top left corner
 
                 for (int i = 0; i < exitsTranslations.Length; i++)
                 {
-                    if (closestExitTarget.Equals(float3.zero))
+                    if (exitsTranslations[i].Value.x <= actionPosition.x && exitsTranslations[i].Value.z >= actionPosition.z) // Just use this exitTranslation when it's in the top left corner with actionPosition as center 
                     {
-                        // No target
-                        closestExitTarget = exitsTranslations[i].Value;
-                    }
-                    else
-                    {
-                        if (math.distance(agentPosition, exitsTranslations[i].Value) < math.distance(agentPosition, closestExitTarget))
+                        // Action is close to exit, do not use this exit
+                        if (closestExitTarget.Equals(float3.zero))
                         {
+                            // No target
                             closestExitTarget = exitsTranslations[i].Value;
+                        }
+                        else
+                        {
+                            if (math.distance(agentPosition, exitsTranslations[i].Value) < math.distance(agentPosition, closestExitTarget))
+                            {
+                                closestExitTarget = exitsTranslations[i].Value;
+                            }
                         }
                     }
                 }
-                agentComponent.target = closestExitTarget;
+            }
+            else if (agentPosition.x >= actionPosition.x && agentPosition.z >= actionPosition.z)
+            {
+                // Agent is in the top right corner with actionPosition as center
+                // Only use exits in the top right corner
+
+                for (int i = 0; i < exitsTranslations.Length; i++)
+                {
+                    if (exitsTranslations[i].Value.x >= actionPosition.x && exitsTranslations[i].Value.z >= actionPosition.z) // Just use this exitTranslation when it's in the top right corner with actionPosition as center 
+                    {
+                        // Action is close to exit, do not use this exit
+                        if (closestExitTarget.Equals(float3.zero))
+                        {
+                            // No target
+                            closestExitTarget = exitsTranslations[i].Value;
+                        }
+                        else
+                        {
+                            if (math.distance(agentPosition, exitsTranslations[i].Value) < math.distance(agentPosition, closestExitTarget))
+                            {
+                                closestExitTarget = exitsTranslations[i].Value;
+                            }
+                        }
+                    }
+                }
+            }
+            else if (agentPosition.x <= actionPosition.x && agentPosition.z <= actionPosition.z)
+            {
+                // Agent is in the bottom left corner with actionPosition as center
+                // Only use exits in the bottom left corner
+
+                for (int i = 0; i < exitsTranslations.Length; i++)
+                {
+                    if (exitsTranslations[i].Value.x <= actionPosition.x /*&& exitsTranslations[i].Value.z <= actionPosition.z*/) // Just use this exitTranslation when it's in the bottom left corner with actionPosition as center 
+                    {
+                        // Action is close to exit, do not use this exit
+                        if (closestExitTarget.Equals(float3.zero))
+                        {
+                            // No target
+                            closestExitTarget = exitsTranslations[i].Value;
+                        }
+                        else
+                        {
+                            if (math.distance(agentPosition, exitsTranslations[i].Value) < math.distance(agentPosition, closestExitTarget))
+                            {
+                                closestExitTarget = exitsTranslations[i].Value;
+                            }
+                        }
+                    }
+                }
+            }
+            else if (agentPosition.x >= actionPosition.x && agentPosition.z <= actionPosition.z)
+            {
+                // Agent is in the bottom right corner with actionPosition as center
+                // Only use exits in the bottom right corner
+
+                for (int i = 0; i < exitsTranslations.Length; i++)
+                {
+                    if (exitsTranslations[i].Value.x >= actionPosition.x /*&& exitsTranslations[i].Value.z <= actionPosition.z*/) // Just use this exitTranslation when it's in the bottom right corner with actionPosition as center 
+                    {
+                        // Action is close to exit, do not use this exit
+                        if (closestExitTarget.Equals(float3.zero))
+                        {
+                            // No target
+                            closestExitTarget = exitsTranslations[i].Value;
+                        }
+                        else
+                        {
+                            if (math.distance(agentPosition, exitsTranslations[i].Value) < math.distance(agentPosition, closestExitTarget))
+                            {
+                                closestExitTarget = exitsTranslations[i].Value;
+                            }
+                        }
+                    }
+                }
+            }
+            agentComponent.target = closestExitTarget;
+            agentComponent.agentStatus = AgentStatus.Running; //???
+            agentComponent.hasTarget = true;
+            //agentComponent.foundFinalExitPoint = true;
+        }
+        //}
+    }
+
+    /// <summary>
+    /// Every Agent in given radius gets the Panic AgentStatus
+    /// </summary>
+    [BurstCompile]
+    public struct EnablePanicModeJob : IJobForEachWithEntity<AgentComponent, Translation>
+    {
+        [ReadOnly]
+        public float panicRadius;
+
+        [ReadOnly]
+        public float3 actionPosition;
+
+        public void Execute(Entity entity, int index, ref AgentComponent agentComponent, [ReadOnly] ref Translation translation)
+        {
+            if (math.distance(translation.Value, actionPosition) <= panicRadius)
+            {
+                // Agent close to the action position
+                // Enable Pre Panic Mode
                 agentComponent.agentStatus = AgentStatus.Running;
-                agentComponent.hasTarget = true;
             }
         }
     }
 
     [BurstCompile]
-    public struct PanicJob : IJobForEachWithEntity<Translation, AgentComponent>
+    public struct PanicJob : IJobForEachWithEntity<Translation, AgentComponent, BorderComponent>
     {
         [ReadOnly] public NativeArray<Translation> exitsTranslations;
 
         public float3 actionPosition; // The spot where the action arised
-        public int actionMode; // The mode which was used
+        [NativeDisableParallelForRestriction]
+        [DeallocateOnJobCompletion]
+        public NativeArray<Random> RandomGenerator;
 
-        public void Execute(Entity entity, int index, [ReadOnly] ref Translation translation, ref AgentComponent agentComponent)
+        [Unity.Collections.LowLevel.Unsafe.NativeSetThreadIndex]
+        private int threadIndex;
+
+        public void Execute(Entity entity, int index, [ReadOnly] ref Translation translation, ref AgentComponent agentComponent, [ReadOnly] ref BorderComponent borderComponent)
         {
-            float panicRadius = 0.0f;
+            var randomGenerator = RandomGenerator[threadIndex - 1];
 
-            switch (actionMode)
+            RandomGenerator[threadIndex - 1] = randomGenerator; //This is necessary to update the state of the element inside the array.
+
+            var rnd = RandomGenerator[threadIndex - 1];
+
+            if (agentComponent.agentStatus == AgentStatus.Running && !agentComponent.hasTarget)
             {
-                case 0:
-                    // No action created
-                    break;
-                case 1:
-                    // Small Explosion created
-                    panicRadius = 5.0f;
-                    CalculateNearestExitPoint(translation.Value, actionPosition, panicRadius, ref agentComponent, exitsTranslations);
-                    break;
-                case 2:
-                    //  Medium Explosion created
-                    panicRadius = 10.0f;
-                    CalculateNearestExitPoint(translation.Value, actionPosition, panicRadius, ref agentComponent, exitsTranslations);
-                    break;
-                case 3:
-                    // Big Explosion created
-                    panicRadius = 15.0f;
-                    CalculateNearestExitPoint(translation.Value, actionPosition, panicRadius, ref agentComponent, exitsTranslations);
-                    break;
-                case 4:
-                    // Falling Truss created
-                    panicRadius = 10.0f;
-                    CalculateNearestExitPoint(translation.Value, actionPosition, panicRadius, ref agentComponent, exitsTranslations);
-                    break;
-                case 5:
-                    // Fire created
-                    panicRadius = 10.0f;
-                    CalculateNearestExitPoint(translation.Value, actionPosition, panicRadius, ref agentComponent, exitsTranslations);
-                    break;
-                default:
-                    panicRadius = 10.0f;
-                    CalculateNearestExitPoint(translation.Value, actionPosition, panicRadius, ref agentComponent, exitsTranslations);
-                    break;
+                // Generate random position on map
+                // Set target for enabling Running Job in Running System
+                float3 randomGeneratedPanicPosition = float3.zero;
+                float3 tempRandomPosition = float3.zero;
+                while (randomGeneratedPanicPosition.Equals(float3.zero))
+                {
+                    tempRandomPosition = new float3(
+                        rnd.NextFloat(borderComponent.backRight.x, borderComponent.backLeft.x),
+                        .5f,
+                        rnd.NextFloat(borderComponent.frontLeft.z, borderComponent.backLeft.z));
+
+                    if (CalculateNewRandomPositionSystem.IsInsideFestivalArea(ref borderComponent, tempRandomPosition))
+                    {
+                        // If tempRandomPosition is inside the festival Area, set this random Position and trigger the Running Job in the RunningSystem
+                        randomGeneratedPanicPosition = tempRandomPosition;
+
+                        agentComponent.target = randomGeneratedPanicPosition;
+                        agentComponent.hasTarget = true;
+                    }
+                }
             }
         }
     }
@@ -106,6 +214,9 @@ public class PanicSystem : JobComponentSystem
 
         [ReadOnly]
         public NativeArray<Translation> exitsTranslations;
+
+        [ReadOnly]
+        public float3 actionPosition; // position where panic appears
 
         public void Execute(Entity entity, int index, [ReadOnly] ref Translation translation, ref AgentComponent agentComponent)
         {
@@ -136,15 +247,13 @@ public class PanicSystem : JobComponentSystem
             {
                 do
                 {
-                    if (math.distance(translation.Value, quadrantData.position) <= 5.0f
-                        && !quadrantData.agentComponent.exitPointReached
-                        && !agentComponent.exitPointReached)
+                    if (math.distance(translation.Value, quadrantData.position) <= 20.0f
+                    && !quadrantData.agentComponent.exitPointReached
+                    && !agentComponent.exitPointReached)
                     {
                         if (quadrantData.agentComponent.agentStatus == AgentStatus.Running)
                         {
-                            CalculateNearestExitPoint(translation.Value, quadrantData.position, 5f, ref agentComponent, exitsTranslations);
                             agentComponent.agentStatus = AgentStatus.Running;
-                            agentComponent.hasTarget = true;
                         }
                     }
                 } while (quadrantMultiHashMap.TryGetNextValue(out quadrantData, ref nativeMultiHashMapIterator));
@@ -154,7 +263,9 @@ public class PanicSystem : JobComponentSystem
 
     float3 actionPosition;
     int actionMode;
-
+    float panicRadius;
+    Random Rnd = new Random(1);
+    NativeArray<Random> RandomGenerator;
     /// <summary>
     /// Runs on main thread, 1 times per frame
     /// </summary>
@@ -163,6 +274,12 @@ public class PanicSystem : JobComponentSystem
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
         JobHandle jobHandle = new JobHandle();
+        RandomGenerator = new NativeArray<Random>(System.Environment.ProcessorCount, Allocator.TempJob);
+
+        for (int i = 0; i < RandomGenerator.Length; i++)
+        {
+            RandomGenerator[i] = new Random((uint)Rnd.NextInt());
+        }
 
         if (Actions.instance.actionEnabled) // If action is enabled, get all exits and calculate the closest position
         {
@@ -173,54 +290,42 @@ public class PanicSystem : JobComponentSystem
             if (Actions.instance.smallGroundExplosion)
             {
                 actionMode = 1;
-            }
-            else if (Actions.instance.mediumGroundExplosion)
-            {
-                actionMode = 2;
-            }
-            else if (Actions.instance.bigGroundExplosion)
-            {
-                actionMode = 3;
-            }
-            else if (Actions.instance.trussHasFallen)
-            {
-                actionMode = 4;
-            }
-            else if (Actions.instance.fire)
-            {
-                actionMode = 5;
-            }
-            else
-            {
-                actionMode = 0;
-            }
-
-            if (UnityEngine.Input.GetMouseButtonDown(0))
-            {
-                // Small Explosions in Radial menu was selected
-                actionPosition = UnityEngine.Input.mousePosition;
-                UnityEngine.Ray ray = UnityEngine.Camera.main.ScreenPointToRay(actionPosition);
-                if (UnityEngine.Physics.Raycast(ray, out UnityEngine.RaycastHit hit))
+                if (UnityEngine.Input.GetMouseButtonDown(0))
                 {
-                    if (hit.collider != null)
+                    // Small Explosions in Radial menu was selected
+                    actionPosition = UnityEngine.Input.mousePosition;
+                    UnityEngine.Ray ray = UnityEngine.Camera.main.ScreenPointToRay(actionPosition);
+                    if (UnityEngine.Physics.Raycast(ray, out UnityEngine.RaycastHit hit))
                     {
-                        actionPosition = new float3(hit.point.x, .5f, hit.point.z);
+                        if (hit.collider != null)
+                        {
+                            actionPosition = new float3(hit.point.x, .5f, hit.point.z);
+                        }
                     }
+
+                    EnablePanicModeJob enablePrePanicJob = new EnablePanicModeJob
+                    {
+                        actionPosition = actionPosition,
+                        panicRadius = 5f // TODO set
+                    };
+                    jobHandle = enablePrePanicJob.Schedule(this, inputDeps);
                 }
 
                 PanicJob panicJob = new PanicJob
                 {
-                    exitsTranslations = exitsTranslations,
                     actionPosition = actionPosition,
-                    actionMode = actionMode
+                    RandomGenerator = RandomGenerator,
+                    exitsTranslations = exitsTranslations
                 };
-                jobHandle = panicJob.Schedule(this, inputDeps);
+                jobHandle = panicJob.Schedule(this, jobHandle);
             }
+
             // Only React on panic when panic action is enabled
             ReactOnPanicInsideQuadrantJob reactOnPanicInsideQuadrantJob = new ReactOnPanicInsideQuadrantJob
             {
                 quadrantMultiHashMap = QuadrantSystem.quadrantMultiHashMap,
-                exitsTranslations = exitsTranslations
+                exitsTranslations = exitsTranslations,
+                actionPosition = actionPosition
             };
 
             jobHandle = reactOnPanicInsideQuadrantJob.Schedule(this, jobHandle);

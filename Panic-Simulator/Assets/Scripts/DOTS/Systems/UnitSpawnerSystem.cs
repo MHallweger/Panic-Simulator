@@ -46,10 +46,13 @@ public class UnitSpawnerSystem : JobComponentSystem
 
             RandomGenerator[threadIndex - 1] = randomGenerator; //This is necessary to update the state of the element inside the array.
 
+            var seed = (uint)(BaseSeed + index); // For Unity.Mathematics.Random --Slightly useless here because there is only one entity which calls this Execute()
+            var rnd = new Random(seed); // Random Object for accessing rnd.NextFloat()
+
             if (_inputComponent.keyOnePressedUp)
             {
-                var seed = (uint)(BaseSeed + index); // For Unity.Mathematics.Random --Slightly useless here because there is only one entity which calls this Execute()
-                var rnd = new Random(seed); // Random Object for accessing rnd.NextFloat()
+                //var seed = (uint)(BaseSeed + index); // For Unity.Mathematics.Random --Slightly useless here because there is only one entity which calls this Execute()
+                //var rnd = new Random(seed); // Random Object for accessing rnd.NextFloat()
 
                 for (int i = 0; i < _spawner.AmountToSpawn; i++)
                 {
@@ -86,14 +89,14 @@ public class UnitSpawnerSystem : JobComponentSystem
                                 Value = randomPositions[i + loopIndex]
                             }); // Agent outside. Set Translation value
 
-                            CommandBuffer.AddComponent(index, instance, new AgentComponent
-                            {
-                                hasTarget = false,
-                                target = randomPositions[i + loopIndex],
-                                agentStatus = AgentStatus.Idle,
-                                exitPointReached = false
-                                // TODO test jumped here
-                            });
+                            //CommandBuffer.AddComponent(index, instance, new AgentComponent
+                            //{
+                            //    hasTarget = false,
+                            //    target = randomPositions[i + loopIndex],
+                            //    agentStatus = AgentStatus.Idle,
+                            //    exitPointReached = false,
+                            //    // TODO test jumped here
+                            //});
 
                             setPosition = true;
                         }
@@ -105,15 +108,15 @@ public class UnitSpawnerSystem : JobComponentSystem
                                 Value = randomPositions[i + loopIndex]
                             }); // Agent outside. Set Translation value
 
-                            CommandBuffer.AddComponent(index, instance, new AgentComponent
-                            {
-                                hasTarget = false,
-                                target = randomPositions[i + loopIndex],
-                                agentStatus = AgentStatus.Idle,
-                                exitPointReached = false
-                                // TODO test jumped here
+                            //CommandBuffer.AddComponent(index, instance, new AgentComponent
+                            //{
+                            //    hasTarget = false,
+                            //    target = randomPositions[i + loopIndex],
+                            //    agentStatus = AgentStatus.Idle,
+                            //    exitPointReached = false,
+                            //    // TODO test jumped here
 
-                            });
+                            //});
 
                             setPosition = true;
                         }
@@ -138,14 +141,14 @@ public class UnitSpawnerSystem : JobComponentSystem
                                     Value = rndPos
                                 });
 
-                                CommandBuffer.AddComponent(index, instance, new AgentComponent
-                                {
-                                    hasTarget = false,
-                                    target = randomPositions[i + loopIndex],
-                                    agentStatus = AgentStatus.Idle,
-                                    exitPointReached = false 
-                                    // TODO test jumped here
-                                });
+                                //CommandBuffer.AddComponent(index, instance, new AgentComponent
+                                //{
+                                //    hasTarget = false,
+                                //    target = randomPositions[i + loopIndex],
+                                //    agentStatus = AgentStatus.Idle,
+                                //    exitPointReached = false,
+                                //    // TODO test jumped here
+                                //});
                             }
                         }
                     }
@@ -157,6 +160,16 @@ public class UnitSpawnerSystem : JobComponentSystem
                         runningSpeed = rnd.NextFloat(3.0f,4.0f), // before (7.0,9.0)
                         jumpSpeed = rnd.NextFloat(2.0f, 4.0f),
                         panicJumpSpeed = rnd.NextFloat(4.0f, 5.0f)
+                    });
+
+                    CommandBuffer.AddComponent(index, instance, new AgentComponent
+                    {
+                        hasTarget = false,
+                        target = randomPositions[i + loopIndex],
+                        agentStatus = AgentStatus.Idle,
+                        exitPointReached = false,
+                        randomPositionsAfterActionPassed = rnd.NextInt(1, 10)
+                        // TODO test jumped here
                     });
 
                     CommandBuffer.AddComponent(index, instance, new BorderComponent
