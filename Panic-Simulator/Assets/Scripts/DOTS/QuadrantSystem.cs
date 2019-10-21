@@ -8,20 +8,32 @@ using Unity.Transforms;
 using Unity.Burst;
 using Unity.Jobs;
 
+public struct QuadrantEntity : IComponentData
+{
+    public TypeEnum typeEnum;
+
+    public enum TypeEnum
+    {
+        Agent,
+        Exit
+    }
+}
+
 public struct QuadrantData
 {
     public Entity entity;
     public float3 position;
     public AgentComponent agentComponent;
+    public QuadrantEntity quadrantEntity;
 }
 
-public class QuadrantSystem : ComponentSystem
+public class QuadrantSystem : JobComponentSystem
 {
     public static NativeMultiHashMap<int, QuadrantData> quadrantMultiHashMap;
     public const int quadrantYMultiplier = 1000; // Enough for this level/Simulation size
-    private const int quadrantCellSize = 2;
+    private const float quadrantCellSize = 1.5f; // vorher int 1
 
-    public static int GetPositionHashMapKey(float3 position)
+    public static int GetPositionHashMapKey(float3 position) // Video Anleitung
     {
         return (int)(math.floor(position.x / quadrantCellSize) + (quadrantYMultiplier * math.floor(position.z / quadrantCellSize)));
     }
@@ -36,7 +48,7 @@ public class QuadrantSystem : ComponentSystem
         //Debug.Log(GetPositionHashMapKey(position) + " " + position);
     }
 
-    private static int GetEntityCountInHashMap(NativeMultiHashMap<int, QuadrantData> quadrantMultiHashMap, int hashMapKey)
+    public static int GetEntityCountInHashMap(NativeMultiHashMap<int, QuadrantData> quadrantMultiHashMap, int hashMapKey)
     {
         QuadrantData quadrantData;
         NativeMultiHashMapIterator<int> nativeMultiHashMapIterator;
@@ -52,18 +64,36 @@ public class QuadrantSystem : ComponentSystem
     }
 
     [BurstCompile]
-    private struct SetQuadrantDataHashMapJob : IJobForEachWithEntity<AgentComponent, Translation>
+    private struct SetQuadrantDataHashMapJob : IJobForEachWithEntity<AgentComponent, Translation, QuadrantEntity>
     {
         public NativeMultiHashMap<int, QuadrantData>.Concurrent quadrantMultiHashMap;
 
-        public void Execute(Entity entity, int index, ref AgentComponent agentComponent, ref Translation translation)
+        public void Execute(Entity entity, int index, ref AgentComponent agentComponent, ref Translation translation, ref QuadrantEntity quadrantEntity)
         {
             int hashMapKey = GetPositionHashMapKey(translation.Value);
             quadrantMultiHashMap.Add(hashMapKey, new QuadrantData
             {
                 entity = entity,
                 position = translation.Value,
-                agentComponent = agentComponent
+                agentComponent = agentComponent,
+                quadrantEntity = quadrantEntity
+            });
+        }
+    }
+
+    [BurstCompile]
+    private struct SetQuadrantDataHashMapJobForExits : IJobForEachWithEntity<ExitComponent, Translation, QuadrantEntity>
+    {
+        public NativeMultiHashMap<int, QuadrantData>.Concurrent quadrantMultiHashMap;
+
+        public void Execute(Entity entity, int index, [ReadOnly] ref ExitComponent exitComponent, [ReadOnly] ref Translation translation, ref QuadrantEntity quadrantEntity)
+        {
+            int hashMapKey = GetPositionHashMapKey(translation.Value);
+            quadrantMultiHashMap.Add(hashMapKey, new QuadrantData
+            {
+                entity = entity,
+                position = translation.Value,
+                quadrantEntity = quadrantEntity
             });
         }
     }
@@ -80,12 +110,12 @@ public class QuadrantSystem : ComponentSystem
         base.OnDestroy();
     }
 
-    protected override void OnUpdate()
+    protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
-        EntityQuery entityQuery = GetEntityQuery(typeof(AgentComponent), typeof(Translation));
+        EntityQuery entityQuery = GetEntityQuery(typeof(QuadrantEntity), typeof(Translation));
 
-        quadrantMultiHashMap.Clear();
-        if (entityQuery.CalculateEntityCount() > quadrantMultiHashMap.Capacity) //  prevent hasMap is full error
+        quadrantMultiHashMap.Clear(); // because of the persistent hasMap
+        if (entityQuery.CalculateEntityCount() > quadrantMultiHashMap.Capacity) //  prevent hasMap is full error, hashmaps cannot dynamically grow in jobs. need to to this here instead, before starting the specifify job
         {
             quadrantMultiHashMap.Capacity = entityQuery.CalculateEntityCount();
         }
@@ -95,8 +125,15 @@ public class QuadrantSystem : ComponentSystem
             quadrantMultiHashMap = quadrantMultiHashMap.ToConcurrent() // TODO: deprecated
         };
 
-        JobHandle jobHandle = JobForEachExtensions.Schedule(setQuadrantDataHashMapJob, entityQuery);
-        jobHandle.Complete();
+        JobHandle jobHandle = setQuadrantDataHashMapJob.Schedule(this, inputDeps);/* JobForEachExtensions.Schedule(setQuadrantDataHashMapJob, entityQuery);*/
+
+        SetQuadrantDataHashMapJobForExits setQuadrantDataHashMapJobForExits = new SetQuadrantDataHashMapJobForExits
+        {
+            quadrantMultiHashMap = quadrantMultiHashMap.ToConcurrent()
+        };
+
+        jobHandle = setQuadrantDataHashMapJobForExits.Schedule(this, jobHandle);
+        //jobHandle.Complete();
 
         //var mousePosition = Input.mousePosition;
         //mousePosition.z = Mathf.Abs(Camera.main.gameObject.transform.position.z);
@@ -105,5 +142,7 @@ public class QuadrantSystem : ComponentSystem
         //DebugDrawQuadrant(GameObject.Find("QuadrantDebugCube").transform.position);
 
         //Debug.Log(GetEntityCountInHashMap(quadrantMultiHashMap, GetPositionHashMapKey(GameObject.Find("QuadrantDebugCube").transform.position)));
+        return jobHandle;
+
     }
 }

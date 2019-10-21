@@ -33,13 +33,15 @@ public class RunningSystem : JobComponentSystem
                     if (agentComponent.foundFinalExitPoint)
                     {
                         // Agent is near to the target
-                        agentComponent.hasTarget = false;
                         agentComponent.agentStatus = AgentStatus.Moving;
+                        agentComponent.hasTarget = false;
                         agentComponent.exitPointReached = true; // The CalculateNewRandomPositionSystem is able now to seperate the agents and allow the correct new random generated positions
+                        agentComponent.marked = false;
                     }
                     else
                     {
                         agentComponent.hasTarget = false;
+                        agentComponent.marked = false;
                     }
                 }
                 else

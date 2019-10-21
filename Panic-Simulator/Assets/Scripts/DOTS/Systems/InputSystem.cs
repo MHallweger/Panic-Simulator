@@ -73,6 +73,7 @@ public class InputSystem : JobComponentSystem
             Entity exitEntity = CommandBuffer.CreateEntity(index);
             CommandBuffer.AddComponent(index, exitEntity, new Translation { Value = positionForExitEntity });
             CommandBuffer.AddComponent(index, exitEntity, new ExitComponent { });
+            CommandBuffer.AddComponent(index, exitEntity, new QuadrantEntity { typeEnum = QuadrantEntity.TypeEnum.Exit });
 
             // Disable Remove Exits System, otherwise the exit entity will instantly removed
             World.Active.GetExistingSystem<RemoveExitsSystem>().Enabled = false;

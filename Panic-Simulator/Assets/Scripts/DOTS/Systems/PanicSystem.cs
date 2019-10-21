@@ -14,124 +14,51 @@ using Unity.Burst;
 /// </summary>
 public class PanicSystem : JobComponentSystem
 {
-    public static void CalculateNearestExitPoint(float3 agentPosition/*, float3 collisionPosition, float panicRadius*/, ref AgentComponent agentComponent,
-        NativeArray<Translation> exitsTranslations, float3 actionPosition)
-    {
-        //var test = math.distance(agentPosition, collisionPosition);
-        //if (test <= panicRadius)
-        //{
-        if (!agentComponent.exitPointReached)
-        {
-            float3 closestExitTarget = float3.zero;
+    //public static void CheckForClosestExit(float3 agentPosition/*, float3 collisionPosition, float panicRadius*/, ref AgentComponent agentComponent,
+    //    NativeArray<Translation> exitsTranslations/*, Translation excludedTranslation = new Translation()*//*, float3 actionPosition*/, NativeArray<ExitComponent> exitsExitComponents)
+    //{
+    //    for (int i = 0; i < exitsTranslations.Length; i++)
+    //    {
+    //        if (math.distance(agentPosition, exitsTranslations[i].Value) < 20f)
+    //        {
+    //            if (!exitsExitComponents[i].overloaded)
+    //            {
+    //                //If Agent can see an exit, set this exit as target
+    //                agentComponent.target = exitsTranslations[i].Value;
+    //                agentComponent.hasTarget = true;
+    //                agentComponent.foundFinalExitPoint = true;
+    //                agentComponent.foundTemporaryNewRandomPosition = false;
+    //            }
+    //        }
+    //    }
+    //}
 
-            // Calculate optimal exit dependencies
-            if (agentPosition.x <= actionPosition.x && agentPosition.z >= actionPosition.z)
-            {
-                // Agent is in the top left corner with actionPosition as center
-                // Only use exits in the top left corner
-
-                for (int i = 0; i < exitsTranslations.Length; i++)
-                {
-                    if (exitsTranslations[i].Value.x <= actionPosition.x && exitsTranslations[i].Value.z >= actionPosition.z) // Just use this exitTranslation when it's in the top left corner with actionPosition as center 
-                    {
-                        // Action is close to exit, do not use this exit
-                        if (closestExitTarget.Equals(float3.zero))
-                        {
-                            // No target
-                            closestExitTarget = exitsTranslations[i].Value;
-                        }
-                        else
-                        {
-                            if (math.distance(agentPosition, exitsTranslations[i].Value) < math.distance(agentPosition, closestExitTarget))
-                            {
-                                closestExitTarget = exitsTranslations[i].Value;
-                            }
-                        }
-                    }
-                }
-            }
-            else if (agentPosition.x >= actionPosition.x && agentPosition.z >= actionPosition.z)
-            {
-                // Agent is in the top right corner with actionPosition as center
-                // Only use exits in the top right corner
-
-                for (int i = 0; i < exitsTranslations.Length; i++)
-                {
-                    if (exitsTranslations[i].Value.x >= actionPosition.x && exitsTranslations[i].Value.z >= actionPosition.z) // Just use this exitTranslation when it's in the top right corner with actionPosition as center 
-                    {
-                        // Action is close to exit, do not use this exit
-                        if (closestExitTarget.Equals(float3.zero))
-                        {
-                            // No target
-                            closestExitTarget = exitsTranslations[i].Value;
-                        }
-                        else
-                        {
-                            if (math.distance(agentPosition, exitsTranslations[i].Value) < math.distance(agentPosition, closestExitTarget))
-                            {
-                                closestExitTarget = exitsTranslations[i].Value;
-                            }
-                        }
-                    }
-                }
-            }
-            else if (agentPosition.x <= actionPosition.x && agentPosition.z <= actionPosition.z)
-            {
-                // Agent is in the bottom left corner with actionPosition as center
-                // Only use exits in the bottom left corner
-
-                for (int i = 0; i < exitsTranslations.Length; i++)
-                {
-                    if (exitsTranslations[i].Value.x <= actionPosition.x /*&& exitsTranslations[i].Value.z <= actionPosition.z*/) // Just use this exitTranslation when it's in the bottom left corner with actionPosition as center 
-                    {
-                        // Action is close to exit, do not use this exit
-                        if (closestExitTarget.Equals(float3.zero))
-                        {
-                            // No target
-                            closestExitTarget = exitsTranslations[i].Value;
-                        }
-                        else
-                        {
-                            if (math.distance(agentPosition, exitsTranslations[i].Value) < math.distance(agentPosition, closestExitTarget))
-                            {
-                                closestExitTarget = exitsTranslations[i].Value;
-                            }
-                        }
-                    }
-                }
-            }
-            else if (agentPosition.x >= actionPosition.x && agentPosition.z <= actionPosition.z)
-            {
-                // Agent is in the bottom right corner with actionPosition as center
-                // Only use exits in the bottom right corner
-
-                for (int i = 0; i < exitsTranslations.Length; i++)
-                {
-                    if (exitsTranslations[i].Value.x >= actionPosition.x /*&& exitsTranslations[i].Value.z <= actionPosition.z*/) // Just use this exitTranslation when it's in the bottom right corner with actionPosition as center 
-                    {
-                        // Action is close to exit, do not use this exit
-                        if (closestExitTarget.Equals(float3.zero))
-                        {
-                            // No target
-                            closestExitTarget = exitsTranslations[i].Value;
-                        }
-                        else
-                        {
-                            if (math.distance(agentPosition, exitsTranslations[i].Value) < math.distance(agentPosition, closestExitTarget))
-                            {
-                                closestExitTarget = exitsTranslations[i].Value;
-                            }
-                        }
-                    }
-                }
-            }
-            agentComponent.target = closestExitTarget;
-            agentComponent.agentStatus = AgentStatus.Running; //???
-            agentComponent.hasTarget = true;
-            //agentComponent.foundFinalExitPoint = true;
-        }
-        //}
-    }
+    //public static void AgentAmountCheck(NativeArray<Translation> exitsTranslations, ref AgentComponent agentComponent, float3 agentPosition,
+    //    NativeMultiHashMap<int, QuadrantData> quadrantMultiHashMap)
+    //{
+    //    // Agent found exit and runs to it
+    //    //if (exitsTranslations.Length > 1) // If there are more than 1 exits, decide which one contains less agents
+    //    //{
+    //    // In this period calculate the current amount of agents that are around this exit
+    //    if (agentComponent.foundFinalExitPoint)
+    //    {
+    //        for (int i = 0; i < exitsTranslations.Length; i++)
+    //        {
+    //            if (agentComponent.target.Equals(exitsTranslations[i].Value))
+    //            {
+    //                if (QuadrantSystem.GetEntityCountInHashMap(quadrantMultiHashMap, QuadrantSystem.GetPositionHashMapKey(exitsTranslations[i].Value)) > 3)
+    //                {
+    //                    // If the Amunt is higher than 100, do
+    //                    //CheckForClosestExit(agentPosition, ref agentComponent, exitsTranslations, excludedTranslation: exitsTranslations[i]);
+    //                    agentComponent.agentStatus = AgentStatus.Running;
+    //                    agentComponent.hasTarget = false;
+    //                    agentComponent.testing = true;
+    //                }
+    //            }
+    //        }
+    //    }
+    //    //}
+    //}
 
     /// <summary>
     /// Every Agent in given radius gets the Panic AgentStatus
@@ -159,7 +86,11 @@ public class PanicSystem : JobComponentSystem
     [BurstCompile]
     public struct PanicJob : IJobForEachWithEntity<Translation, AgentComponent, BorderComponent>
     {
+        [ReadOnly]
+        public NativeMultiHashMap<int, QuadrantData> quadrantMultiHashMap;
+
         [ReadOnly] public NativeArray<Translation> exitsTranslations;
+        [ReadOnly] public NativeArray<ExitComponent> exitsExitComponents;
 
         public float3 actionPosition; // The spot where the action arised
         [NativeDisableParallelForRestriction]
@@ -177,7 +108,8 @@ public class PanicSystem : JobComponentSystem
 
             var rnd = RandomGenerator[threadIndex - 1];
 
-            if (agentComponent.agentStatus == AgentStatus.Running && !agentComponent.hasTarget)
+            // Generate new random position on map
+            if (agentComponent.agentStatus == AgentStatus.Running && !agentComponent.hasTarget /*&& !agentComponent.exitPointReached*/)
             {
                 // Generate random position on map
                 // Set target for enabling Running Job in Running System
@@ -197,6 +129,95 @@ public class PanicSystem : JobComponentSystem
 
                         agentComponent.target = randomGeneratedPanicPosition;
                         agentComponent.hasTarget = true;
+                        agentComponent.foundTemporaryNewRandomPosition = true;
+                    }
+                }
+            }
+            // Calculate nearest exit. Look on the exit and check if its overloaded. Only set this exit as target when its not overloaed
+            else if (agentComponent.agentStatus == AgentStatus.Running && agentComponent.hasTarget && agentComponent.foundTemporaryNewRandomPosition && !agentComponent.foundFinalExitPoint && !agentComponent.marked)
+            {
+                for (int i = 0; i < exitsTranslations.Length; i++)
+                {
+                    if (math.distance(translation.Value, exitsTranslations[i].Value) < 20f) // Agents in der Nähe von 20 meiden einen exit der überladen ist
+                    {
+                        if (!exitsExitComponents[i].overloaded /*&& !agentComponent.marked*/)
+                        {
+                            //If Agent can see an exit, set this exit as target
+                            agentComponent.target = exitsTranslations[i].Value;
+                            agentComponent.hasTarget = true;
+                            agentComponent.foundFinalExitPoint = true;
+                            agentComponent.foundTemporaryNewRandomPosition = false;
+                        }
+                        else
+                        {
+                            agentComponent.hasTarget = false;
+                        }
+                    }
+                    else if (math.distance(translation.Value, exitsTranslations[i].Value) >= 20.0f)
+                    {
+                        // Every Agent with distance greater than 40 will look on the overloaded bool on this exit
+                        float dice = rnd.NextFloat(1000.0f);
+
+                        if (dice <= agentComponent.discoverProbability)
+                        {
+                            agentComponent.target = exitsTranslations[i].Value;
+                            agentComponent.hasTarget = true;
+                            agentComponent.foundFinalExitPoint = true;
+                            agentComponent.foundTemporaryNewRandomPosition = false;
+
+                            agentComponent.discoverProbability += 5.5f; // Increase the probability for running to an exit where a lot of agents are 
+
+                        }
+                        else
+                        {
+                            agentComponent.hasTarget = false;
+                        }
+                    }
+                }
+            }
+            else if (agentComponent.agentStatus != AgentStatus.Running)
+            {
+                // For those which are standing in a corner of the festival area
+                for (int i = 0; i < exitsExitComponents.Length; i++)
+                {
+                    if (exitsExitComponents[i].overloaded)
+                    {
+                        agentComponent.agentStatus = AgentStatus.Running;
+                        //agentComponent.target = exitsTranslations[i].Value;
+                        //agentComponent.hasTarget = true;
+                        //agentComponent.foundFinalExitPoint = true;
+                    }
+                }
+            }
+            if (agentComponent.foundFinalExitPoint && agentComponent.hasTarget)
+            {
+                // Agent runs to an exit
+                for (int i = 0; i < exitsTranslations.Length; i++)
+                {
+                    if (agentComponent.target.Equals(exitsTranslations[i].Value))
+                    {
+                        if (exitsExitComponents[i].overloaded)
+                        {
+                            // Agents notices on the way to the exit that this exis is overloaded now, randomly decide if it shall keep this exit or to choose another one
+
+                            float dice = rnd.NextFloat(1000f);
+
+                            if (dice <= agentComponent.fleeProbability)
+                            {
+                                agentComponent.hasTarget = false;
+                                agentComponent.foundFinalExitPoint = false;
+                                agentComponent.marked = true;
+
+                                if (agentComponent.fleeProbability - 5.5f < 0.0f)
+                                {
+                                    agentComponent.fleeProbability = 22.22f;
+                                }
+                                else
+                                {
+                                    agentComponent.fleeProbability -= 5.5f;
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -207,7 +228,7 @@ public class PanicSystem : JobComponentSystem
     /// Job that handles the reaction of an agent when beeing in near of an agent that has panic and is in running mode.
     /// </summary>
     [BurstCompile]
-    public struct ReactOnPanicInsideQuadrantJob : IJobForEachWithEntity<Translation, AgentComponent>
+    public struct ReactOnPanicInsideQuadrantJob : IJobForEachWithEntity<Translation, AgentComponent, QuadrantEntity>
     {
         [ReadOnly]
         public NativeMultiHashMap<int, QuadrantData> quadrantMultiHashMap;
@@ -216,9 +237,12 @@ public class PanicSystem : JobComponentSystem
         public NativeArray<Translation> exitsTranslations;
 
         [ReadOnly]
+        public NativeArray<ExitComponent> exitsExitComponents;
+
+        [ReadOnly]
         public float3 actionPosition; // position where panic appears
 
-        public void Execute(Entity entity, int index, [ReadOnly] ref Translation translation, ref AgentComponent agentComponent)
+        public void Execute(Entity entity, int index, [ReadOnly] ref Translation translation, ref AgentComponent agentComponent, ref QuadrantEntity quadrantEntity)
         {
             int hashMapKey = QuadrantSystem.GetPositionHashMapKey(translation.Value); // Calculate the correct quadrant for this agent
             CalculatePanicReaction(hashMapKey, ref translation, ref agentComponent); // This quadrant itself (mid)
@@ -247,19 +271,29 @@ public class PanicSystem : JobComponentSystem
             {
                 do
                 {
-                    if (math.distance(translation.Value, quadrantData.position) <= 20.0f
-                    && !quadrantData.agentComponent.exitPointReached
-                    && !agentComponent.exitPointReached)
+                    if (math.distance(translation.Value, quadrantData.position) < 20
+                        && quadrantData.agentComponent.agentStatus == AgentStatus.Running
+                        && !quadrantData.agentComponent.exitPointReached // prevent stopping at exit
+                        && !agentComponent.exitPointReached) // prevent stopping at exit
                     {
-                        if (quadrantData.agentComponent.agentStatus == AgentStatus.Running)
-                        {
-                            agentComponent.agentStatus = AgentStatus.Running;
-                        }
+                        agentComponent.agentStatus = AgentStatus.Running;
+                    }
+
+                    if (math.distance(translation.Value, quadrantData.position) < 30
+                        && quadrantData.agentComponent.foundFinalExitPoint
+                        && !quadrantData.agentComponent.exitPointReached
+                        && !agentComponent.exitPointReached
+                        && !agentComponent.marked)
+                    {
+                        agentComponent.target = quadrantData.agentComponent.target;
+                        agentComponent.foundFinalExitPoint = true;
+                        agentComponent.hasTarget = true;
                     }
                 } while (quadrantMultiHashMap.TryGetNextValue(out quadrantData, ref nativeMultiHashMapIterator));
             }
         }
     }
+
 
     float3 actionPosition;
     int actionMode;
@@ -286,6 +320,7 @@ public class PanicSystem : JobComponentSystem
             EntityQuery exitQuery = GetEntityQuery(typeof(ExitComponent), ComponentType.ReadOnly<Translation>());
 
             NativeArray<Translation> exitsTranslations = exitQuery.ToComponentDataArray<Translation>(Allocator.TempJob);
+            NativeArray<ExitComponent> exitsExitComponents = exitQuery.ToComponentDataArray<ExitComponent>(Allocator.TempJob);
 
             if (Actions.instance.smallGroundExplosion)
             {
@@ -310,12 +345,18 @@ public class PanicSystem : JobComponentSystem
                     };
                     jobHandle = enablePrePanicJob.Schedule(this, inputDeps);
                 }
+                //for (int i = 0; i < exitsTranslations.Length; i++)
+                //{
+                //    UnityEngine.Debug.Log(QuadrantSystem.GetEntityCountInHashMap(QuadrantSystem.quadrantMultiHashMap, QuadrantSystem.GetPositionHashMapKey(exitsTranslations[i].Value)));
+                //}
 
                 PanicJob panicJob = new PanicJob
                 {
                     actionPosition = actionPosition,
                     RandomGenerator = RandomGenerator,
-                    exitsTranslations = exitsTranslations
+                    exitsTranslations = exitsTranslations,
+                    exitsExitComponents = exitsExitComponents,
+                    quadrantMultiHashMap = QuadrantSystem.quadrantMultiHashMap
                 };
                 jobHandle = panicJob.Schedule(this, jobHandle);
             }
@@ -325,11 +366,13 @@ public class PanicSystem : JobComponentSystem
             {
                 quadrantMultiHashMap = QuadrantSystem.quadrantMultiHashMap,
                 exitsTranslations = exitsTranslations,
+                exitsExitComponents = exitsExitComponents,
                 actionPosition = actionPosition
             };
 
             jobHandle = reactOnPanicInsideQuadrantJob.Schedule(this, jobHandle);
         }
+        jobHandle.Complete(); // For writing on the multiHashMap (Quadrant System)
         return jobHandle;
     }
 }

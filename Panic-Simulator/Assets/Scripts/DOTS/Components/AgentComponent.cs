@@ -20,6 +20,11 @@ public struct AgentComponent : IComponentData
     public float3 target; // The actual target
     public AgentStatus agentStatus; // The actual status of the agent
     public bool exitPointReached; // For checking if the agent has reached the user generated exit spot
-    public float randomPositionsAfterActionPassed; // Int that describes the amount of random Positions that have been passed from an agent since the action appeared
+    //public float randomPositionsAfterActionPassed; // Int that describes the amount of random Positions that have been passed from an agent since the action appeared
+    public bool foundTemporaryNewRandomPosition;
     public bool foundFinalExitPoint;
+    public bool marked;
+    public bool testing;
+    public float fleeProbability;
+    public float discoverProbability;
 }

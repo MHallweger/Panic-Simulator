@@ -55722,7 +55722,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Prefab: {fileID: 8408481587431717791, guid: b34994b6fabf81044af040a70a0582dc, type: 3}
-  AmountToSpawn: 10000
+  AmountToSpawn: 1000
   frontRight: {fileID: 2042601932}
   frontLeft: {fileID: 1120442313}
   backRight: {fileID: 735924124}

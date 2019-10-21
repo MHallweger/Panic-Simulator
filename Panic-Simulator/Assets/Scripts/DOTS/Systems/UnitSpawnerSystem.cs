@@ -157,7 +157,7 @@ public class UnitSpawnerSystem : JobComponentSystem
                     CommandBuffer.AddComponent(index, instance, new MoveSpeedComponent
                     {
                         moveSpeed = rnd.NextFloat(4.0f, 5.0f),
-                        runningSpeed = rnd.NextFloat(3.0f,4.0f), // before (7.0,9.0)
+                        runningSpeed = rnd.NextFloat(3.0f, 4.0f), // before (7.0,9.0)
                         jumpSpeed = rnd.NextFloat(2.0f, 4.0f),
                         panicJumpSpeed = rnd.NextFloat(4.0f, 5.0f)
                     });
@@ -168,7 +168,9 @@ public class UnitSpawnerSystem : JobComponentSystem
                         target = randomPositions[i + loopIndex],
                         agentStatus = AgentStatus.Idle,
                         exitPointReached = false,
-                        randomPositionsAfterActionPassed = rnd.NextInt(1, 10)
+                        discoverProbability = 33.33f,
+                        fleeProbability = 22.22f
+                        //randomPositionsAfterActionPassed = rnd.NextInt(1, 10)
                         // TODO test jumped here
                     });
 
@@ -180,6 +182,11 @@ public class UnitSpawnerSystem : JobComponentSystem
                         backLeft = _borderComponent.backLeft
                     });
                     CommandBuffer.AddComponent(index, instance, new InputComponent { });
+
+                    CommandBuffer.AddComponent(index, instance, new QuadrantEntity
+                    {
+                        typeEnum = QuadrantEntity.TypeEnum.Agent
+                    });
                 }
                 //// Create Dummy Entity:
                 //Entity dummyEntity = CommandBuffer.CreateEntity(index);
