@@ -4,7 +4,6 @@ using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
-using Unity.Physics;
 
 /// <summary>
 /// System that runs only 1 times to spawn the agent entitys.
@@ -165,11 +164,11 @@ public class UnitSpawnerSystem : JobComponentSystem
                     CommandBuffer.AddComponent(index, instance, new AgentComponent
                     {
                         hasTarget = false,
-                        target = randomPositions[i + loopIndex],
+                        //target = randomPositions[i + loopIndex],
                         agentStatus = AgentStatus.Idle,
                         exitPointReached = false,
                         discoverProbability = 33.33f,
-                        fleeProbability = 22.22f
+                        fleeProbability = 15.55f,
                         //randomPositionsAfterActionPassed = rnd.NextInt(1, 10)
                         // TODO test jumped here
                     });
@@ -194,6 +193,7 @@ public class UnitSpawnerSystem : JobComponentSystem
 
                 // Disable this system to save performance. Otherwise this system will recreate n Agents again and again.
                 // This system will be enabled when pressing the "1" key down (see ManagerSystem).
+                ManagerSystem.actionUsed = false;
                 World.Active.GetExistingSystem<UnitSpawnerSystem>().Enabled = false;
             }
         }

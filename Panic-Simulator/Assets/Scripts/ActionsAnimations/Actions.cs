@@ -18,15 +18,19 @@ public class Actions : MonoBehaviour
     public bool createExits = false; // Bool for activating the convertBarriers action/effect
     public bool dropSoundSystem = false; // Bool for creating a sound System object on the mouse position
     public bool fire = false; // Bool for activating the fire action/effect
-    public bool actionEnabled; // Bool for checking if an action is selected (needed in InputSystem, DOTS) // TODO seperate between different states
+    public bool actionEnabled = false; // Bool for checking if an action is selected (needed in InputSystem, DOTS) // TODO seperate between different states
+    public bool actionPlaced = false; // Bool for checking if an action has been placed on the ground
     private float fireBurnTime = 30f; // Float that controls the amount of time the fire burns
     public static Actions instance; // Instance Variable for access
+    private GameObject actionsGameObject;
+
 
     //[SerializeField] private Animator animator;
 
     private void Awake()
     {
         instance = this;
+        actionsGameObject = GameObject.Find("Actions");
     }
 
     void Update()
@@ -52,6 +56,7 @@ public class Actions : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 GameObject explosion = Instantiate(smallExplosionParticleEffect, mousePosition, Quaternion.identity);
+                actionPlaced = true;
                 Destroy(explosion, 3f);
             }
         }
@@ -71,6 +76,7 @@ public class Actions : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 GameObject explosion = Instantiate(mediumExplosionParticleEffect, mousePosition, Quaternion.identity);
+                actionPlaced = true;
                 Destroy(explosion, 3f);
             }
         }
@@ -90,6 +96,7 @@ public class Actions : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 GameObject explosion = Instantiate(bigExplosionParticleEffect, mousePosition, Quaternion.identity);
+                actionPlaced = true;
                 Destroy(explosion, 3f);
             }
         }
@@ -173,54 +180,38 @@ public class Actions : MonoBehaviour
         }
         else if (fire)
         {
+            // Falling Truss in Radial menu was selected
             if (Input.GetMouseButtonDown(0))
             {
-                StartCoroutine("Fire");
+                var mousePosition = Input.mousePosition;
+                Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+                if (Physics.Raycast(ray, out RaycastHit hit))
+                {
+                    string hittedGameObjectName = hit.collider.gameObject.name;
+                    if (hittedGameObjectName == "Sound System"
+                        || hittedGameObjectName == "Sound System_2"
+                        || hittedGameObjectName == "Sound System_3"
+                        || hittedGameObjectName == "Sound System_4"
+                        || hittedGameObjectName == "Sound System_5"
+                        || hittedGameObjectName == "Sound System(Clone)")
+                    {
+                        Fire(hit.collider.gameObject.transform.position);
+                        actionPlaced = true;
+                    }
+                }
             }
         }
     }
 
-    private IEnumerator Fire()
+    private void Fire(Vector3 SoundSystemPosition)
     {
-        List<GameObject> fireList = new List<GameObject>();
-        float increaser = 0.0f;
+        GameObject fire = Instantiate(firePrefab);
+        fire.transform.SetParent(actionsGameObject.transform); // Set the "Actions" GameObject as parent, to have the option to delete all childs of this parent when deleting all agents later with key 2
 
-        var mousePosition = Input.mousePosition;
-        Ray ray = Camera.main.ScreenPointToRay(mousePosition);
-
-        if (Physics.Raycast(ray, out RaycastHit hit))
-        {
-            if (hit.collider != null)
-            {
-                GameObject fire = Instantiate(firePrefab);
-
-                Vector3 newFirePosition = new Vector3(
-                    hit.point.x,
-                    0.0f,
-                    hit.point.z);
-                fire.transform.position = newFirePosition;
-
-                yield return new WaitForSeconds(1f);
-
-                for (int i = 0; i < Random.Range(10, 20); i++)
-                {
-                    GameObject randomGeneratedFire = Instantiate(firePrefab);
-
-                    Vector3 newRandomFirePosition = new Vector3(
-                        fire.transform.position.x + Random.Range(-5f + increaser, 5f + increaser),
-                        0.0f,
-                        fire.transform.position.z + Random.Range(-5f + increaser, 5f + increaser));
-
-                    randomGeneratedFire.transform.position = newRandomFirePosition;
-
-                    fireList.Add(randomGeneratedFire);
-
-                    fire = fireList[Random.Range(0, fireList.Count)];
-                    increaser += .5f;
-
-                    yield return new WaitForSeconds(1f);
-                }
-            }
-        }
+        Vector3 newFirePosition = new Vector3(
+            SoundSystemPosition.x,
+            0.0f,
+            SoundSystemPosition.z);
+        fire.transform.position = newFirePosition;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 /// <summary>
 /// Script that handles different UI windows and user Inputs.
@@ -39,6 +40,9 @@ public class UIHandler : MonoBehaviour
     private float pitch = 0f; // Variable for Camera rotation feature
 
     // FPS/ms/Entity/exits amount, UI stuff
+    [SerializeField] private Image statusImage;
+    [SerializeField] private Sprite normalMode;
+    [SerializeField] private Sprite panicMode;
     [HideInInspector] public int entityAmount; // UI entity Amount
     [HideInInspector] public int exitsAmount; // UI exits Amount
     private float ms = 0.0f; // UI ms amount
@@ -98,6 +102,7 @@ public class UIHandler : MonoBehaviour
         ShowFPS();
         WindowCheck();
         CheckKeys();
+        UpdateStatusIcon();
     }
 
     /// <summary>
@@ -158,7 +163,8 @@ public class UIHandler : MonoBehaviour
         deltaTime += (Time.unscaledDeltaTime - deltaTime) * 0.1f;
         ms = deltaTime * 1000.0f;
         fps = 1.0f / deltaTime;
-        infoText.text = "ms: " + ms + "    FPS: " + Mathf.Ceil(fps).ToString() + "\n" + "Entitys: " + entityAmount + "    Exits: " + exitsAmount + "\n" + "Mode: " + mode;
+
+        infoText.text = "ms: " + /*Mathf.Ceil(ms).ToString()*/ ms.ToString("F2") + "   FPS: " + /*Mathf.Ceil(fps).ToString()*/fps.ToString("F2") + "\n" + "Entitys: " + entityAmount + "    Exits: " + exitsAmount + "\n" + "Mode: " + mode;
     }
 
     /// <summary>
@@ -344,6 +350,18 @@ public class UIHandler : MonoBehaviour
             {
                 lightObject.SetActive(true);
             }
+        }
+    }
+
+    private void UpdateStatusIcon()
+    {
+        if (Actions.instance.actionPlaced)
+        {
+            statusImage.sprite = panicMode;
+        }
+        else
+        {
+            statusImage.sprite = normalMode;
         }
     }
 

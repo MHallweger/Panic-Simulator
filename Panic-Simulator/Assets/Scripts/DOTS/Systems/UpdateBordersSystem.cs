@@ -31,14 +31,19 @@ public class UpdateBordersSystem : JobComponentSystem
 
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
-        var updateBordersJob = new UpdateBordersJob
-        {
-            frontLeft = UnityEngine.GameObject.Find("SpawnPoint_Front_Left").transform.position,
-            frontRight = UnityEngine.GameObject.Find("SpawnPoint_Front_Right").transform.position,
-            backLeft = UnityEngine.GameObject.Find("SpawnPoint_Back_Left_1").transform.position,
-            backRight = UnityEngine.GameObject.Find("SpawnPoint_Back_Right_1").transform.position
-        }.Schedule(this, inputDeps);
+        JobHandle jobHandle = new JobHandle();
 
-        return updateBordersJob;
+        if (!InputWindow.instance.inputField.isFocused)
+        {
+            UpdateBordersJob updateBordersJob = new UpdateBordersJob
+            {
+                frontLeft = UnityEngine.GameObject.Find("SpawnPoint_Front_Left").transform.position,
+                frontRight = UnityEngine.GameObject.Find("SpawnPoint_Front_Right").transform.position,
+                backLeft = UnityEngine.GameObject.Find("SpawnPoint_Back_Left_1").transform.position,
+                backRight = UnityEngine.GameObject.Find("SpawnPoint_Back_Right_1").transform.position
+            };
+            jobHandle = updateBordersJob.Schedule(this, inputDeps);
+        }
+        return jobHandle;
     }
 }

@@ -45,20 +45,31 @@ public class InputSystem : JobComponentSystem
         public bool keySevenPressedDown;
         public bool keySevenPressedUp;
 
+        public bool entityInputisFocused;
+
         public void Execute(ref InputComponent _inputComponent)
         {
             _inputComponent.leftClick = leftClick;
             _inputComponent.rightClick = rightClick;
-            _inputComponent.keyOnePressedDown = keyOnePressedDown;
-            _inputComponent.keyOnePressedUp = keyOnePressedUp;
-            _inputComponent.keyTwoPressedDown = keyTwoPressedDown;
-            _inputComponent.keyTwoPressedUp = keyTwoPressedUp;
             _inputComponent.keyThreePressedUp = keyThreePressedUp;
             _inputComponent.keyFourPressedUp = keyFourPressedUp;
             _inputComponent.keyFivePressedUp = keyFivePressedUp;
             _inputComponent.keySixPressedUp = keySixPressedUp;
-            _inputComponent.keySevenPressedDown = keySevenPressedDown;
-            _inputComponent.keySevenPressedUp = keySevenPressedUp;
+            _inputComponent.entityInputisFocused = entityInputisFocused;
+
+            if (!entityInputisFocused)
+            {
+                // Seperated keys: Only enable them when the Entity Input UI Field is not focused. Otherwise the bool will be set tu true, when you leave the UI Input field the bool will be set to true
+                // and the specific action starts (e.g removing all exits).
+                _inputComponent.keyOnePressedDown = keyOnePressedDown;
+                _inputComponent.keyOnePressedUp = keyOnePressedUp;
+
+                _inputComponent.keyTwoPressedDown = keyTwoPressedDown;
+                _inputComponent.keyTwoPressedUp = keyTwoPressedUp;
+
+                _inputComponent.keySevenPressedDown = keySevenPressedDown;
+                _inputComponent.keySevenPressedUp = keySevenPressedUp;
+            }
         }
     }
 
@@ -72,7 +83,7 @@ public class InputSystem : JobComponentSystem
         {
             Entity exitEntity = CommandBuffer.CreateEntity(index);
             CommandBuffer.AddComponent(index, exitEntity, new Translation { Value = positionForExitEntity });
-            CommandBuffer.AddComponent(index, exitEntity, new ExitComponent { });
+            CommandBuffer.AddComponent(index, exitEntity, new ExitComponent {});
             CommandBuffer.AddComponent(index, exitEntity, new QuadrantEntity { typeEnum = QuadrantEntity.TypeEnum.Exit });
 
             // Disable Remove Exits System, otherwise the exit entity will instantly removed
@@ -97,7 +108,8 @@ public class InputSystem : JobComponentSystem
             keyFivePressedUp = UnityEngine.Input.GetKeyUp(UnityEngine.KeyCode.Alpha5),
             keySixPressedUp = UnityEngine.Input.GetKeyUp(UnityEngine.KeyCode.Alpha6),
             keySevenPressedDown = UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.Alpha7),
-            keySevenPressedUp = UnityEngine.Input.GetKeyUp(UnityEngine.KeyCode.Alpha7)
+            keySevenPressedUp = UnityEngine.Input.GetKeyUp(UnityEngine.KeyCode.Alpha7),
+            entityInputisFocused = InputWindow.instance.inputField.isFocused
         };
 
         JobHandle jobHandle = inputJob.Schedule(this, inputDeps);

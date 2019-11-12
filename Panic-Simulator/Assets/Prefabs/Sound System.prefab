@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3265147039255148948}
+  - component: {fileID: 5252079576158393220}
   m_Layer: 0
   m_Name: Sound System
   m_TagString: Untagged
@@ -41,10 +42,22 @@ Transform:
   - {fileID: 1470264586265143742}
   - {fileID: 1470264584442589863}
   - {fileID: 1470264585366058448}
-  - {fileID: 1470264586390598032}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &5252079576158393220
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 114312177259087890}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 8.19, y: 18.61, z: 4.68}
+  m_Center: {x: 0.63, y: 8.01, z: 0}
 --- !u!1 &1468292837718459053
 GameObject:
   m_ObjectHideFlags: 0
@@ -816,7 +829,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1474800215551888673}
-  - component: {fileID: 1527597166536139355}
   m_Layer: 0
   m_Name: Speaker_C (2)
   m_TagString: Untagged
@@ -843,25 +855,6 @@ Transform:
   m_Father: {fileID: 1470963987194894041}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &1527597166536139355
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1468475212946704603}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 6d943cacdf4e23a49b4c96b98ae19c80, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1468475213403107923
 GameObject:
   m_ObjectHideFlags: 0
@@ -871,7 +864,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1474800215102846889}
-  - component: {fileID: 1527597166988335315}
   m_Layer: 0
   m_Name: Speaker_C (2)
   m_TagString: Untagged
@@ -898,25 +890,6 @@ Transform:
   m_Father: {fileID: 1470963986611104849}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &1527597166988335315
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1468475213403107923}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 6d943cacdf4e23a49b4c96b98ae19c80, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1468476795988489173
 GameObject:
   m_ObjectHideFlags: 0
@@ -1160,7 +1133,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1470976533514196147}
-  - component: {fileID: 1528668526125178653}
   m_Layer: 0
   m_Name: Speaker_D
   m_TagString: Untagged
@@ -1184,25 +1156,6 @@ Transform:
   m_Father: {fileID: 1470963986611104849}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &1528668526125178653
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1468492621658332297}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 2aca166c5da50ac4bb53977ed5a1bc42, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1468492622112105985
 GameObject:
   m_ObjectHideFlags: 0
@@ -1212,7 +1165,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1470976534107958843}
-  - component: {fileID: 1528668526586291605}
   m_Layer: 0
   m_Name: Speaker_D
   m_TagString: Untagged
@@ -1236,25 +1188,6 @@ Transform:
   m_Father: {fileID: 1470963987194894041}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &1528668526586291605
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1468492622112105985}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 2aca166c5da50ac4bb53977ed5a1bc42, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1468494466375117364
 GameObject:
   m_ObjectHideFlags: 0
@@ -1342,7 +1275,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1470853039444501055}
-  - component: {fileID: 1528203157369231071}
   m_Layer: 0
   m_Name: Speaker_E (1)
   m_TagString: Untagged
@@ -1366,25 +1298,6 @@ Transform:
   m_Father: {fileID: 1470963987194894041}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 2.551, z: 0}
---- !u!95 &1528203157369231071
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1468510264101673331}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: efed716019e15454e862e6e7406e333c, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1468510264721122299
 GameObject:
   m_ObjectHideFlags: 0
@@ -1394,7 +1307,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1470853038852315319}
-  - component: {fileID: 1528203157960895575}
   m_Layer: 0
   m_Name: Speaker_E (1)
   m_TagString: Untagged
@@ -1418,25 +1330,6 @@ Transform:
   m_Father: {fileID: 1470963986611104849}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 2.551, z: 0}
---- !u!95 &1528203157960895575
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1468510264721122299}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: efed716019e15454e862e6e7406e333c, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1468511079398758033
 GameObject:
   m_ObjectHideFlags: 0
@@ -1923,7 +1816,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1474737463278970823}
-  - component: {fileID: 1528184351221668291}
   m_Layer: 0
   m_Name: Speaker_D (3)
   m_TagString: Untagged
@@ -1947,25 +1839,6 @@ Transform:
   m_Father: {fileID: 1470963986611104849}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &1528184351221668291
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1468545526889717095}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 2aca166c5da50ac4bb53977ed5a1bc42, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1468545527510214639
 GameObject:
   m_ObjectHideFlags: 0
@@ -1975,7 +1848,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1474737463867481423}
-  - component: {fileID: 1528184351670199115}
   m_Layer: 0
   m_Name: Speaker_D (3)
   m_TagString: Untagged
@@ -1999,25 +1871,6 @@ Transform:
   m_Father: {fileID: 1470963987194894041}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &1528184351670199115
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1468545527510214639}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 2aca166c5da50ac4bb53977ed5a1bc42, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1468554147166051397
 GameObject:
   m_ObjectHideFlags: 0
@@ -3453,7 +3306,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1474788469223543991}
-  - component: {fileID: 1528332002846812451}
   m_Layer: 0
   m_Name: Speaker_C (1)
   m_TagString: Untagged
@@ -3480,25 +3332,6 @@ Transform:
   m_Father: {fileID: 1470963986611104849}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &1528332002846812451
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1468780409044509395}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 6d943cacdf4e23a49b4c96b98ae19c80, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1468780409534453851
 GameObject:
   m_ObjectHideFlags: 0
@@ -3508,7 +3341,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1474788469838802495}
-  - component: {fileID: 1528332002400900011}
   m_Layer: 0
   m_Name: Speaker_C (1)
   m_TagString: Untagged
@@ -3535,25 +3367,6 @@ Transform:
   m_Father: {fileID: 1470963987194894041}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &1528332002400900011
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1468780409534453851}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 6d943cacdf4e23a49b4c96b98ae19c80, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1468797940306736488
 GameObject:
   m_ObjectHideFlags: 0
@@ -5169,7 +4982,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1470970473207488625}
-  - component: {fileID: 1527890039620143179}
   m_Layer: 0
   m_Name: Speaker_D (2)
   m_TagString: Untagged
@@ -5193,25 +5005,6 @@ Transform:
   m_Father: {fileID: 1470963986611104849}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &1527890039620143179
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1468962695322892909}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 2aca166c5da50ac4bb53977ed5a1bc42, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1468962695917682917
 GameObject:
   m_ObjectHideFlags: 0
@@ -5221,7 +5014,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1470970473832700665}
-  - component: {fileID: 1527890040201851587}
   m_Layer: 0
   m_Name: Speaker_D (2)
   m_TagString: Untagged
@@ -5245,25 +5037,6 @@ Transform:
   m_Father: {fileID: 1470963987194894041}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &1527890040201851587
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1468962695917682917}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 2aca166c5da50ac4bb53977ed5a1bc42, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1468985253316216401
 GameObject:
   m_ObjectHideFlags: 0
@@ -5729,7 +5502,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1470671776629736441}
-  - component: {fileID: 1527861626923251321}
   m_Layer: 0
   m_Name: Speaker_E (2)
   m_TagString: Untagged
@@ -5753,25 +5525,6 @@ Transform:
   m_Father: {fileID: 1470963987194894041}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: -1.33, z: 0}
---- !u!95 &1527861626923251321
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1469081639090681135}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: efed716019e15454e862e6e7406e333c, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1469081639583764391
 GameObject:
   m_ObjectHideFlags: 0
@@ -5781,7 +5534,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1470671777218263409}
-  - component: {fileID: 1527861627545308401}
   m_Layer: 0
   m_Name: Speaker_E (2)
   m_TagString: Untagged
@@ -5805,25 +5557,6 @@ Transform:
   m_Father: {fileID: 1470963986611104849}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: -1.33, z: 0}
---- !u!95 &1527861627545308401
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1469081639583764391}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: efed716019e15454e862e6e7406e333c, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1469083777694719685
 GameObject:
   m_ObjectHideFlags: 0
@@ -7203,7 +6936,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1474775192125965107}
-  - component: {fileID: 1527960053573205699}
   m_Layer: 0
   m_Name: Speaker_E
   m_TagString: Untagged
@@ -7227,25 +6959,6 @@ Transform:
   m_Father: {fileID: 1470963986611104849}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 9.278001, z: 0}
---- !u!95 &1527960053573205699
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1469270957836391847}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: efed716019e15454e862e6e7406e333c, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1469270958461087535
 GameObject:
   m_ObjectHideFlags: 0
@@ -7255,7 +6968,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1474775191673780667}
-  - component: {fileID: 1527960054195258443}
   m_Layer: 0
   m_Name: Speaker_E
   m_TagString: Untagged
@@ -7279,25 +6991,6 @@ Transform:
   m_Father: {fileID: 1470963987194894041}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 9.278001, z: 0}
---- !u!95 &1527960054195258443
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1469270958461087535}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: efed716019e15454e862e6e7406e333c, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1469275327972350041
 GameObject:
   m_ObjectHideFlags: 0
@@ -7859,7 +7552,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1474497972783263905}
-  - component: {fileID: 1528065655555043717}
   m_Layer: 0
   m_Name: Speaker_C (3)
   m_TagString: Untagged
@@ -7886,25 +7578,6 @@ Transform:
   m_Father: {fileID: 1470963986611104849}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &1528065655555043717
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1469456908303292609}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 6d943cacdf4e23a49b4c96b98ae19c80, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1469456908926935625
 GameObject:
   m_ObjectHideFlags: 0
@@ -7914,7 +7587,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1474497973369670185}
-  - component: {fileID: 1528065655099165453}
   m_Layer: 0
   m_Name: Speaker_C (3)
   m_TagString: Untagged
@@ -7941,25 +7613,6 @@ Transform:
   m_Father: {fileID: 1470963987194894041}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &1528065655099165453
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1469456908926935625}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 6d943cacdf4e23a49b4c96b98ae19c80, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1469458279604237271
 GameObject:
   m_ObjectHideFlags: 0
@@ -7969,7 +7622,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1470770600417376901}
-  - component: {fileID: 1528053590870666873}
   m_Layer: 0
   m_Name: Speaker_E (3)
   m_TagString: Untagged
@@ -7993,25 +7645,6 @@ Transform:
   m_Father: {fileID: 1470963987194894041}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: -7.3570004, z: 0}
---- !u!95 &1528053590870666873
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1469458279604237271}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: efed716019e15454e862e6e7406e333c, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1469458280231012703
 GameObject:
   m_ObjectHideFlags: 0
@@ -8021,7 +7654,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1470770600863268877}
-  - component: {fileID: 1528053591462843633}
   m_Layer: 0
   m_Name: Speaker_E (3)
   m_TagString: Untagged
@@ -8045,25 +7677,6 @@ Transform:
   m_Father: {fileID: 1470963986611104849}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: -7.3570004, z: 0}
---- !u!95 &1528053591462843633
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1469458280231012703}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: efed716019e15454e862e6e7406e333c, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1469463389344482960
 GameObject:
   m_ObjectHideFlags: 0
@@ -8166,7 +7779,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1474415744576212193}
-  - component: {fileID: 1527845966062636377}
   m_Layer: 0
   m_Name: Speaker_C
   m_TagString: Untagged
@@ -8193,25 +7805,6 @@ Transform:
   m_Father: {fileID: 1470963987194894041}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &1527845966062636377
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1469522710380789811}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 6d943cacdf4e23a49b4c96b98ae19c80, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1469522710838246075
 GameObject:
   m_ObjectHideFlags: 0
@@ -8221,7 +7814,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1474415745198290537}
-  - component: {fileID: 1527845965477803985}
   m_Layer: 0
   m_Name: Speaker_C
   m_TagString: Untagged
@@ -8248,25 +7840,6 @@ Transform:
   m_Father: {fileID: 1470963986611104849}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &1527845965477803985
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1469522710838246075}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 6d943cacdf4e23a49b4c96b98ae19c80, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1469527719414731147
 GameObject:
   m_ObjectHideFlags: 0
@@ -8726,7 +8299,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1474904789023227577}
-  - component: {fileID: 1528322116501613473}
   m_Layer: 0
   m_Name: Speaker_D (1)
   m_TagString: Untagged
@@ -8750,25 +8322,6 @@ Transform:
   m_Father: {fileID: 1470963987194894041}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &1528322116501613473
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1469564449083430151}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 2aca166c5da50ac4bb53977ed5a1bc42, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1469564449707077519
 GameObject:
   m_ObjectHideFlags: 0
@@ -8778,7 +8331,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1474904789610153009}
-  - component: {fileID: 1528322117115810089}
   m_Layer: 0
   m_Name: Speaker_D (1)
   m_TagString: Untagged
@@ -8802,25 +8354,6 @@ Transform:
   m_Father: {fileID: 1470963986611104849}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &1528322117115810089
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1469564449707077519}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 2aca166c5da50ac4bb53977ed5a1bc42, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1469565302655441366
 GameObject:
   m_ObjectHideFlags: 0
@@ -9141,7 +8674,6 @@ GameObject:
   - component: {fileID: 1470264584294922831}
   - component: {fileID: 1470264584291498607}
   - component: {fileID: 1470264584292629551}
-  - component: {fileID: 1470264584285409583}
   m_Layer: 0
   m_Name: Truss_display_audio_holder_left_left (2)
   m_TagString: Untagged
@@ -9209,25 +8741,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!95 &1470264584285409583
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1470264584294682223}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 00268d90510ea0b42b96f979cc8e86dd, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 1
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1470264584442749745
 GameObject:
   m_ObjectHideFlags: 0
@@ -9932,7 +9445,6 @@ GameObject:
   - component: {fileID: 1470264584515556300}
   - component: {fileID: 1470264584514786284}
   - component: {fileID: 1470264584513656236}
-  - component: {fileID: 1470264584508291244}
   m_Layer: 0
   m_Name: Truss_display_audio_holder_left_left (1)
   m_TagString: Untagged
@@ -10000,25 +9512,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!95 &1470264584508291244
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1470264584515856364}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 00268d90510ea0b42b96f979cc8e86dd, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 1
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1470264584597483874
 GameObject:
   m_ObjectHideFlags: 0
@@ -10030,7 +9523,6 @@ GameObject:
   - component: {fileID: 1470264584597243202}
   - component: {fileID: 1470264584600667490}
   - component: {fileID: 1470264584599536418}
-  - component: {fileID: 1470264584590241314}
   m_Layer: 0
   m_Name: Truss_display_audio_holder_left_left (4)
   m_TagString: Untagged
@@ -10098,25 +9590,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!95 &1470264584590241314
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1470264584597483874}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 00268d90510ea0b42b96f979cc8e86dd, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 1
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1470264584780829533
 GameObject:
   m_ObjectHideFlags: 0
@@ -10192,7 +9665,6 @@ GameObject:
   - component: {fileID: 1470264585087354625}
   - component: {fileID: 1470264585084487457}
   - component: {fileID: 1470264585085583713}
-  - component: {fileID: 1470264585078385761}
   m_Layer: 0
   m_Name: Truss_display_audio_holder_left_left (3)
   m_TagString: Untagged
@@ -10260,25 +9732,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!95 &1470264585078385761
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1470264585087660833}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 00268d90510ea0b42b96f979cc8e86dd, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 1
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1470264585365824582
 GameObject:
   m_ObjectHideFlags: 0
@@ -10981,7 +10434,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1470264585521784725}
-  - component: {fileID: 1470264585512138939}
   m_Layer: 0
   m_Name: Speaker_midSection 2
   m_TagString: Untagged
@@ -11004,25 +10456,6 @@ Transform:
   m_Father: {fileID: 3265147039255148948}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: -4.5860004, y: 332.595, z: -0.453}
---- !u!95 &1470264585512138939
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1470264585521548277}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 5ebf4aadb285e0748be5da5b8d552c16, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 1
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1470264585521548283
 GameObject:
   m_ObjectHideFlags: 0
@@ -11188,7 +10621,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1470264585523879244}
-  - component: {fileID: 1470264585514222178}
   m_Layer: 0
   m_Name: Speaker_midSection 3
   m_TagString: Untagged
@@ -11211,25 +10643,6 @@ Transform:
   m_Father: {fileID: 3265147039255148948}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: -10.939, y: 206.03699, z: 0.15}
---- !u!95 &1470264585514222178
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1470264585523654956}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 5ebf4aadb285e0748be5da5b8d552c16, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 1
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1470264586047448163
 GameObject:
   m_ObjectHideFlags: 0
@@ -11239,7 +10652,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1470264586047604739}
-  - component: {fileID: 1470264586054735661}
   m_Layer: 0
   m_Name: Speaker_midSection 1
   m_TagString: Untagged
@@ -11262,25 +10674,6 @@ Transform:
   m_Father: {fileID: 3265147039255148948}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: -6.9160004, y: 31.522001, z: -0.148}
---- !u!95 &1470264586054735661
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1470264586047448163}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 5ebf4aadb285e0748be5da5b8d552c16, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 1
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1470264586047448173
 GameObject:
   m_ObjectHideFlags: 0
@@ -11446,7 +10839,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1470264586265143742}
-  - component: {fileID: 1470264586274797200}
   m_Layer: 0
   m_Name: Speaker_midSection 4
   m_TagString: Untagged
@@ -11469,183 +10861,3 @@ Transform:
   m_Father: {fileID: 3265147039255148948}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: -7.1340003, y: 154.03801, z: -0.47100002}
---- !u!95 &1470264586274797200
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1470264586265298398}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 5ebf4aadb285e0748be5da5b8d552c16, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 1
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
---- !u!1 &1470264586390598033
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1470264586390598032}
-  - component: {fileID: 1470264586390598061}
-  - component: {fileID: 1470264586390598034}
-  - component: {fileID: 1470264586390598035}
-  m_Layer: 0
-  m_Name: Unity.Physics Collider MidSection
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1470264586390598032
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1470264586390598033}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.6215198, y: 0.21499968, z: -0.13384247}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 3265147039255148948}
-  m_RootOrder: 14
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1470264586390598061
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1470264586390598033}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ccea9ea98e38942e0b0938c27ed1903e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_MotionType: 2
-  m_Mass: 1
-  m_LinearDamping: 0.01
-  m_AngularDamping: 0.05
-  m_InitialLinearVelocity:
-    x: 0
-    y: 0
-    z: 0
-  m_InitialAngularVelocity:
-    x: 0
-    y: 0
-    z: 0
-  m_GravityFactor: 1
-  m_OverrideDefaultMassDistribution: 0
-  m_CenterOfMass:
-    x: 0
-    y: 0
-    z: 0
-  m_Orientation:
-    Value:
-      x: 0
-      y: 0
-      z: 0
-    RotationOrder: 4
-  m_InertiaTensor:
-    x: 0.4
-    y: 0.4
-    z: 0.4
-  m_CustomTags:
-    Tag00: 0
-    Tag01: 0
-    Tag02: 0
-    Tag03: 0
-    Tag04: 0
-    Tag05: 0
-    Tag06: 0
-    Tag07: 0
---- !u!114 &1470264586390598034
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1470264586390598033}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b275e5f92732148048d7b77e264ac30e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ShapeType: 0
-  m_PrimitiveCenter:
-    x: 0
-    y: 0
-    z: 0
-  m_PrimitiveSize:
-    x: 7.21
-    y: 4.49
-    z: 6.9
-  m_PrimitiveOrientation:
-    Value:
-      x: 0
-      y: 0
-      z: 0
-    RotationOrder: 4
-  m_Capsule:
-    Height: 7.21
-    Radius: 3.45
-    Axis: 0
-  m_Cylinder:
-    Height: 4.49
-    Radius: 3.605
-    Axis: 1
-  m_SphereRadius: 3.605
-  m_ConvexRadius: 0
-  m_CustomMesh: {fileID: 0}
-  m_Material:
-    m_SupportsTemplate: 1
-    m_Template: {fileID: 0}
-    m_IsTrigger:
-      m_Override: 0
-      m_Value: 0
-    m_Friction:
-      m_Override: 0
-      m_Value:
-        Value: 0.5
-        CombineMode: 0
-    m_Restitution:
-      m_Override: 0
-      m_Value:
-        Value: 0
-        CombineMode: 2
-    m_BelongsTo:
-      m_Override: 0
-      m_Value: 0101010101010101010101010101010101010101010101010101010101010101
-    m_CollidesWith:
-      m_Override: 0
-      m_Value: 0101010101010101010101010101010101010101010101010101010101010101
-    m_RaisesCollisionEvents:
-      m_Override: 0
-      m_Value: 0
-    m_CustomTags:
-      m_Override: 0
-      m_Value: 0000000000000000
---- !u!114 &1470264586390598035
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1470264586390598033}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea7d7495833204790ba1d3a8755397f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ConversionMode: 0

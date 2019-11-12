@@ -14,6 +14,8 @@ using Unity.Transforms;
 [UpdateBefore(typeof(UnitSpawnerSystem))]
 public class ManagerSystem : JobComponentSystem
 {
+    public static bool actionUsed = false;
+
     protected override void OnCreate()
     {
         //World.Active.GetExistingSystem<RemoveExitsSystem>().Enabled = false;
@@ -97,12 +99,24 @@ public class ManagerSystem : JobComponentSystem
         }
     }
 
+    [BurstCompile]
+    struct UpdateEntityAmount : IJobForEachWithEntity<UnitSpawnerComponent>
+    {
+        public int newAmountToSpawn;
+
+        public void Execute(Entity entity, int index, ref UnitSpawnerComponent unitSpawnerComponent)
+        {
+            unitSpawnerComponent.AmountToSpawn = newAmountToSpawn;
+        }
+    }
+
     Random Rnd = new Random(1);
     NativeArray<Random> RandomGenerator;
-    bool actionUsed = false;
+    //bool actionUsed = false;
 
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
+        //actionUsed = false;
         RandomGenerator = new NativeArray<Random>(System.Environment.ProcessorCount, Allocator.TempJob);
 
         if (Actions.instance.actionEnabled)
@@ -118,19 +132,27 @@ public class ManagerSystem : JobComponentSystem
             RandomGenerator[i] = new Random((uint)Rnd.NextInt());
         }
 
-        var managerInputJob = new ManagerInputJob
+        ManagerInputJob managerInputJob = new ManagerInputJob
         {
         };
 
         JobHandle jobHandle = managerInputJob.Schedule(this, inputDeps);
 
-        var managerJob = new ManagerJob
+        ManagerJob managerJob = new ManagerJob
         {
             RandomGenerator = RandomGenerator,
             actionUsed = actionUsed
         };
 
         jobHandle = managerJob.Schedule(this, jobHandle);
+
+        UpdateEntityAmount updateEntityAmount = new UpdateEntityAmount
+        {
+            newAmountToSpawn = UnitSpawnerProxy.instance.AmountToSpawn
+        };
+
+        jobHandle = updateEntityAmount.Schedule(this, jobHandle);
+
         return jobHandle;
     }
 }

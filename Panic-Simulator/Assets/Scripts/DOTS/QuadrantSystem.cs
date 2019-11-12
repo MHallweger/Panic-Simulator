@@ -31,7 +31,7 @@ public class QuadrantSystem : JobComponentSystem
 {
     public static NativeMultiHashMap<int, QuadrantData> quadrantMultiHashMap;
     public const int quadrantYMultiplier = 1000; // Enough for this level/Simulation size
-    private const float quadrantCellSize = 1.5f; // vorher int 1
+    private const float quadrantCellSize = 1f; // vorher int 1
 
     public static int GetPositionHashMapKey(float3 position) // Video Anleitung
     {

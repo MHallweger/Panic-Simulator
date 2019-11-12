@@ -2,8 +2,8 @@
 using Unity.Entities;
 using UnityEngine;
 
-// Authoring
 /// <summary>
+/// Authoring
 /// Starting Area of this project.
 /// </summary>
 [RequiresEntityConversion]
@@ -11,11 +11,17 @@ public class UnitSpawnerProxy : MonoBehaviour, IDeclareReferencedPrefabs, IConve
 {
     // MonoBehaviour Variables
     [SerializeField] private GameObject Prefab;
-    [SerializeField] public int AmountToSpawn;
     [SerializeField] private GameObject frontRight;
     [SerializeField] private GameObject frontLeft;
     [SerializeField] private GameObject backRight;
     [SerializeField] private GameObject backLeft;
+    public int AmountToSpawn;
+    public static UnitSpawnerProxy instance;
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     // Referenced prefabs have to be declared so that the conversion system knows about them ahead of time
     public void DeclareReferencedPrefabs(List<GameObject> gameObjects)

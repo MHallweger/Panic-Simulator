@@ -19,12 +19,16 @@ public class ItemClickHandler : MonoBehaviour
     [SerializeField] private GameObject barrierLeftWithPivot;
     [SerializeField] private GameObject barrierRightWithPivot;
     [SerializeField] private float rotationSpeed; // Rotation speed of the rotating barriers
+    [SerializeField] private GameObject penultimateSoundSystem; // The Sound System before the last System
+    [SerializeField] private GameObject lastSoundSystem; // The last Sound System
 
     // Spawn places, needed in the DOTS scripts for spawning Agents inside a user created area
     [SerializeField] private GameObject spawnPlaceLeft; // First back left spawn point
     [SerializeField] private GameObject spawnPlaceRight; // First back right spawn point
     [SerializeField] private GameObject[] additionalSpawnObjectsLeft; // Additional spawn places that can be used to increase the spawn area from the festival
     [SerializeField] private GameObject[] additionalSpawnObjectsRight; // Additional spawn places that can be used to increase the spawn area from the festival
+    private Vector3 originalStartingSpawnObjectPositionLeft; // ...
+    private Vector3 originalStartingSpawnObjectPositionRight; // ...
 
     // Internals
     [SerializeField] private GameObject crowdObject; // For getting the entity AmountToSpawn
@@ -39,6 +43,8 @@ public class ItemClickHandler : MonoBehaviour
     private void Start()
     {
         increaseAmount = crowdObject.GetComponent<UnitSpawnerProxy>().AmountToSpawn;
+        originalStartingSpawnObjectPositionLeft = additionalSpawnObjectsLeft[0].transform.position;
+        originalStartingSpawnObjectPositionRight = additionalSpawnObjectsRight[0].transform.position;
     }
 
     /// <summary>
@@ -59,13 +65,13 @@ public class ItemClickHandler : MonoBehaviour
         }
 
         // Rotate Barriers
-        if (Input.GetKey(KeyCode.Alpha3))
+        if (Input.GetKey(KeyCode.Alpha3) && !InputWindow.instance.inputField.isFocused)
         {
             // For holding the button down
             // Rotate side barriers
             OnButtonHoldingDownRotateOut();
         }
-        else if (Input.GetKey(KeyCode.Alpha4))
+        else if (Input.GetKey(KeyCode.Alpha4) && !InputWindow.instance.inputField.isFocused)
         {
             // For holding the button down
             // Rotate side barriers
@@ -128,6 +134,22 @@ public class ItemClickHandler : MonoBehaviour
             // If -60°/60° is not reached, rotate more.
             barrierLeftWithPivot.transform.Rotate(Vector3.up * Time.deltaTime * (rotationSpeed / 4), Space.World);
             barrierRightWithPivot.transform.Rotate(Vector3.down * Time.deltaTime * (rotationSpeed / 4), Space.World);
+
+            // Control the last two Sound Systems
+            // Otherwise they will exists on an empty festival area where no people are
+            if (barrierLeftWithPivot.transform.rotation.y <= .25f && barrierRightWithPivot.transform.rotation.y >= -.25f)
+            {
+                if (penultimateSoundSystem.activeInHierarchy == true && lastSoundSystem.activeInHierarchy == true)
+                {
+                    penultimateSoundSystem.SetActive(true);
+                    lastSoundSystem.SetActive(true);
+                }
+            }
+            else
+            {
+                penultimateSoundSystem.SetActive(false);
+                lastSoundSystem.SetActive(false);
+            }
         }
         else
         {
@@ -150,6 +172,22 @@ public class ItemClickHandler : MonoBehaviour
             // Stop with an offset of 0.0005. This helps for stopping on an rotation of Vector3.zero
             barrierLeftWithPivot.transform.Rotate(Vector3.down * Time.deltaTime * (rotationSpeed / 4), Space.World);
             barrierRightWithPivot.transform.Rotate(Vector3.up * Time.deltaTime * (rotationSpeed / 4), Space.World);
+
+            // Control the last two Sound Systems
+            // Otherwise they will exists on an empty festival area where no people are
+            if (barrierLeftWithPivot.transform.rotation.y <= .25f && barrierRightWithPivot.transform.rotation.y >= -.25f)
+            {
+                if (lastSoundSystem.transform.parent.Find("Sound System_3").gameObject.activeInHierarchy)
+                {
+                    penultimateSoundSystem.SetActive(true);
+                    lastSoundSystem.SetActive(true);
+                }
+            }
+            else
+            {
+                penultimateSoundSystem.SetActive(false);
+                lastSoundSystem.SetActive(false);
+            }
         }
         else
         {
@@ -166,29 +204,37 @@ public class ItemClickHandler : MonoBehaviour
     /// </summary>
     private void AddNewSideBarrier()
     {
-        if (increaseCounter == additionalBarriersLeft.Length)
+        if (!InputWindow.instance.inputField.isFocused)
         {
-            // The counter has the same value like the length of the additionalBarriers Array. The Next Barrier would lead to NullPointer
-            // Throw warning/log and return
-            Debug.LogWarning("Limit reached!");
-            Debug.Log("The barrier limit for this simulation was reached.");
-            return;
-        }
+            if (increaseCounter == additionalBarriersLeft.Length)
+            {
+                // The counter has the same value like the length of the additionalBarriers Array. The Next Barrier would lead to NullPointer
+                // Throw warning/log and return
+                Debug.LogWarning("Limit reached!");
+                Debug.Log("The barrier limit for this simulation was reached.");
+                return;
+            }
 
-        // Set the next Barriers and sound system to active
-        additionalBarriersLeft[increaseCounter].SetActive(true);
-        additionalBarriersRight[increaseCounter].SetActive(true);
-        additionalSoundSystems[increaseCounter].SetActive(true);
+            // Set the next Barriers and sound system to active
+            additionalBarriersLeft[increaseCounter].SetActive(true);
+            additionalBarriersRight[increaseCounter].SetActive(true);
+            additionalSoundSystems[increaseCounter].SetActive(true);
 
-        // Set spawnpoint 1 position to spawnpoint additionalBarriersLeft[increaseCounter] position
-        // The DOTS System will be able now to spawn agents in the new area
-        spawnPlaceLeft.transform.position = additionalSpawnObjectsLeft[increaseCounter].transform.position;
-        spawnPlaceRight.transform.position = additionalSpawnObjectsRight[increaseCounter].transform.position;
-
-        if (!(increaseCounter == additionalBarriersLeft.Length))
-        {
-            // Only increase the counter when the limit is not reached yet.
-            increaseCounter++;
+            // Set spawnpoint 1 position to spawnpoint additionalBarriersLeft[increaseCounter] position
+            // The DOTS System will be able now to spawn agents in the new area
+            spawnPlaceLeft.transform.position = additionalSpawnObjectsLeft[increaseCounter + 1].transform.position;
+            spawnPlaceRight.transform.position = additionalSpawnObjectsRight[increaseCounter + 1].transform.position;
+            #region Debug Barriers
+            //Debug.Log(spawnPlaceLeft.transform.position);
+            //Debug.Log(spawnPlaceRight.transform.position);
+            Debug.DrawLine(spawnPlaceLeft.transform.position, new Vector3(spawnPlaceLeft.transform.position.x, spawnPlaceLeft.transform.position.y + 50f, spawnPlaceLeft.transform.position.z), Color.blue, 1f);
+            Debug.DrawLine(spawnPlaceRight.transform.position, new Vector3(spawnPlaceRight.transform.position.x, spawnPlaceRight.transform.position.y + 50f, spawnPlaceRight.transform.position.z), Color.blue, 1f);
+            #endregion // Debug Barriers
+            if (!(increaseCounter == additionalBarriersLeft.Length))
+            {
+                // Only increase the counter when the limit is not reached yet.
+                increaseCounter++;
+            }
         }
     }
 
@@ -198,26 +244,44 @@ public class ItemClickHandler : MonoBehaviour
     /// </summary>
     private void RemoveNewSideBarrier()
     {
-        if (increaseCounter != 0) // Prevent of getting the -1th Object of the Arrays
+        if (!InputWindow.instance.inputField.isFocused)
         {
-            // Set the Objects to false, to disable the GameObjects and going back with the barriers and the Sound Systems
-            additionalBarriersLeft[increaseCounter - 1].SetActive(false);
-            additionalBarriersRight[increaseCounter - 1].SetActive(false);
-            additionalSoundSystems[increaseCounter - 1].SetActive(false);
+            if (increaseCounter != 0) // Prevent of getting the -1th Object of the Arrays != 0
+            {
+                // Set the Objects to false, to disable the GameObjects and going back with the barriers and the Sound Systems
+                additionalBarriersLeft[increaseCounter - 1].SetActive(false);
+                additionalBarriersRight[increaseCounter - 1].SetActive(false);
+                additionalSoundSystems[increaseCounter - 1].SetActive(false);
 
-            // Change the spawnplace back
-            spawnPlaceLeft.transform.position = additionalSpawnObjectsLeft[increaseCounter - 1].transform.position;
-            spawnPlaceRight.transform.position = additionalSpawnObjectsRight[increaseCounter - 1].transform.position;
+                if (increaseCounter == 1)
+                {
+                    // Change the spawnplace back
+                    spawnPlaceLeft.transform.position = originalStartingSpawnObjectPositionLeft;
+                    spawnPlaceRight.transform.position = originalStartingSpawnObjectPositionRight;
+                }
+                else
+                {
+                    // Change the spawnplace back
+                    spawnPlaceLeft.transform.position = additionalSpawnObjectsLeft[increaseCounter - 1].transform.position;
+                    spawnPlaceRight.transform.position = additionalSpawnObjectsRight[increaseCounter - 1].transform.position;
+                }
+                #region Debug Barriers
+                //Debug.Log(spawnPlaceLeft.transform.position);
+                //Debug.Log(spawnPlaceRight.transform.position);
+                Debug.DrawLine(spawnPlaceLeft.transform.position, new Vector3(spawnPlaceLeft.transform.position.x, spawnPlaceLeft.transform.position.y + 50f, spawnPlaceLeft.transform.position.z), Color.red, 1f);
+                Debug.DrawLine(spawnPlaceRight.transform.position, new Vector3(spawnPlaceRight.transform.position.x, spawnPlaceRight.transform.position.y + 50f, spawnPlaceRight.transform.position.z), Color.red, 1f);
+                #endregion // Debug Barriers
+                // Decrease the counter
+                increaseCounter--;
 
-            // Decrease the counter
-            increaseCounter--;
-        }
-        else
-        {
-            // Throw Warning/log when increaseCounter is 0, return
-            Debug.LogWarning("Limit reached!");
-            Debug.Log("The minimum limit for the barriers is one.");
-            return;
+            }
+            else if (increaseCounter <= 0) // else
+            {
+                // Throw Warning/log when increaseCounter is 0, return
+                Debug.LogWarning("Limit reached!");
+                Debug.Log("The minimum limit for the barriers is one.");
+                return;
+            }
         }
     }
 }

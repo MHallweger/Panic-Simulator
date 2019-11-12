@@ -4,15 +4,12 @@ using Unity.Mathematics;
 using Unity.Collections;
 using Unity.Transforms;
 using Unity.Burst;
-using Unity.Physics;
 
 /// <summary>
 /// System that reacts on changes of agentComponents of the agents. Creates an Jumping-"dancing" Animation to simulate human behavior on a festival.
 /// </summary>
 public class JumpingSystem : JobComponentSystem
 {
-
-
     //[RequireComponentTag(typeof(DancingTag))]
     //[ExcludeComponent(typeof(IdleTag), typeof(MovingTag), typeof(RunningTag))]
     [BurstCompile]

@@ -87,21 +87,21 @@ public class CalculateNewRandomPositionSystem : JobComponentSystem
                 {
                     if (_translation.Value.x >= 180f)
                     {
-                        // Agent is on a right exit spot
+                        // Agent is on a left exit spot
                         // Calculate a random Position that points to the right side
                         calculatedRandomPosition = new float3(
-                            rnd.NextFloat(_translation.Value.x + rnd.NextFloat(10f, 50f), _translation.Value.x + rnd.NextFloat(10f, 50f)),
+                            rnd.NextFloat(_translation.Value.x + rnd.NextFloat(3f, 6f), _translation.Value.x + rnd.NextFloat(3f, 6f)),
                             .5f,
-                            rnd.NextFloat(_translation.Value.z - rnd.NextFloat(10f, 50f), _translation.Value.z + rnd.NextFloat(10f, 50f)));
+                            rnd.NextFloat(_translation.Value.z - rnd.NextFloat(3f, 4f), _translation.Value.z + rnd.NextFloat(3f, 4f)));
                     }
                     else
                     {
-                        // Agent is on a left exit spot
+                        // Agent is on a right exit spot
                         // Calculate a random Position that points to the left side
                         calculatedRandomPosition = new float3(
-                            rnd.NextFloat(_translation.Value.x - rnd.NextFloat(10f, 50f), _translation.Value.x - rnd.NextFloat(10f, 50f)),
+                            rnd.NextFloat(_translation.Value.x - rnd.NextFloat(3f, 6f), _translation.Value.x - rnd.NextFloat(3f, 6f)),
                             .5f,
-                            rnd.NextFloat(_translation.Value.z - rnd.NextFloat(10f, 50f), _translation.Value.z + rnd.NextFloat(10f, 50f)));
+                            rnd.NextFloat(_translation.Value.z - rnd.NextFloat(3f, 4f), _translation.Value.z + rnd.NextFloat(3f, 4f)));
                     }
                 }
                 else
@@ -135,6 +135,8 @@ public class CalculateNewRandomPositionSystem : JobComponentSystem
 
                 if ((f.x - d.x) * as_z_ii - (d.z - d.z) * as_x_ii > 0 == s_de && (c.x - a.x) * as_z_i - (a.z - a.z) * as_x_i > 0 == s_ab)
                 {
+                    // Outside festival area
+
                     if (_agentComponent.exitPointReached)
                     {
                         _agentComponent.target = calculatedRandomPosition;
@@ -190,19 +192,20 @@ public class CalculateNewRandomPositionSystem : JobComponentSystem
                 }
                 else
                 {
-                    //if (_agentComponent.exitPointReached)
-                    //{
-                    //    _agentComponent.target = calculatedRandomPosition;
-                    //    _agentComponent.hasTarget = true;
-                    //}
-                    //else
-                    //{
-                    //    // Outside festival area
-                    //    // Exit point not reached
-                    //    // Else if newRandomPosition is outside the festival area, stay with AgentStatus.Idle
-                    //    _agentComponent.target = _translation.Value;
-                    //    _agentComponent.hasTarget = false;
-                    //}
+                    // Inside Festival
+                    if (_agentComponent.exitPointReached)
+                    {
+                        _agentComponent.target = calculatedRandomPosition;
+                        _agentComponent.hasTarget = true;
+                    }
+                    else
+                    {
+                        // Outside festival area
+                        // Exit point not reached
+                        // Else if newRandomPosition is outside the festival area, stay with AgentStatus.Idle
+                        _agentComponent.target = _translation.Value;
+                        _agentComponent.hasTarget = false;
+                    }
                 }
             }
         }

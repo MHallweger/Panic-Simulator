@@ -6,6 +6,5 @@ using Unity.Mathematics;
 public struct ExitComponent : IComponentData
 {
     public bool overloaded;
-    public bool extremelyOverloaded;
-    public float3 amount;
+    public float amount;
 }

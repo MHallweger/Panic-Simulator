@@ -24,10 +24,10 @@ public class RemoveAgentsSystem : JobComponentSystem
     }
 
     //[BurstCompile]
-    struct RemoveAgentsJob : IJobForEachWithEntity<AgentComponent>
+    struct RemoveAgentsJob : IJobForEachWithEntity<AgentComponent, InputComponent>
     {
         public EntityCommandBuffer.Concurrent CommandBuffer; // instantiating and deleting of Entitys can only gets done on the main thread, save commands in buffer for main thread
-        public void Execute(Entity entity, int index, [ReadOnly] ref AgentComponent agentComponent)
+        public void Execute(Entity entity, int index, [ReadOnly] ref AgentComponent agentComponent, [ReadOnly] ref InputComponent inputComponent)
         {
             CommandBuffer.DestroyEntity(index, entity);
             World.Active.GetExistingSystem<RemoveAgentsSystem>().Enabled = false;
@@ -42,6 +42,18 @@ public class RemoveAgentsSystem : JobComponentSystem
         }.Schedule(this, inputDeps);
 
         m_EntityCommandBufferSystem.AddJobHandleForProducer(removeAgentsJob); // Execute the commandBuffer commands when spawnJob is finished
+
+        // Mono Behavior stuff
+        ManagerSystem.actionUsed = false; // If this is not set, all new agents would instantly set to AgentStatus = AgentsStatus.Running
+
+        // Get all children of the Actions GameObject and destroy them.
+        // The children are all active Actions (burning fires)
+        UnityEngine.GameObject actions = UnityEngine.GameObject.Find("Actions");
+        int childs = actions.transform.childCount;
+        for (int i = childs - 1; i >= 0; i--)
+        {
+            UnityEngine.GameObject.Destroy(actions.transform.GetChild(i).gameObject);
+        }
         return removeAgentsJob;
     }
 }

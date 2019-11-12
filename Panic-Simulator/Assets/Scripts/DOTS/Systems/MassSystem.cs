@@ -28,22 +28,18 @@ public class MassSystem : JobComponentSystem
             amount += QuadrantSystem.GetEntityCountInHashMap(nativeMultiHashMap, QuadrantSystem.GetPositionHashMapKey(translation.Value) - 1 + QuadrantSystem.quadrantYMultiplier); // Corner Top Left
             amount += QuadrantSystem.GetEntityCountInHashMap(nativeMultiHashMap, QuadrantSystem.GetPositionHashMapKey(translation.Value) + 1 - QuadrantSystem.quadrantYMultiplier); // Corner Bottom Right
             amount += QuadrantSystem.GetEntityCountInHashMap(nativeMultiHashMap, QuadrantSystem.GetPositionHashMapKey(translation.Value) - 1 - QuadrantSystem.quadrantYMultiplier); // Corner Bottom Left
-            exitComponent.amount = new float3(amount, 0, 0);
+            exitComponent.amount = amount;
             if (amount > 10)
             {
                 exitComponent.overloaded = true;
             }
-            else if (amount > 20)
-            {
-                exitComponent.extremelyOverloaded = true;
-            }
-            else 
+            else
             {
                 exitComponent.overloaded = false;
             }
         }
     }
-    
+
     //public struct MassJob : IJobForEachWithEntity<AgentComponent>
 
     /// <summary>

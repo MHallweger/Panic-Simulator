@@ -43,29 +43,35 @@ public class RemoveExitsSystem : JobComponentSystem
     /// <returns></returns>
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
-        // Enable the Mesh Renderer of the LOD Barrier.
-        //hit.collider.gameObject.transform.parent.gameObject.transform.Find("chainlink_group-1_LOD0").GetComponent<UnityEngine.MeshRenderer>().enabled = true;
-        var poleClones = UnityEngine.Resources.FindObjectsOfTypeAll<UnityEngine.GameObject>().Where(obj => obj.name == "GroundPoleA(Clone)");
+        JobHandle jobHandle = new JobHandle();
 
-        foreach (UnityEngine.GameObject pole in poleClones)
+        if (!InputWindow.instance.inputField.isFocused)
         {
-            if (pole != null)
+            // Enable the Mesh Renderer of the LOD Barrier.
+            //hit.collider.gameObject.transform.parent.gameObject.transform.Find("chainlink_group-1_LOD0").GetComponent<UnityEngine.MeshRenderer>().enabled = true;
+            var poleClones = UnityEngine.Resources.FindObjectsOfTypeAll<UnityEngine.GameObject>().Where(obj => obj.name == "GroundPoleA(Clone)");
+
+            foreach (UnityEngine.GameObject pole in poleClones)
             {
-                // The poles are childs from a parent GameObject.
-                // Get this GameObject, get the first child from this GameObject which holds a MeshRenderer, which displays the whole GameObject
-                // Enable this MeshRenderer.
-                // Not the best implementation but ECS/Jobs do not offer a better solution.
-                pole.transform.parent.GetChild(0).GetComponent<UnityEngine.MeshRenderer>().enabled = true;
-                UnityEngine.Object.Destroy(pole);
+                if (pole != null)
+                {
+                    // The poles are childs from a parent GameObject.
+                    // Get this GameObject, get the first child from this GameObject which holds a MeshRenderer, which displays the whole GameObject
+                    // Enable this MeshRenderer.
+                    // Not the best implementation but ECS/Jobs do not offer a better solution.
+                    pole.transform.parent.GetChild(0).GetComponent<UnityEngine.MeshRenderer>().enabled = true;
+                    UnityEngine.Object.Destroy(pole);
+                }
             }
+
+            RemoveExitsJob removeExitsJob = new RemoveExitsJob
+            {
+                CommandBuffer = m_EntityCommandBufferSystem.CreateCommandBuffer().ToConcurrent(), // Create the commandBuffer
+            };
+
+            jobHandle = removeExitsJob.Schedule(this, inputDeps);
+            m_EntityCommandBufferSystem.AddJobHandleForProducer(jobHandle); // Execute the commandBuffer commands when spawnJob is finished
         }
-
-        var removeExitsJob = new RemoveExitsJob
-        {
-            CommandBuffer = m_EntityCommandBufferSystem.CreateCommandBuffer().ToConcurrent(), // Create the commandBuffer
-        }.Schedule(this, inputDeps);
-
-        m_EntityCommandBufferSystem.AddJobHandleForProducer(removeExitsJob); // Execute the commandBuffer commands when spawnJob is finished
-        return removeExitsJob;
+        return jobHandle;
     }
 }

@@ -24,7 +24,8 @@ public struct AgentComponent : IComponentData
     public bool foundTemporaryNewRandomPosition;
     public bool foundFinalExitPoint;
     public bool marked;
-    public bool testing;
     public float fleeProbability;
     public float discoverProbability;
+    public bool paniced;
+    public bool areaFinallyleaved;
 }

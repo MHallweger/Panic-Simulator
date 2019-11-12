@@ -9,10 +9,21 @@ using Unity.Burst;
 /// </summary>
 public class RunningSystem : JobComponentSystem
 {
+    EndSimulationEntityCommandBufferSystem m_EntityCommandBufferSystem; // For creating the commandBuffer
+
+    /// <summary>
+    /// Initialize The EndSimulationEntityCommandBufferSystem commandBufferSystem.
+    /// </summary>
+    protected override void OnCreate()
+    {
+        m_EntityCommandBufferSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+    }
+
     [BurstCompile]
     public struct RunningJob : IJobForEachWithEntity<Translation, AgentComponent, MoveSpeedComponent>
     {
         public float deltaTime;
+        public EntityCommandBuffer.Concurrent CommandBuffer; // instantiating and deleting of Entitys can only gets done on the main thread, save commands in buffer for main thread
 
         [NativeDisableParallelForRestriction]
         [DeallocateOnJobCompletion]
@@ -101,6 +112,27 @@ public class RunningSystem : JobComponentSystem
             }
         }
     }
+
+    // No Burst because of the CommandBuffer
+    public struct RemovePanicTagJob : IJobForEachWithEntity<AgentComponent>
+    {
+        public EntityCommandBuffer.Concurrent CommandBuffer; // instantiating and deleting of Entitys can only gets done on the main thread, save commands in buffer for main thread
+
+        public void Execute(Entity entity, int index, ref AgentComponent agentComponent)
+        {
+            if (agentComponent.exitPointReached && agentComponent.foundFinalExitPoint && !agentComponent.marked)
+            {
+                if (!agentComponent.areaFinallyleaved) // prevent to run the following code over and over again -> saves main thread performance
+                {
+                    // Agent found an exit and has leaved the festival area
+                    //CommandBuffer.RemoveComponent<PanicTag>(index, entity);
+                    //CommandBuffer.AddComponent<EscapedTag>(index, entity);
+                    agentComponent.areaFinallyleaved = true;
+                }
+            }
+        }
+    }
+
     Random Rnd = new Random(1);
     NativeArray<Random> RandomGenerator;
     /// <summary>
@@ -117,12 +149,23 @@ public class RunningSystem : JobComponentSystem
             RandomGenerator[i] = new Random((uint)Rnd.NextInt());
         }
 
-        var runningJob = new RunningJob
+        RunningJob runningJob = new RunningJob
         {
             deltaTime = UnityEngine.Time.deltaTime,
             RandomGenerator = RandomGenerator
-        }.Schedule(this, inputDeps);
+        };
 
-        return runningJob;
+        JobHandle jobHandle = runningJob.Schedule(this, inputDeps);
+
+        RemovePanicTagJob removePanicTagJob = new RemovePanicTagJob
+        {
+            CommandBuffer = m_EntityCommandBufferSystem.CreateCommandBuffer().ToConcurrent()
+        };
+
+        jobHandle = removePanicTagJob.Schedule(this, jobHandle);
+
+        m_EntityCommandBufferSystem.AddJobHandleForProducer(jobHandle); // Execute the commandBuffer commands when spawnJob is finished
+
+        return jobHandle;
     }
 }
