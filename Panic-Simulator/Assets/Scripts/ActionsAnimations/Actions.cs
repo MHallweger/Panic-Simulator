@@ -2,14 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Script for instantiating effect/actions.
+/// </summary>
 public class Actions : MonoBehaviour
 {
+    #region Variables
+    // Instance Variable / Hierarchy
+    public static Actions instance; // Instance Variable for access
+    private GameObject actionsGameObject; // Actions GameObject
+
+    // Action Prefab GameObjects
     [SerializeField] private GameObject smallExplosionParticleEffect; // Small Explosion Prefab for the explosion effect
     [SerializeField] private GameObject mediumExplosionParticleEffect; // Medium Explosion Prefab for the explosion effect
     [SerializeField] private GameObject bigExplosionParticleEffect; // Big Explosion Prefab for the explosion effect
     [SerializeField] private GameObject pinPrefab; // The spawned pin for custom exits
     [SerializeField] private GameObject soundSystemPrefab; // The instantiated sound System
     [SerializeField] private GameObject firePrefab; // Fire effect for the fire action
+
+    // Helper bools
     public bool smallGroundExplosion = false; // Bool for activating the small ground Explosion action/effect
     public bool mediumGroundExplosion = false; // Bool for activating the medium ground Explosion action/effect
     public bool bigGroundExplosion = false; // Bool for activating the big ground Explosion action/effect
@@ -18,14 +29,9 @@ public class Actions : MonoBehaviour
     public bool createExits = false; // Bool for activating the convertBarriers action/effect
     public bool dropSoundSystem = false; // Bool for creating a sound System object on the mouse position
     public bool fire = false; // Bool for activating the fire action/effect
-    public bool actionEnabled = false; // Bool for checking if an action is selected (needed in InputSystem, DOTS) // TODO seperate between different states
+    public bool actionEnabled = false; // Bool for checking if an action is selected (needed in InputSystem, DOTS)
     public bool actionPlaced = false; // Bool for checking if an action has been placed on the ground
-    private float fireBurnTime = 30f; // Float that controls the amount of time the fire burns
-    public static Actions instance; // Instance Variable for access
-    private GameObject actionsGameObject;
-
-
-    //[SerializeField] private Animator animator;
+    #endregion // Variables
 
     private void Awake()
     {
@@ -38,6 +44,9 @@ public class Actions : MonoBehaviour
         CheckActionBools();
     }
 
+    /// <summary>
+    /// React on action bool changes, when enabled, check for left mouse input. -> Instantiate action/effect when clicked.
+    /// </summary>
     private void CheckActionBools()
     {
         if (smallGroundExplosion)
@@ -49,12 +58,14 @@ public class Actions : MonoBehaviour
             {
                 if (hit.collider != null)
                 {
+                    // Save current mouse position
                     mousePosition = new Vector3(hit.point.x, 0.5f, hit.point.z);
                 }
             }
 
             if (Input.GetMouseButtonDown(0))
             {
+                // Instantiate action when left mouse button was pressed
                 GameObject explosion = Instantiate(smallExplosionParticleEffect, mousePosition, Quaternion.identity);
                 actionPlaced = true;
                 Destroy(explosion, 3f);
@@ -69,12 +80,14 @@ public class Actions : MonoBehaviour
             {
                 if (hit.collider != null)
                 {
+                    // Save current mouse position
                     mousePosition = new Vector3(hit.point.x, 0.5f, hit.point.z);
                 }
             }
 
             if (Input.GetMouseButtonDown(0))
             {
+                // Instantiate action when left mouse button was pressed
                 GameObject explosion = Instantiate(mediumExplosionParticleEffect, mousePosition, Quaternion.identity);
                 actionPlaced = true;
                 Destroy(explosion, 3f);
@@ -89,12 +102,14 @@ public class Actions : MonoBehaviour
             {
                 if (hit.collider != null)
                 {
+                    // Save current mouse position
                     mousePosition = new Vector3(hit.point.x, 0.5f, hit.point.z);
                 }
             }
 
             if (Input.GetMouseButtonDown(0))
             {
+                // Instantiate action when left mouse button was pressed
                 GameObject explosion = Instantiate(bigExplosionParticleEffect, mousePosition, Quaternion.identity);
                 actionPlaced = true;
                 Destroy(explosion, 3f);
@@ -111,6 +126,7 @@ public class Actions : MonoBehaviour
                 {
                     if (hit.collider != null && hit.collider.gameObject.name != "ColliderGround" && hit.collider.gameObject.tag != "Truss")
                     {
+                        // Spawn pin Game Object and set the position to the barrier position
                         GameObject pinGo = Instantiate(pinPrefab, hit.collider.gameObject.transform.position, Quaternion.identity);
                         pinGo.transform.SetParent(hit.transform.parent);
                         Vector3 newPinPosition = new Vector3(
@@ -123,7 +139,7 @@ public class Actions : MonoBehaviour
                         // <moved to Input System>
 
                         // Increase Exits Amount
-                        UIHandler.instance.InCreaseExitsAmount();
+                        UIHandler.instance.IncreaseExitsAmount(); // +1 exits amount
                     }
                 }
             }
@@ -156,8 +172,8 @@ public class Actions : MonoBehaviour
                 {
                     if (hit.collider != null)
                     {
+                        // Instantiate SOund System and set position to mouse position
                         GameObject soundSystemObject = Instantiate(soundSystemPrefab);
-                        //UIHandler.instance.userCreatedSoundSystems.Add(soundSystemObject);
                         UIHandler.instance.userCreatedSoundSystems.Add(soundSystemObject);
                         Vector3 newSoundSystemPosition = new Vector3(
                             hit.point.x,
@@ -166,6 +182,7 @@ public class Actions : MonoBehaviour
                         soundSystemObject.transform.position = newSoundSystemPosition;
                         soundSystemPrefab.transform.rotation = Quaternion.identity;
 
+                        // Enable lights when they are enabled
                         if (!UIHandler.instance.effectsEnabled)
                         {
                             soundSystemObject.transform.Find("Lights").gameObject.SetActive(false);
@@ -187,6 +204,7 @@ public class Actions : MonoBehaviour
                 Ray ray = Camera.main.ScreenPointToRay(mousePosition);
                 if (Physics.Raycast(ray, out RaycastHit hit))
                 {
+                    // Only Instantiate fire on Sound Systems
                     string hittedGameObjectName = hit.collider.gameObject.name;
                     if (hittedGameObjectName == "Sound System"
                         || hittedGameObjectName == "Sound System_2"
@@ -203,6 +221,10 @@ public class Actions : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Instantiate Fire GameObject and spawns it at parameters position.
+    /// </summary>
+    /// <param name="SoundSystemPosition">Spawn position for Sound System</param>
     private void Fire(Vector3 SoundSystemPosition)
     {
         GameObject fire = Instantiate(firePrefab);

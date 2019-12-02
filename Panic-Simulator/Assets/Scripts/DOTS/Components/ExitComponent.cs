@@ -1,10 +1,10 @@
 ﻿using Unity.Entities;
-using Unity.Mathematics;
 
 /// <summary>
+/// Component for each exit entity.
 /// </summary>
 public struct ExitComponent : IComponentData
 {
-    public bool overloaded;
-    public float amount;
+    public bool overloaded; // Bool for checking if an exit is overloaded
+    public float amount; // How many entitys are in the exit quadrant
 }

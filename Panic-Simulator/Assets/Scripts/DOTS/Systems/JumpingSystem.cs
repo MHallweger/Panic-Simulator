@@ -10,56 +10,78 @@ using Unity.Burst;
 /// </summary>
 public class JumpingSystem : JobComponentSystem
 {
-    //[RequireComponentTag(typeof(DancingTag))]
-    //[ExcludeComponent(typeof(IdleTag), typeof(MovingTag), typeof(RunningTag))]
+    /// <summary>
+    /// Handles Jumping Behavior for each agent.
+    /// Runs on every entity with Translation, MoveSpeedComponent and Agent Component Component.
+    /// </summary>
     [BurstCompile]
     public struct JumpingJob : IJobForEachWithEntity<Translation, MoveSpeedComponent, AgentComponent>
     {
+        // Data from main thread
         public float deltaTime;
 
-        public void Execute(Entity entity, int index, ref Translation translation, ref MoveSpeedComponent moveSpeedComponent, ref AgentComponent agentComponent)
+        /// <summary>
+        /// Calculate a jumping animation on current translation.value.
+        /// Sum y up to .9f, if the y value is at this point, move the agent back to the ground.
+        /// </summary>
+        /// <param name="entity">Current Entity</param>
+        /// <param name="index">Current Entity index</param>
+        /// <param name="_translation">Current Translation Component</param>
+        /// <param name="_moveSpeedComponent">Current MoveSpeedComponent Component</param>
+        /// <param name="_agentComponent">Current AgentComponent Component</param>
+        public void Execute(Entity entity, int index, ref Translation _translation, ref MoveSpeedComponent _moveSpeedComponent, [ReadOnly] ref AgentComponent _agentComponent)
         {
-
-            if (!agentComponent.hasTarget && agentComponent.agentStatus == AgentStatus.Dancing)
+            // If the agent just want to dance, handle this here
+            if (!_agentComponent.hasTarget && _agentComponent.agentStatus == AgentStatus.Dancing)
             {
-                translation.Value.y += moveSpeedComponent.jumpSpeed * deltaTime;
+                // Per iteration, add a value to the y value
+                _translation.Value.y += _moveSpeedComponent.jumpSpeed * deltaTime;
 
-                if (translation.Value.y > .9f)
+                // If y is at .9f, set the jumpSpeed to a negative value, to move the agent back to the ground
+                if (_translation.Value.y > .9f)
                 {
-                    moveSpeedComponent.jumpSpeed = -math.abs(moveSpeedComponent.jumpSpeed);
+                    _moveSpeedComponent.jumpSpeed = -math.abs(_moveSpeedComponent.jumpSpeed);
                 }
-                if (translation.Value.y < .5f)
-                {
-                    moveSpeedComponent.jumpSpeed = +math.abs(moveSpeedComponent.jumpSpeed);
-                }
-            }
-            else if (agentComponent.hasTarget && agentComponent.agentStatus == AgentStatus.Running)
-            {
-                // Enable Panic-Running-Jumping Animation.
-                // Use random jumpSpeed increaser to simulate different panic behavior
-                translation.Value.y += moveSpeedComponent.panicJumpSpeed * deltaTime;
 
-                if (translation.Value.y > .9f)
+                // If y is at .5f, set the jumpSpeed back to positive, to move the agent back up
+                if (_translation.Value.y < .5f)
                 {
-                    moveSpeedComponent.panicJumpSpeed = -math.abs(moveSpeedComponent.panicJumpSpeed);
-                }
-                if (translation.Value.y < .5f)
-                {
-                    moveSpeedComponent.panicJumpSpeed = +math.abs(moveSpeedComponent.panicJumpSpeed);
+                    _moveSpeedComponent.jumpSpeed = +math.abs(_moveSpeedComponent.jumpSpeed);
                 }
             }
 
-            if ((agentComponent.agentStatus == AgentStatus.Idle || agentComponent.agentStatus == AgentStatus.Moving)
-                && translation.Value.y > .5f)
+            // If the Agent has a target and is in panic Mode, jump while Running
+            else if (_agentComponent.hasTarget && _agentComponent.agentStatus == AgentStatus.Running)
+            {
+                // Per iteration, add a value to the y value
+                // Use a different speed variable
+                _translation.Value.y += _moveSpeedComponent.panicJumpSpeed * deltaTime;
+
+                // If y is at .9f, set the jumpSpeed to a negative value, to move the agent back to the ground
+                if (_translation.Value.y > .9f)
+                {
+                    _moveSpeedComponent.panicJumpSpeed = -math.abs(_moveSpeedComponent.panicJumpSpeed);
+                }
+
+                // If y is at .5f, set the jumpSpeed back to positive, to move the agent back up
+                if (_translation.Value.y < .5f)
+                {
+                    _moveSpeedComponent.panicJumpSpeed = +math.abs(_moveSpeedComponent.panicJumpSpeed);
+                }
+            }
+
+            // Get Agent back to the ground when it has Idle or Moving AgentStatus
+            if ((_agentComponent.agentStatus == AgentStatus.Idle || _agentComponent.agentStatus == AgentStatus.Moving)
+                && _translation.Value.y > .5f)
             {
                 // Go back to normal position (Y value .5f)
                 // Prevent from beeing in y > .5f while moving/running
-                translation.Value.y -= 5f * deltaTime;
+                _translation.Value.y -= 5f * deltaTime;
             }
-            #region Old Version (Physics version. Much influence on performance. Physics Scripts on Human Prefab needs to be enabled.)
+            #region Old Version (Physics version. Much influence on performance. Physics Scripts on Human Prefab needs to be enabled. Unity Physics needs to be installed into this project from the Package Manager)
             //if (!agentComponent.hasTarget && agentComponent.agentStatus == AgentStatus.Dancing && agentComponent.jumped == false) // Agent dont have a target, actual AgentStatus is Dancing
             //{
-            //    physicsVelocity.Linear.y = 3f;
+            //    physicsVelocity.Linear.y = 3f; // Add a force to the Agent's physics component
             //    agentComponent.jumped = true;
             //} 
 
@@ -71,22 +93,22 @@ public class JumpingSystem : JobComponentSystem
         }
     }
 
-
     /// <summary>
-    /// Runs on main thread, 1 times per frame
+    /// Main Thread section, where Jobs are called and connected.
     /// </summary>
-    /// <param name="inputDeps"></param>
-    /// <returns></returns>
+    /// <param name="inputDeps">starting deps</param>
+    /// <returns>jobHandle</returns>
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
-
-
-        // Schedule moveJob
-        var jumpingJob = new JumpingJob
+        // Create JumpingJob 
+        JumpingJob jumpingJob = new JumpingJob
         {
             deltaTime = UnityEngine.Time.deltaTime
-    }.Schedule(this, inputDeps);
+        };
 
-        return jumpingJob;
+        // Scheduling JumpingJob
+        JobHandle jobHandle = jumpingJob.Schedule(this, inputDeps);
+
+        return jobHandle;
     }
 }

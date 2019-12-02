@@ -32,7 +32,7 @@ public class RadialButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     }
 
     /// <summary>
-    /// Exit over button hover
+    /// Exit over button hover.
     /// </summary>
     /// <param name="eventData">Contains different data of the exit hover event</param>
     void IPointerExitHandler.OnPointerExit(PointerEventData eventData)

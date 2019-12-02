@@ -1,8 +1,10 @@
 using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Helper light script for light bowls.
+/// </summary>
 public class ScrollUV_Spotlight : MonoBehaviour {
-
 
 	public float horizontalScrollSpeed = 0.5f;
 	public float verticalScrollSpeed = 0.5f;
@@ -32,5 +34,4 @@ public class ScrollUV_Spotlight : MonoBehaviour {
 	{
 		scroll = !scroll;
 	}
-
 }

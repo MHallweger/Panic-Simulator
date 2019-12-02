@@ -62,7 +62,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: InformationArrow
+    m_ConditionEvent: InformationArrowTruss
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -1583722698098998153}
@@ -93,7 +93,7 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: InformationArrow
+  - m_Name: InformationArrowTruss
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0

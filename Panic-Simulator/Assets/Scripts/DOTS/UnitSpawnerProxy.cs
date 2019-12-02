@@ -9,29 +9,45 @@ using UnityEngine;
 [RequiresEntityConversion]
 public class UnitSpawnerProxy : MonoBehaviour, IDeclareReferencedPrefabs, IConvertGameObjectToEntity
 {
-    // MonoBehaviour Variables
-    [SerializeField] private GameObject Prefab;
-    [SerializeField] private GameObject frontRight;
-    [SerializeField] private GameObject frontLeft;
-    [SerializeField] private GameObject backRight;
-    [SerializeField] private GameObject backLeft;
-    public int AmountToSpawn;
+    #region Variables
+    // Singleton instance variable
     public static UnitSpawnerProxy instance;
 
+    // MonoBehaviour Variables
+    [SerializeField] private GameObject Prefab; // Capsule human Prefab
+    [SerializeField] private GameObject frontRight; // Border orientation GameObject
+    [SerializeField] private GameObject frontLeft; // Border orientation GameObject
+    [SerializeField] private GameObject backRight; // Border orientation GameObject
+    [SerializeField] private GameObject backLeft; // Border orientation GameObject
+    public int AmountToSpawn; // Amount can be set in the inspector, in later version the user can set the value for himself
+    #endregion // Variables
+
+    /// <summary>
+    /// Assign instance variable.
+    /// </summary>
     private void Awake()
     {
         instance = this;
     }
 
-    // Referenced prefabs have to be declared so that the conversion system knows about them ahead of time
+    /// <summary>
+    /// Referenced prefabs have to be declared so that the conversion system knows about them ahead of time.
+    /// </summary>
+    /// <param name="gameObjects">All current assigned GameObjects, there aren't any at the moment</param>
     public void DeclareReferencedPrefabs(List<GameObject> gameObjects)
     {
         gameObjects.Add(Prefab);
     }
 
-    // Convert the editor data representation to the entity optimal runtime representation
+    /// <summary>
+    /// Convert the editor data representation to the entity optimal runtime representation.
+    /// </summary>
+    /// <param name="entity">The first entity that handles the first steps of this process. -> Crowd GameObject from hierarchy</param>
+    /// <param name="dstManager">The current actual World Entity Manager</param>
+    /// <param name="conversionSystem">The Unity conversionSystem that handles everything for us</param>
     public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
     {
+        // Create Components
         var spawnerData = new UnitSpawnerComponent
         {
             // The referenced prefab will be converted due to DeclareReferencedPrefabs
@@ -42,6 +58,7 @@ public class UnitSpawnerProxy : MonoBehaviour, IDeclareReferencedPrefabs, IConve
 
         var borderData = new BorderComponent
         {
+            // Get current Border GameObject positions to save frontRight, frontLeft, backRight, backLeft position
             frontRight = new Vector3(frontRight.transform.position.x, frontRight.transform.position.y, frontRight.transform.position.z),
             frontLeft = new Vector3(frontLeft.transform.position.x, frontLeft.transform.position.y, frontLeft.transform.position.z),
             backRight = new Vector3(backRight.transform.position.x, backRight.transform.position.y, backRight.transform.position.z),
@@ -52,6 +69,7 @@ public class UnitSpawnerProxy : MonoBehaviour, IDeclareReferencedPrefabs, IConve
         {
         };
 
+        // Add created Components to EntityManager
         dstManager.AddComponentData(entity, spawnerData); // SYNC POINT // Just for the Entity Manager
         dstManager.AddComponentData(entity, borderData); // SYNC POINT // Just for the Entity Manager
         dstManager.AddComponentData(entity, inputData); // SYNC POINT // Just for the Entity Manager

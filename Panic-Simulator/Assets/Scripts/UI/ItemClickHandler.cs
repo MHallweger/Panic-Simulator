@@ -8,6 +8,9 @@ using UnityEngine.UI;
 public class ItemClickHandler : MonoBehaviour
 {
     #region Variables
+    // Instance
+    private static ItemClickHandler instance;
+
     // Button specific
     [SerializeField] private KeyCode key; // Selected KeyCode in the inspector
     [SerializeField] private Button button; // .this
@@ -33,9 +36,17 @@ public class ItemClickHandler : MonoBehaviour
     // Internals
     [SerializeField] private GameObject crowdObject; // For getting the entity AmountToSpawn
     private bool inside = false; // Bool for checking if the Enable/Disable Effects function was called
-    private static int increaseCounter = 0; // For checking how many barriers are active
+    private int increaseCounter = 0; // For checking how many barriers are active
     private int increaseAmount = 0; // For counting the entitys
     #endregion // Variables
+
+    /// <summary>
+    /// Assign instance variable.
+    /// </summary>
+    private void Awake()
+    {
+        instance = this;
+    }
 
     /// <summary>
     /// Getting the entity AmountToSpawn from the crowdObject.
@@ -100,7 +111,11 @@ public class ItemClickHandler : MonoBehaviour
             case 0:
                 // Inspector Index is 0 for slot 1
                 // Key 1 was pressed, spawn entitys, increase the entity Amount. This way is faster. Calculating the actual entity amount inside Update() would cost too much performance
-                Camera.main.GetComponent<UIHandler>().entityAmount += increaseAmount;
+                // Prevent from incrreasing UI stat when beeing in Input UI field
+                if (!InputWindow.instance.inputField.isFocused)
+                {
+                    Camera.main.GetComponent<UIHandler>().entityAmount += UnitSpawnerProxy.instance.AmountToSpawn;
+                }
                 break;
             case 1:
                 // Inspector Index is 1 for slot 2
@@ -206,7 +221,7 @@ public class ItemClickHandler : MonoBehaviour
     {
         if (!InputWindow.instance.inputField.isFocused)
         {
-            if (increaseCounter == additionalBarriersLeft.Length)
+            if (instance.increaseCounter == additionalBarriersLeft.Length)
             {
                 // The counter has the same value like the length of the additionalBarriers Array. The Next Barrier would lead to NullPointer
                 // Throw warning/log and return
@@ -216,24 +231,24 @@ public class ItemClickHandler : MonoBehaviour
             }
 
             // Set the next Barriers and sound system to active
-            additionalBarriersLeft[increaseCounter].SetActive(true);
-            additionalBarriersRight[increaseCounter].SetActive(true);
-            additionalSoundSystems[increaseCounter].SetActive(true);
+            additionalBarriersLeft[instance.increaseCounter].SetActive(true);
+            additionalBarriersRight[instance.increaseCounter].SetActive(true);
+            additionalSoundSystems[instance.increaseCounter].SetActive(true);
 
             // Set spawnpoint 1 position to spawnpoint additionalBarriersLeft[increaseCounter] position
             // The DOTS System will be able now to spawn agents in the new area
-            spawnPlaceLeft.transform.position = additionalSpawnObjectsLeft[increaseCounter + 1].transform.position;
-            spawnPlaceRight.transform.position = additionalSpawnObjectsRight[increaseCounter + 1].transform.position;
+            spawnPlaceLeft.transform.position = additionalSpawnObjectsLeft[instance.increaseCounter + 1].transform.position;
+            spawnPlaceRight.transform.position = additionalSpawnObjectsRight[instance.increaseCounter + 1].transform.position;
             #region Debug Barriers
             //Debug.Log(spawnPlaceLeft.transform.position);
             //Debug.Log(spawnPlaceRight.transform.position);
             Debug.DrawLine(spawnPlaceLeft.transform.position, new Vector3(spawnPlaceLeft.transform.position.x, spawnPlaceLeft.transform.position.y + 50f, spawnPlaceLeft.transform.position.z), Color.blue, 1f);
             Debug.DrawLine(spawnPlaceRight.transform.position, new Vector3(spawnPlaceRight.transform.position.x, spawnPlaceRight.transform.position.y + 50f, spawnPlaceRight.transform.position.z), Color.blue, 1f);
             #endregion // Debug Barriers
-            if (!(increaseCounter == additionalBarriersLeft.Length))
+            if (!(instance.increaseCounter == additionalBarriersLeft.Length))
             {
                 // Only increase the counter when the limit is not reached yet.
-                increaseCounter++;
+                instance.increaseCounter++;
             }
         }
     }
@@ -246,14 +261,14 @@ public class ItemClickHandler : MonoBehaviour
     {
         if (!InputWindow.instance.inputField.isFocused)
         {
-            if (increaseCounter != 0) // Prevent of getting the -1th Object of the Arrays != 0
+            if (instance.increaseCounter != 0) // Prevent of getting the -1th Object of the Arrays != 0
             {
                 // Set the Objects to false, to disable the GameObjects and going back with the barriers and the Sound Systems
-                additionalBarriersLeft[increaseCounter - 1].SetActive(false);
-                additionalBarriersRight[increaseCounter - 1].SetActive(false);
-                additionalSoundSystems[increaseCounter - 1].SetActive(false);
+                additionalBarriersLeft[instance.increaseCounter - 1].SetActive(false);
+                additionalBarriersRight[instance.increaseCounter - 1].SetActive(false);
+                additionalSoundSystems[instance.increaseCounter - 1].SetActive(false);
 
-                if (increaseCounter == 1)
+                if (instance.increaseCounter == 1)
                 {
                     // Change the spawnplace back
                     spawnPlaceLeft.transform.position = originalStartingSpawnObjectPositionLeft;
@@ -262,8 +277,8 @@ public class ItemClickHandler : MonoBehaviour
                 else
                 {
                     // Change the spawnplace back
-                    spawnPlaceLeft.transform.position = additionalSpawnObjectsLeft[increaseCounter - 1].transform.position;
-                    spawnPlaceRight.transform.position = additionalSpawnObjectsRight[increaseCounter - 1].transform.position;
+                    spawnPlaceLeft.transform.position = additionalSpawnObjectsLeft[instance.increaseCounter - 1].transform.position;
+                    spawnPlaceRight.transform.position = additionalSpawnObjectsRight[instance.increaseCounter - 1].transform.position;
                 }
                 #region Debug Barriers
                 //Debug.Log(spawnPlaceLeft.transform.position);
@@ -272,10 +287,10 @@ public class ItemClickHandler : MonoBehaviour
                 Debug.DrawLine(spawnPlaceRight.transform.position, new Vector3(spawnPlaceRight.transform.position.x, spawnPlaceRight.transform.position.y + 50f, spawnPlaceRight.transform.position.z), Color.red, 1f);
                 #endregion // Debug Barriers
                 // Decrease the counter
-                increaseCounter--;
+                instance.increaseCounter--;
 
             }
-            else if (increaseCounter <= 0) // else
+            else if (instance.increaseCounter <= 0)
             {
                 // Throw Warning/log when increaseCounter is 0, return
                 Debug.LogWarning("Limit reached!");

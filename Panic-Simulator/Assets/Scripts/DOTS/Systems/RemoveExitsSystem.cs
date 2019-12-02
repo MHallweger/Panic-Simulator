@@ -9,13 +9,13 @@ using Unity.Transforms;
 using System.Linq;
 
 /// <summary>
-/// System that updates the current status of left and right click. The agents are now able to access the specific left/right click bool to see if one of both was clicked. 
-/// The System also takes a look on different keys.
+/// Handles the Job to remove exits entities.
 /// </summary>
 [UpdateBefore(typeof(UnitSpawnerSystem))]
 public class RemoveExitsSystem : JobComponentSystem
 {
-    EndSimulationEntityCommandBufferSystem m_EntityCommandBufferSystem; // For creating the commandBuffer
+    // For creating the commandBuffer
+    EndSimulationEntityCommandBufferSystem m_EntityCommandBufferSystem;
 
     /// <summary>
     /// Initialize The EndSimulationEntityCommandBufferSystem commandBufferSystem.
@@ -25,13 +25,31 @@ public class RemoveExitsSystem : JobComponentSystem
         m_EntityCommandBufferSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
     }
 
-    //[BurstCompile] TODO creaate job that only disables this system. Then enable Burst on this job
+    /// <summary>
+    /// Deleting all Entities with ExitComponent.
+    /// </summary>
+    [BurstCompile]
     struct RemoveExitsJob : IJobForEachWithEntity<ExitComponent>
     {
-        public EntityCommandBuffer.Concurrent CommandBuffer; // instantiating and deleting of Entitys can only gets done on the main thread, save commands in buffer for main thread
-        public void Execute(Entity entity, int index, [ReadOnly] ref ExitComponent exitComponent)
+        // Data from main thread
+        // Instantiating and deleting of Entitys can only get done on the main thread. Save commands in buffer for main thread later
+        public EntityCommandBuffer.Concurrent CommandBuffer;
+
+        public void Execute(Entity entity, int index, [ReadOnly] ref ExitComponent _exitComponent)
         {
             CommandBuffer.DestroyEntity(index, entity);
+        }
+    }
+
+    /// <summary>
+    /// Job that handles commands that cannot be done inside a [BurstCompile] Job.
+    /// This is the reason why here is no [BurstCompile] Tag.
+    /// </summary>
+    struct DisableRemoveExitsSystemJob : IJobForEach<ExitComponent>
+    {
+        public void Execute(ref ExitComponent _exitComponent)
+        {
+            // Disable this whole System
             World.Active.GetExistingSystem<RemoveExitsSystem>().Enabled = false;
         }
     }
@@ -39,16 +57,16 @@ public class RemoveExitsSystem : JobComponentSystem
     /// <summary>
     /// This OnUpdate only runs one time, so GameObject.Find will be no problem here.
     /// </summary>
-    /// <param name="inputDeps"></param>
-    /// <returns></returns>
+    /// <param name="inputDeps">starting deps</param>
+    /// <returns>jobHandle</returns>
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
         JobHandle jobHandle = new JobHandle();
 
         if (!InputWindow.instance.inputField.isFocused)
         {
-            // Enable the Mesh Renderer of the LOD Barrier.
-            //hit.collider.gameObject.transform.parent.gameObject.transform.Find("chainlink_group-1_LOD0").GetComponent<UnityEngine.MeshRenderer>().enabled = true;
+            // If InputField is not focused
+            // Get all pole GameObjects
             var poleClones = UnityEngine.Resources.FindObjectsOfTypeAll<UnityEngine.GameObject>().Where(obj => obj.name == "GroundPoleA(Clone)");
 
             foreach (UnityEngine.GameObject pole in poleClones)
@@ -64,13 +82,27 @@ public class RemoveExitsSystem : JobComponentSystem
                 }
             }
 
+            // Creating RemoveExitsJob
             RemoveExitsJob removeExitsJob = new RemoveExitsJob
             {
-                CommandBuffer = m_EntityCommandBufferSystem.CreateCommandBuffer().ToConcurrent(), // Create the commandBuffer
+                // Create the commandBuffer
+                CommandBuffer = m_EntityCommandBufferSystem.CreateCommandBuffer().ToConcurrent(),
             };
 
+            // Scheduling RemoveExitsJob and save the results into jobHandle
             jobHandle = removeExitsJob.Schedule(this, inputDeps);
-            m_EntityCommandBufferSystem.AddJobHandleForProducer(jobHandle); // Execute the commandBuffer commands when spawnJob is finished
+
+            // Load CommandBuffercommands into main thread
+            // Execute the commandBuffer commands when spawnJob is finished
+            m_EntityCommandBufferSystem.AddJobHandleForProducer(jobHandle);
+
+            // Create DisableRemoveExitsSystemJob to disable this whole System
+            DisableRemoveExitsSystemJob disableRemoveExitsSystemJob = new DisableRemoveExitsSystemJob
+            {
+            };
+
+            // Schedule this job and save the results into jobHandle
+            jobHandle = disableRemoveExitsSystemJob.Schedule(this, jobHandle);
         }
         return jobHandle;
     }

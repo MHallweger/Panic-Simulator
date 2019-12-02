@@ -8,15 +8,17 @@ using Unity.Collections;
 using Unity.Transforms;
 
 /// <summary>
-/// System that updates the current status of left and right click. The agents are now able to access the specific left/right click bool to see if one of both was clicked. 
-/// The System also takes a look on different keys.
+/// System that handles user input.
+/// System that handles exit entity creation.
 /// </summary>
 public class InputSystem : JobComponentSystem
 {
-    EndSimulationEntityCommandBufferSystem m_EntityCommandBufferSystem; // For creating the commandBuffer
+    // For creating the commandBuffer
+    EndSimulationEntityCommandBufferSystem m_EntityCommandBufferSystem; 
 
     /// <summary>
     /// Initialize The EndSimulationEntityCommandBufferSystem commandBufferSystem.
+    /// Create Dummy Entity.
     /// </summary>
     protected override void OnCreate()
     {
@@ -28,9 +30,14 @@ public class InputSystem : JobComponentSystem
         EntityManager.SetName(dummyEntity, "DummyEntity");
     }
 
+    /// <summary>
+    /// Job that handles different User Input.
+    /// </summary>
     [BurstCompile]
     struct PlayerInputJob : IJobForEach<InputComponent>
     {
+        // Data from main thread
+        // Mono Behavior Input
         public bool leftClick;
         public bool rightClick;
 
@@ -47,8 +54,13 @@ public class InputSystem : JobComponentSystem
 
         public bool entityInputisFocused;
 
-        public void Execute(ref InputComponent _inputComponent)
+        /// <summary>
+        /// Assign Mono Behavior main thread Inputs to each entity with InputComponent.
+        /// </summary>
+        /// <param name="_inputComponent">Current Entity InputComponent</param>
+        public void Execute([WriteOnly] ref InputComponent _inputComponent)
         {
+            // Assign Inputs
             _inputComponent.leftClick = leftClick;
             _inputComponent.rightClick = rightClick;
             _inputComponent.keyThreePressedUp = keyThreePressedUp;
@@ -73,14 +85,25 @@ public class InputSystem : JobComponentSystem
         }
     }
 
-    // TODO BURST: Create a job that only handles the CommandBuffer and World. Active things
-    struct CreateExitEntitys : IJobForEachWithEntity<DummyComponent>
+    /// <summary>
+    /// Job that handles the exit entity creation.
+    /// No Burst here because of the CommandBuffer and the World.Active access.
+    /// </summary>
+    struct CreateExitEntities : IJobForEachWithEntity<DummyComponent>
     {
-        public EntityCommandBuffer.Concurrent CommandBuffer; // instantiating and deleting of Entitys can only gets done on the main thread, save commands in buffer for main thread
+        // Data from main thread
+        public EntityCommandBuffer.Concurrent CommandBuffer;
         public float3 positionForExitEntity;
 
+        /// <summary>
+        /// Creating actual exit entities.
+        /// </summary>
+        /// <param name="entity">Current Entity</param>
+        /// <param name="index">Current Entity index</param>
+        /// <param name="_dummyComponent">Current _DummyComponent</param>
         public void Execute(Entity entity, int index, [ReadOnly] ref DummyComponent _dummyComponent)
         {
+            // Create exit entity and add Components
             Entity exitEntity = CommandBuffer.CreateEntity(index);
             CommandBuffer.AddComponent(index, exitEntity, new Translation { Value = positionForExitEntity });
             CommandBuffer.AddComponent(index, exitEntity, new ExitComponent {});
@@ -91,11 +114,20 @@ public class InputSystem : JobComponentSystem
         }
     }
 
+    // Variables for not creating new ones each time OnUpdate restarts
+    #region // Variables
     float3 exitPosition;
+    #endregion // Variables
 
+    /// <summary>
+    /// Main Thread section, where Jobs are called and connected.
+    /// </summary>
+    /// <param name="inputDeps">starting deps</param>
+    /// <returns>jobHandle</returns>
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
-        var inputJob = new PlayerInputJob
+        // Creating PlayerInputJob
+        PlayerInputJob inputJob = new PlayerInputJob
         {
             leftClick = UnityEngine.Input.GetMouseButtonDown(0),
             rightClick = UnityEngine.Input.GetMouseButtonDown(1),
@@ -112,15 +144,19 @@ public class InputSystem : JobComponentSystem
             entityInputisFocused = InputWindow.instance.inputField.isFocused
         };
 
+        // Scheduling PlayerInputJob with starting deps
         JobHandle jobHandle = inputJob.Schedule(this, inputDeps);
 
-        if (Actions.instance.createExits) // Just for Exits placement
+        // Just for Exits placement
+        if (Actions.instance.createExits)
         {
             // Create Exits mode selected
             // Now every mouseClick (0) places an exit spot.
             if (UnityEngine.Input.GetMouseButtonDown(0))
             {
-                // Small Explosions in Radial menu was selected
+                // Save mouse position and check if hitted collider is a barrier.
+                // If it is a barrie, save the exit position with the hitted object and create the CreateExitEntitiesJob
+                // Disable the barrier GameObject visible
                 exitPosition = UnityEngine.Input.mousePosition;
                 UnityEngine.Ray ray = UnityEngine.Camera.main.ScreenPointToRay(exitPosition);
                 if (UnityEngine.Physics.Raycast(ray, out UnityEngine.RaycastHit hit))
@@ -129,7 +165,8 @@ public class InputSystem : JobComponentSystem
                     {
                         exitPosition = new float3(hit.collider.gameObject.transform.position.x, 0.5f, hit.collider.gameObject.transform.position.z);
 
-                        var createExitEntitysJob = new CreateExitEntitys
+                        // Create CreateExitEntities
+                        CreateExitEntities createExitEntitiesJob = new CreateExitEntities
                         {
                             CommandBuffer = m_EntityCommandBufferSystem.CreateCommandBuffer().ToConcurrent(), // Create the commandBuffer
                             positionForExitEntity = exitPosition
@@ -144,13 +181,14 @@ public class InputSystem : JobComponentSystem
                         hit.collider.gameObject.transform.parent.gameObject.transform.GetChild(0).GetComponent<UnityEngine.MeshRenderer>().enabled = false;
 
                         // Schedule this job when an exit spot is created with Mono behavior and the position is spotted here
-                        jobHandle = createExitEntitysJob.Schedule(this, jobHandle);
+                        jobHandle = createExitEntitiesJob.Schedule(this, jobHandle);
                     }
                 }
             }
         }
 
-        m_EntityCommandBufferSystem.AddJobHandleForProducer(jobHandle); // Execute the commandBuffer commands when spawnJob is finished
+        // Execute the commandBuffer commands when spawnJob is finished
+        m_EntityCommandBufferSystem.AddJobHandleForProducer(jobHandle);
         return jobHandle;
     }
 }

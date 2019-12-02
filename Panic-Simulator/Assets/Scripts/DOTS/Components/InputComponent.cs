@@ -23,5 +23,5 @@ public struct InputComponent : IComponentData
     public bool keySevenPressedDown;
     public bool keySevenPressedUp;
 
-    public bool entityInputisFocused;
+    public bool entityInputisFocused; // For Input window
 }

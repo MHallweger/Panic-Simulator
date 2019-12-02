@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Flickering Light script for Lights bowls.
+/// </summary>
 public class Flickering_Light : MonoBehaviour {
 	
-	// Your light gameObject here.
 	public Light flickerLight;
 	public float flickerSpeed = 60;
 	

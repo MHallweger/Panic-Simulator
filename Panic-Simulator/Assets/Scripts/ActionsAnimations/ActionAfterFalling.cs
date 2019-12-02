@@ -2,17 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Class that holds methods that will be called when Unity event in animation is triggered.
+/// </summary>
 public class ActionAfterFalling : MonoBehaviour
 {
+    #region Variables
+    // Prefab GameObjects
     [SerializeField] private GameObject explosionPrefab;
     [SerializeField] private GameObject firePrefab;
     private GameObject actionsGameObject;
+    #endregion // Variables
 
     private void Awake()
     {
         actionsGameObject = GameObject.Find("Actions");
     }
 
+    /// <summary>
+    /// Instantaite Explosion and fire effects when falling.
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator ExplodeAfterFallingForeground()
     {
         GameObject explosionOne = Instantiate(explosionPrefab, new Vector3(transform.position.x, 0.5f, transform.position.z + 6f), transform.rotation);
@@ -40,6 +50,10 @@ public class ActionAfterFalling : MonoBehaviour
         Destroy(fireThree, 300f);
     }
 
+    /// <summary>
+    /// Instantaite Explosion and fire effects when falling.
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator ExplodeAfterFallingLeftSide()
     {
         GameObject explosionOne = Instantiate(explosionPrefab, new Vector3(transform.position.x - 6f, 0.5f, transform.position.z), transform.rotation);
@@ -67,6 +81,10 @@ public class ActionAfterFalling : MonoBehaviour
         Destroy(fireThree, 300f);
     }
 
+    /// <summary>
+    /// Instantaite Explosion and fire effects when falling.
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator ExplodeAfterFallingRightSide()
     {
         GameObject explosionOne = Instantiate(explosionPrefab, new Vector3(transform.position.x + 6f, 0.5f, transform.position.z), transform.rotation);
@@ -94,6 +112,10 @@ public class ActionAfterFalling : MonoBehaviour
         Destroy(fireThree, 300f);
     }
 
+    /// <summary>
+    /// Helper IEnumerator that calls when truss has fallen, needed for other methods.
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator EnableTrussHasFallenBool()
     {
         yield return new WaitForSeconds(.2f);

@@ -51,5 +51,4 @@ public class RadialMenuSpawner : MonoBehaviour
         radialMenu.label.text = "Actions"; // Sets label Text of the Radial Menu
         radialMenu.SpawnButtons(uiHandler); // Call button method
     }
-
 }

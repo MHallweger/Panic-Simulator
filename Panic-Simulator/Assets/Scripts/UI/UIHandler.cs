@@ -58,6 +58,10 @@ public class UIHandler : MonoBehaviour
     [SerializeField] private GameObject smoke; // The smoke GameObject
     [SerializeField] private GameObject displays; // The GameObject that holds all displays
     [SerializeField] private GameObject trussLights; // The GameObject that holds all lights on the stage
+    [SerializeField] private Light directionalLight; // Main directional light to change the ambient color for enabling/disabling night mode
+    [SerializeField] private Material skyboxDay; // Day Skybox Material
+    [SerializeField] private Material skyboxNight; // Night Skybox Material
+    // ##### TESTING ##### //
 
     // Barriers/Sound Systems
     public List<GameObject> userCreatedSoundSystems = new List<GameObject>(); // An Array, containing all user created Sound Systems
@@ -67,8 +71,8 @@ public class UIHandler : MonoBehaviour
     [SerializeField] private GameObject[] additionalSoundSystems; // Contains 4 additional Sound Systems
 
     // Animations
-    [HideInInspector] public bool enableArrows = false; // Bool that allows the animation script on the Information Arrow GameObhects to animate
-
+    [HideInInspector] public bool enableTrussArrows = false; // Bool that allows the animation script on the Information Arrow GameObjects to animate, for Truss GameObjects
+    [HideInInspector] public bool enableSoundSystemArrows = false; // Bool that allows the animation script on the Information Arrow GameObjects to animate, for Sound System GameObjects
     #endregion // Variables
 
     /// <summary>
@@ -130,7 +134,7 @@ public class UIHandler : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.C)) // Enable/Disable Orbit Camera
         {
-            EnableOrDisableOrbitCamera();
+            
         }
         else if (Input.GetKeyDown(KeyCode.L)) // Enable/Disable Effects (Lights, Displays, Smoke)
         {
@@ -138,7 +142,10 @@ public class UIHandler : MonoBehaviour
         }
     }
 
-    public void InCreaseExitsAmount()
+    /// <summary>
+    /// Increase exits amount when called.
+    /// </summary>
+    public void IncreaseExitsAmount()
     {
         exitsAmount += 1;
     }
@@ -191,7 +198,6 @@ public class UIHandler : MonoBehaviour
         {
             transform.Translate(Vector3.right * cameraSpeed * Time.deltaTime);
         }
-
 
         // Look around with Right Mouse click
         // Use Unity own Axis
@@ -353,6 +359,9 @@ public class UIHandler : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Method that react on changes of the actionPlaced variable. Changes the status image.
+    /// </summary>
     private void UpdateStatusIcon()
     {
         if (Actions.instance.actionPlaced)
@@ -366,21 +375,24 @@ public class UIHandler : MonoBehaviour
     }
 
     /// <summary>
-    /// Method that Enable/Disable Night mode
+    /// Method that Enable/Disable Night mode.
     /// </summary>
     private void EnableOrDisableNightMode()
     {
-        // TODO: implementing Disable or enable night mode function
-        // Dark atmosphere etc.
-    }
-
-    /// <summary>
-    /// Method that Enable/Disable Orbit Camera
-    /// </summary>
-    private void EnableOrDisableOrbitCamera()
-    {
-        // TODO: implement Disable or enable Orbit Camera function.
-        // Camera flying to different (random?) positions.
-        // Showing different things
+        // Tag: Skyboxes Mega Pack 1/7/7, DL.color = DCDED4
+        // Nacht: Night Skyboxes pack 2/2/2, DL.color = 3146BB
+        if (RenderSettings.skybox == skyboxDay)
+        {
+            // Current Skybox is in Day mode
+            RenderSettings.skybox = null;
+            RenderSettings.skybox = skyboxNight;
+            directionalLight.color = new Color32(0x31, 0x46, 0xBB, 0xFF);
+        }
+        else
+        {
+            // Current Skybox is in Night mode
+            RenderSettings.skybox = skyboxDay;
+            directionalLight.color = new Color32(0xDC, 0xDE, 0xD4, 0xFF);
+        }
     }
 }

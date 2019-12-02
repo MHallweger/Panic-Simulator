@@ -1,13 +1,15 @@
 ﻿using Unity.Entities;
 using Unity.Mathematics;
 
+/// <summary>
+/// Describes the current AgentStatus.
+/// </summary>
 public enum AgentStatus
 {
     Idle = 0, // standing still
     Moving = 1, // normal moving
     Dancing = 2, // jumping/dancing "animation"
-    PrePanic = 3, // Orientation mode
-    Running = 4 // fast moving if panic spot appears
+    Running = 3 // fast moving if panic spot appears
 }
 
 /// <summary>
@@ -15,17 +17,12 @@ public enum AgentStatus
 /// </summary>
 public struct AgentComponent : IComponentData
 {
-    public bool hasTarget; // Which agent has a target?
-    public bool jumped; // For checking if the agent jumped up from the ground
+    public bool hasTarget; // Agent has a target?
     public float3 target; // The actual target
-    public AgentStatus agentStatus; // The actual status of the agent
-    public bool exitPointReached; // For checking if the agent has reached the user generated exit spot
-    //public float randomPositionsAfterActionPassed; // Int that describes the amount of random Positions that have been passed from an agent since the action appeared
-    public bool foundTemporaryNewRandomPosition;
-    public bool foundFinalExitPoint;
-    public bool marked;
-    public float fleeProbability;
-    public float discoverProbability;
-    public bool paniced;
-    public bool areaFinallyleaved;
+    public AgentStatus agentStatus; // The current status of the agent
+    public bool exitPointReached; // Agent has reached the user generated exit spot?
+    public bool foundTemporaryNewRandomPosition; // Agent found a first random generated position?
+    public bool foundFinalExitPoint; // Agent found the final exit position?
+    public bool marked; // Agent was on a exit spot (or on the way to it) but turned around to find a new exit spot?
+    public float fleeProbability; // The Probability to turn around when running to an exit spot
 }

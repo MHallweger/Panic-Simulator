@@ -7,36 +7,52 @@ using CodeMonkey;
 using CodeMonkey.MonoBehaviours;
 using CodeMonkey.Utils;
 
+/// <summary>
+/// Script that handles different things for the Input window.
+/// </summary>
 public class InputWindow : MonoBehaviour
 {
-    private const string validCharacters = "0123456789";
-    public TMP_InputField inputField;
-    public Button button;
+    #region Variables
+    // Singleton instance variable
     public static InputWindow instance;
 
+    // Consts
+    private const string validCharacters = "0123456789";
+
+    // Input window Game Objects
+    public TMP_InputField inputField;
+    private Button button;
+    #endregion // Variables
+
+    /// <summary>
+    /// Assign instance variable.
+    /// </summary>
     private void Awake()
     {
         instance = this;
     }
 
+    /// <summary>
+    /// Get current AmountToSpawn and set it to inputField text.
+    /// </summary>
     private void Start()
     {
         inputField.text = UnitSpawnerProxy.instance.AmountToSpawn.ToString();
     }
 
-    // Update is called once per frame
     void Update()
     {
         ValidateInput();
+        CheckEnterKeyInput();
     }
 
     /// <summary>
     /// Checks if a given Character is i inside the validCharacters string.
+    /// https://www.youtube.com/watch?v=4n6RT805rCc&t=268s
     /// </summary>
     /// <param name="validCharacters">All valid characters for example 0123456789</param>
     /// <param name="addedChar">The test character</param>
     /// <returns></returns>
-    // https://www.youtube.com/watch?v=4n6RT805rCc&t=268s
     private char ValidateCharacter(string validCharacters, char addedChar)
     {
         if (validCharacters.IndexOf(addedChar) != -1)
@@ -70,6 +86,17 @@ public class InputWindow : MonoBehaviour
     public void SaveValue()
     {
         UnitSpawnerProxy.instance.AmountToSpawn = int.Parse(inputField.text);
-        CMDebug.TextPopup("Entity Anzahl angepasst!", new Vector3(button.gameObject.transform.position.x + 20f, button.gameObject.transform.position.y,button.gameObject.transform.position.z));
+        //CMDebug.TextPopup("Entity Anzahl angepasst!", new Vector3(button.gameObject.transform.position.x + 20f, button.gameObject.transform.position.y,button.gameObject.transform.position.z));
+    }
+
+    /// <summary>
+    /// Checks if the user pressed one of the enter buttons to save his input. When pressed, call SaveValue() Method.
+    /// </summary>
+    private void CheckEnterKeyInput()
+    {
+        if (Input.GetKeyDown("return") || Input.GetKeyDown("enter"))
+        {
+            SaveValue();
+        }
     }
 }

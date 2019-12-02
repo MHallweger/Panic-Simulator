@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Simple Script for changing the stage background color
+/// Simple Script for changing the stage background color.
 /// </summary>
 public class StageBackgroundChange : MonoBehaviour
 {

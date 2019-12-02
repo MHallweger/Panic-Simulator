@@ -50,7 +50,7 @@ public class RadialMenu : MonoBehaviour
         for (int i = 0; i < uiHandler.options.Length; i++)
         {
             // Create the button, set as a child of the Radial Menu
-            RadialButton radialButton = Instantiate(buttonPrefab) as RadialButton; // TODO ECS
+            RadialButton radialButton = Instantiate(buttonPrefab) as RadialButton;
             radialButton.transform.SetParent(transform, false);
 
             // Distance around the circle
@@ -84,140 +84,154 @@ public class RadialMenu : MonoBehaviour
     {
         if (Input.GetKeyUp(KeyCode.Tab))
         {
-            if (selected) // The selected Radial Menu Button
-            {
-                // Set default Radial Menu title
-                RadialMenuSpawner.instance.radialMenu.label.text = "Actions";
-                RadialMenuSpawner.instance.updatedMenuText = "Actions";
-
-                if (selected.title == "Create Exits")
-                {
-                    // Create Exits Button choosen
-                    actions.createExits = true;
-                    actions.actionEnabled = false;
-                    actions.fallingTruss = false;
-                    actions.trussHasFallen = false;
-                    actions.dropSoundSystem = false;
-                    actions.smallGroundExplosion = false;
-                    actions.mediumGroundExplosion = false;
-                    actions.bigGroundExplosion = false;
-                    actions.fire = false;
-                    UIHandler.instance.mode = "Create Exits";
-
-                    // Set bool true that will be used in the animator script
-                    UIHandler.instance.enableArrows = false;
-
-                    // Set bool in UI Handler (Synch Point) -> Triggers DOTS script to enable the panic System
-
-                }
-                else if (selected.title == "Small Explosion")
-                {
-                    // Small Explosion Button choosen
-                    actions.smallGroundExplosion = true;
-                    actions.actionEnabled = true;
-
-                    actions.mediumGroundExplosion = false;
-                    actions.bigGroundExplosion = false;
-                    actions.createExits = false;
-                    actions.fallingTruss = false;
-                    actions.trussHasFallen = false;
-                    actions.dropSoundSystem = false;
-                    actions.fire = false;
-                    UIHandler.instance.mode = "Small Explosions";
-
-                    // Set bool true that will be used in the animator script
-                    UIHandler.instance.enableArrows = false;
-                }
-                else if (selected.title == "Medium Explosion")
-                {
-                    // Medium Explosion Button choosen
-                    actions.mediumGroundExplosion = true;
-                    actions.actionEnabled = true;
-
-                    actions.smallGroundExplosion = false;
-                    actions.bigGroundExplosion = false;
-                    actions.createExits = false;
-                    actions.fallingTruss = false;
-                    actions.trussHasFallen = false;
-                    actions.dropSoundSystem = false;
-                    actions.fire = false;
-                    UIHandler.instance.mode = "Medium Explosions";
-
-                    // Set bool true that will be used in the animator script
-                    UIHandler.instance.enableArrows = false;
-                }
-                else if (selected.title == "Big Explosion")
-                {
-                    // Big Explosion Button choosen
-                    actions.bigGroundExplosion = true;
-                    actions.actionEnabled = true;
-
-                    actions.mediumGroundExplosion = false;
-                    actions.smallGroundExplosion = false;
-                    actions.createExits = false;
-                    actions.fallingTruss = false;
-                    actions.trussHasFallen = false;
-                    actions.dropSoundSystem = false;
-                    actions.fire = false;
-                    UIHandler.instance.mode = "Big Explosion";
-
-                    // Set bool true that will be used in the animator script
-                    UIHandler.instance.enableArrows = false;
-                }
-                else if (selected.title == "Falling Truss")
-                {
-                    // Falling Truss Button choosen
-                    actions.fallingTruss = true;
-                    actions.actionEnabled = true;
-
-                    actions.createExits = false;
-                    actions.dropSoundSystem = false;
-                    actions.smallGroundExplosion = false;
-                    actions.mediumGroundExplosion = false;
-                    actions.bigGroundExplosion = false;
-                    actions.fire = false;
-                    UIHandler.instance.mode = "Falling Truss";
-
-                    // Set bool true that will be used in the animator script
-                    UIHandler.instance.enableArrows = true;
-                }
-                else if (selected.title == "Drop Sound System")
-                {
-                    // Drop Sound System Button choosen
-                    actions.dropSoundSystem = true;
-                    actions.fallingTruss = false;
-                    actions.trussHasFallen = false;
-                    actions.createExits = false;
-                    actions.smallGroundExplosion = false;
-                    actions.mediumGroundExplosion = false;
-                    actions.bigGroundExplosion = false;
-                    actions.fire = false;
-                    UIHandler.instance.mode = "Create Sound System";
-
-                    // Set bool true that will be used in the animator script
-                    UIHandler.instance.enableArrows = false;
-                }
-                else if (selected.title == "Fire")
-                {
-                    // Fire Button choosen
-                    actions.fire = true;
-                    actions.actionEnabled = true;
-
-                    actions.dropSoundSystem = false;
-                    actions.fallingTruss = false;
-                    actions.trussHasFallen = false;
-                    actions.createExits = false;
-                    actions.smallGroundExplosion = false;
-                    actions.mediumGroundExplosion = false;
-                    actions.bigGroundExplosion = false;
-                    UIHandler.instance.mode = "Fire";
-
-                    // Set bool true that will be used in the animator script
-                    UIHandler.instance.enableArrows = false;
-                }
-            }
-            // A button was choosen so the Radial Menu is not needed anymore
-            Destroy(gameObject);
+            CheckRadialMenuSelection();
         }
+    }
+
+    /// <summary>
+    /// React on selected Buttons, enable/disable bools.
+    /// </summary>
+    public void CheckRadialMenuSelection()
+    {
+        if (selected) // The selected Radial Menu Button
+        {
+            // Set default Radial Menu title
+            RadialMenuSpawner.instance.radialMenu.label.text = "Actions";
+            RadialMenuSpawner.instance.updatedMenuText = "Actions";
+
+            if (selected.title == "Create Exits")
+            {
+                // Create Exits Button choosen
+                actions.createExits = true;
+                actions.actionEnabled = false;
+                actions.fallingTruss = false;
+                actions.trussHasFallen = false;
+                actions.dropSoundSystem = false;
+                actions.smallGroundExplosion = false;
+                actions.mediumGroundExplosion = false;
+                actions.bigGroundExplosion = false;
+                actions.fire = false;
+                UIHandler.instance.mode = "Create Exits";
+
+                // Set bool true that will be used in the animator script
+                UIHandler.instance.enableTrussArrows = false;
+                UIHandler.instance.enableSoundSystemArrows = false;
+
+                // Set bool in UI Handler (Synch Point) -> Triggers DOTS script to enable the panic System
+            }
+            else if (selected.title == "Small Explosion")
+            {
+                // Small Explosion Button choosen
+                actions.smallGroundExplosion = true;
+                actions.actionEnabled = true;
+
+                actions.mediumGroundExplosion = false;
+                actions.bigGroundExplosion = false;
+                actions.createExits = false;
+                actions.fallingTruss = false;
+                actions.trussHasFallen = false;
+                actions.dropSoundSystem = false;
+                actions.fire = false;
+                UIHandler.instance.mode = "Small Explosions";
+
+                // Set bool true that will be used in the animator script
+                UIHandler.instance.enableTrussArrows = false;
+                UIHandler.instance.enableSoundSystemArrows = false;
+            }
+            else if (selected.title == "Medium Explosion")
+            {
+                // Medium Explosion Button choosen
+                actions.mediumGroundExplosion = true;
+                actions.actionEnabled = true;
+
+                actions.smallGroundExplosion = false;
+                actions.bigGroundExplosion = false;
+                actions.createExits = false;
+                actions.fallingTruss = false;
+                actions.trussHasFallen = false;
+                actions.dropSoundSystem = false;
+                actions.fire = false;
+                UIHandler.instance.mode = "Medium Explosions";
+
+                // Set bool true that will be used in the animator script
+                UIHandler.instance.enableTrussArrows = false;
+                UIHandler.instance.enableSoundSystemArrows = false;
+            }
+            else if (selected.title == "Big Explosion")
+            {
+                // Big Explosion Button choosen
+                actions.bigGroundExplosion = true;
+                actions.actionEnabled = true;
+
+                actions.mediumGroundExplosion = false;
+                actions.smallGroundExplosion = false;
+                actions.createExits = false;
+                actions.fallingTruss = false;
+                actions.trussHasFallen = false;
+                actions.dropSoundSystem = false;
+                actions.fire = false;
+                UIHandler.instance.mode = "Big Explosion";
+
+                // Set bool true that will be used in the animator script
+                UIHandler.instance.enableTrussArrows = false;
+                UIHandler.instance.enableSoundSystemArrows = false;
+            }
+            else if (selected.title == "Falling Truss")
+            {
+                // Falling Truss Button choosen
+                actions.fallingTruss = true;
+                actions.actionEnabled = true;
+
+                actions.createExits = false;
+                actions.dropSoundSystem = false;
+                actions.smallGroundExplosion = false;
+                actions.mediumGroundExplosion = false;
+                actions.bigGroundExplosion = false;
+                actions.fire = false;
+                UIHandler.instance.mode = "Falling Truss";
+
+                // Set bool true that will be used in the animator script
+                UIHandler.instance.enableTrussArrows = true;
+                UIHandler.instance.enableSoundSystemArrows = false;
+            }
+            else if (selected.title == "Drop Sound System")
+            {
+                // Drop Sound System Button choosen
+                actions.dropSoundSystem = true;
+                actions.fallingTruss = false;
+                actions.trussHasFallen = false;
+                actions.createExits = false;
+                actions.smallGroundExplosion = false;
+                actions.mediumGroundExplosion = false;
+                actions.bigGroundExplosion = false;
+                actions.fire = false;
+                UIHandler.instance.mode = "Create Sound System";
+
+                // Set bool true that will be used in the animator script
+                UIHandler.instance.enableTrussArrows = false;
+                UIHandler.instance.enableSoundSystemArrows = false;
+            }
+            else if (selected.title == "Fire")
+            {
+                // Fire Button choosen
+                actions.fire = true;
+                actions.actionEnabled = true;
+
+                actions.dropSoundSystem = false;
+                actions.fallingTruss = false;
+                actions.trussHasFallen = false;
+                actions.createExits = false;
+                actions.smallGroundExplosion = false;
+                actions.mediumGroundExplosion = false;
+                actions.bigGroundExplosion = false;
+                UIHandler.instance.mode = "Fire";
+
+                // Set bool true that will be used in the animator script
+                UIHandler.instance.enableTrussArrows = false;
+                UIHandler.instance.enableSoundSystemArrows = true;
+            }
+        }
+        // A button was choosen so the Radial Menu is not needed anymore
+        Destroy(gameObject);
     }
 }
