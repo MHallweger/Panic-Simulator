@@ -45,7 +45,7 @@ public class UpdateBordersSystem : JobComponentSystem
     /// Job that runs after UpdateBordersJob to disable this Job. This way, [BurstCompile] can be used at UpdateBordersJob.
     /// The reason for this is that Burst cannot handle World access.
     /// </summary>
-    struct DisableUpdateBordersJob : IJobForEach<BorderComponent>
+    struct DisableUpdateBordersSystemJob : IJobForEach<BorderComponent>
     {
         public void Execute([ReadOnly] ref BorderComponent _borderComponent)
         {
@@ -81,7 +81,7 @@ public class UpdateBordersSystem : JobComponentSystem
             jobHandle = updateBordersJob.Schedule(this, inputDeps);
 
             // After that, create a DisableUpdateBordersJob to disable this whole System when BorderComponents are updated
-            DisableUpdateBordersJob disableUpdateBordersJob = new DisableUpdateBordersJob
+            DisableUpdateBordersSystemJob disableUpdateBordersJob = new DisableUpdateBordersSystemJob
             {
             };
 

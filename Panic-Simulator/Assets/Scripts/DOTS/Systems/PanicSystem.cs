@@ -86,13 +86,13 @@ public class PanicSystem : JobComponentSystem
         [ReadOnly] public NativeArray<Translation> exitsTranslations; // Current Exit Translations
         [ReadOnly] public NativeArray<ExitComponent> exitsExitComponents; // Current Exit ExitComponents
 
-        [NativeDisableParallelForRestriction] public NativeArray<Random> RandomGenerator; // Filled RandoGenerator
+        [NativeDisableParallelForRestriction] public NativeArray<Random> RandomGenerator; // Filled RandomGenerator
         [Unity.Collections.LowLevel.Unsafe.NativeSetThreadIndex] private int threadIndex; // Current Thread Index
 
         /// <summary>
         /// This Job is devided into three parts.
         /// Part 1: If there are any Agents with no target and a Running Tag (Agents near an explosion), calculate a random position and check if this random position is inside the festival area.
-        /// If it's not inside the festival area, generate a new random position. If it's inside the festival area, set this random position to the new target of this agent. The Running Tag will react on this information.
+        /// If it's not inside the festival area, generate a new random position. If it's inside the festival area, set this random position to the new target of this agent. The Running System will react on this information.
         /// Part 2: Agent has a target and is running to this target. If the Agent can see an exit, check if this exit is not overloaded. 
         /// If it's overloaded, go to Part 1. If it's not overloaded, set this exit as target and set the foundFinalExitPosition bool to true.
         /// Part 3: Agents on the way to an exit are using this part. If they notice that the current Exit as their target is overloaded, calculate a random value.

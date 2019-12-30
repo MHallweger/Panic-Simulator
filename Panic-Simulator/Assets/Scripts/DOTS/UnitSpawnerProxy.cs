@@ -69,7 +69,7 @@ public class UnitSpawnerProxy : MonoBehaviour, IDeclareReferencedPrefabs, IConve
         {
         };
 
-        // Add created Components to EntityManager
+        // Add created Components via EntityManager to entity (crowd GameObject)
         dstManager.AddComponentData(entity, spawnerData); // SYNC POINT // Just for the Entity Manager
         dstManager.AddComponentData(entity, borderData); // SYNC POINT // Just for the Entity Manager
         dstManager.AddComponentData(entity, inputData); // SYNC POINT // Just for the Entity Manager

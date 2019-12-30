@@ -48,11 +48,11 @@ public class QuadrantSystem : JobComponentSystem
     #endregion // Variables
 
     /// <summary>
-    /// Funktion that takes a position to calculate a individual key with basic math. This way, each position has an individual key to save and load data from.
+    /// Function that takes a position to calculate a individual key with basic math. This way, each position has an individual key to save and load data from.
     /// </summary>
     /// <param name="position">position that is used to calculate an individual key</param>
     /// <returns></returns>
-    public static int GetPositionHashMapKey(float3 position) // Video Anleitung
+    public static int GetPositionHashMapKey(float3 position)
     {
         return (int)(math.floor(position.x / quadrantCellSize) + (quadrantYMultiplier * math.floor(position.z / quadrantCellSize)));
     }

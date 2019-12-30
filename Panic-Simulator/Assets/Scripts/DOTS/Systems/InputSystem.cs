@@ -27,7 +27,7 @@ public class InputSystem : JobComponentSystem
         // Create Dummy Entity:
         Entity dummyEntity = EntityManager.CreateEntity();
         EntityManager.AddComponent(dummyEntity, typeof(DummyComponent));
-        EntityManager.SetName(dummyEntity, "DummyEntity");
+        //EntityManager.SetName(dummyEntity, "DummyEntity");
     }
 
     /// <summary>
@@ -38,18 +38,13 @@ public class InputSystem : JobComponentSystem
     {
         // Data from main thread
         // Mono Behavior Input
-        public bool leftClick;
-        public bool rightClick;
-
         public bool keyOnePressedUp;
         public bool keyOnePressedDown;
         public bool keyTwoPressedUp;
-        public bool keyTwoPressedDown;
         public bool keyThreePressedUp; // Bool for lifting finger from key 3 when rotating barriers outside
         public bool keyFourPressedUp; // Bool for lifting finger from key 4 when rotating barriers inside
         public bool keyFivePressedUp;
         public bool keySixPressedUp;
-        public bool keySevenPressedDown;
         public bool keySevenPressedUp;
 
         public bool entityInputisFocused;
@@ -61,13 +56,10 @@ public class InputSystem : JobComponentSystem
         public void Execute([WriteOnly] ref InputComponent _inputComponent)
         {
             // Assign Inputs
-            _inputComponent.leftClick = leftClick;
-            _inputComponent.rightClick = rightClick;
             _inputComponent.keyThreePressedUp = keyThreePressedUp;
             _inputComponent.keyFourPressedUp = keyFourPressedUp;
             _inputComponent.keyFivePressedUp = keyFivePressedUp;
             _inputComponent.keySixPressedUp = keySixPressedUp;
-            _inputComponent.entityInputisFocused = entityInputisFocused;
 
             if (!entityInputisFocused)
             {
@@ -76,10 +68,8 @@ public class InputSystem : JobComponentSystem
                 _inputComponent.keyOnePressedDown = keyOnePressedDown;
                 _inputComponent.keyOnePressedUp = keyOnePressedUp;
 
-                _inputComponent.keyTwoPressedDown = keyTwoPressedDown;
                 _inputComponent.keyTwoPressedUp = keyTwoPressedUp;
 
-                _inputComponent.keySevenPressedDown = keySevenPressedDown;
                 _inputComponent.keySevenPressedUp = keySevenPressedUp;
             }
         }
@@ -129,17 +119,13 @@ public class InputSystem : JobComponentSystem
         // Creating PlayerInputJob
         PlayerInputJob inputJob = new PlayerInputJob
         {
-            leftClick = UnityEngine.Input.GetMouseButtonDown(0),
-            rightClick = UnityEngine.Input.GetMouseButtonDown(1),
             keyOnePressedDown = UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.Alpha1), // add tag to crowd entity
             keyOnePressedUp = UnityEngine.Input.GetKeyUp(UnityEngine.KeyCode.Alpha1), // bool for allow system to spawn entitys
-            keyTwoPressedDown = UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.Alpha2),
             keyTwoPressedUp = UnityEngine.Input.GetKeyUp(UnityEngine.KeyCode.Alpha2),
             keyThreePressedUp = UnityEngine.Input.GetKeyUp(UnityEngine.KeyCode.Alpha3),
             keyFourPressedUp = UnityEngine.Input.GetKeyUp(UnityEngine.KeyCode.Alpha4),
             keyFivePressedUp = UnityEngine.Input.GetKeyUp(UnityEngine.KeyCode.Alpha5),
             keySixPressedUp = UnityEngine.Input.GetKeyUp(UnityEngine.KeyCode.Alpha6),
-            keySevenPressedDown = UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.Alpha7),
             keySevenPressedUp = UnityEngine.Input.GetKeyUp(UnityEngine.KeyCode.Alpha7),
             entityInputisFocused = InputWindow.instance.inputField.isFocused
         };
@@ -155,7 +141,7 @@ public class InputSystem : JobComponentSystem
             if (UnityEngine.Input.GetMouseButtonDown(0))
             {
                 // Save mouse position and check if hitted collider is a barrier.
-                // If it is a barrie, save the exit position with the hitted object and create the CreateExitEntitiesJob
+                // If it is a barrier, save the exit position with the hitted object and create the CreateExitEntitiesJob
                 // Disable the barrier GameObject visible
                 exitPosition = UnityEngine.Input.mousePosition;
                 UnityEngine.Ray ray = UnityEngine.Camera.main.ScreenPointToRay(exitPosition);

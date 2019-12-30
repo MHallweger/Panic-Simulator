@@ -14,7 +14,7 @@ public class MassSystem : JobComponentSystem
     /// Job that handles the overloaded bools for every single exit entity.
     /// </summary>
     [BurstCompile]
-    public struct CalculateEntitysAroundExitJob : IJobForEachWithEntity<ExitComponent, Translation>
+    public struct CalculateEntitiesAroundExitJob : IJobForEachWithEntity<ExitComponent, Translation>
     {
         // Data from main thread
         [ReadOnly] public NativeMultiHashMap<int, QuadrantData> nativeMultiHashMap;
@@ -66,7 +66,7 @@ public class MassSystem : JobComponentSystem
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
         // Create CalculateEntitysAroundExitJob
-        CalculateEntitysAroundExitJob calculateEntitysAroundExitJob = new CalculateEntitysAroundExitJob
+        CalculateEntitiesAroundExitJob calculateEntitysAroundExitJob = new CalculateEntitiesAroundExitJob
         {
             nativeMultiHashMap = QuadrantSystem.quadrantMultiHashMap
         };

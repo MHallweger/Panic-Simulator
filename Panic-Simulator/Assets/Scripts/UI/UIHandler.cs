@@ -61,7 +61,6 @@ public class UIHandler : MonoBehaviour
     [SerializeField] private Light directionalLight; // Main directional light to change the ambient color for enabling/disabling night mode
     [SerializeField] private Material skyboxDay; // Day Skybox Material
     [SerializeField] private Material skyboxNight; // Night Skybox Material
-    // ##### TESTING ##### //
 
     // Barriers/Sound Systems
     public List<GameObject> userCreatedSoundSystems = new List<GameObject>(); // An Array, containing all user created Sound Systems
@@ -132,10 +131,6 @@ public class UIHandler : MonoBehaviour
         {
             EnableOrDisableNightMode();
         }
-        else if (Input.GetKeyDown(KeyCode.C)) // Enable/Disable Orbit Camera
-        {
-            
-        }
         else if (Input.GetKeyDown(KeyCode.L)) // Enable/Disable Effects (Lights, Displays, Smoke)
         {
             EnableOrDisableEffects();
@@ -171,7 +166,7 @@ public class UIHandler : MonoBehaviour
         ms = deltaTime * 1000.0f;
         fps = 1.0f / deltaTime;
 
-        infoText.text = "ms: " + /*Mathf.Ceil(ms).ToString()*/ ms.ToString("F2") + "   FPS: " + /*Mathf.Ceil(fps).ToString()*/fps.ToString("F2") + "\n" + "Entitys: " + entityAmount + "    Exits: " + exitsAmount + "\n" + "Mode: " + mode;
+        infoText.text = "ms: " + ms.ToString("F2") + "   FPS: " + fps.ToString("F2") + "\n" + "Entities: " + entityAmount + "   Ausgänge: " + exitsAmount + "\n" + "Modus: " + mode;
     }
 
     /// <summary>
@@ -379,8 +374,8 @@ public class UIHandler : MonoBehaviour
     /// </summary>
     private void EnableOrDisableNightMode()
     {
-        // Tag: Skyboxes Mega Pack 1/7/7, DL.color = DCDED4
-        // Nacht: Night Skyboxes pack 2/2/2, DL.color = 3146BB
+        // Day: Skyboxes Mega Pack 1/7/7, DL.color = DCDED4
+        // Night: Night Skyboxes pack 2/2/2, DL.color = 3146BB
         if (RenderSettings.skybox == skyboxDay)
         {
             // Current Skybox is in Day mode

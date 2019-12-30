@@ -5964,8 +5964,8 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 34
+  m_fontSizeBase: 34
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -6002,7 +6002,7 @@ MonoBehaviour:
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: 0.86637145, w: 0}
   m_textInfo:
     textComponent: {fileID: 167344818}
     characterCount: 0
@@ -6052,8 +6052,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 22, y: 0}
-  m_SizeDelta: {x: 500, y: 125.4}
+  m_AnchoredPosition: {x: 2.5, y: 0}
+  m_SizeDelta: {x: 532.76, y: 125.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &168312761
 GameObject:
@@ -9038,8 +9038,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 261, y: -511.9}
-  m_SizeDelta: {x: 470, y: 614.4}
+  m_AnchoredPosition: {x: 296, y: -511.9}
+  m_SizeDelta: {x: 540, y: 614.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &253268017
 GameObject:
@@ -31139,7 +31139,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: Anzahl Entitys
+  m_text: Anzahl Entities
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -31205,10 +31205,10 @@ MonoBehaviour:
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -4.4004264, w: 0}
+  m_margin: {x: 0, y: 0, z: -12.349229, w: 0}
   m_textInfo:
     textComponent: {fileID: 850968371}
-    characterCount: 14
+    characterCount: 15
     spriteCount: 0
     spaceCount: 1
     wordCount: 2
@@ -35188,25 +35188,25 @@ MonoBehaviour:
   options:
   - color: {r: 0.6236922, g: 0.6320754, b: 0.623131, a: 0.19607843}
     sprite: {fileID: 21300000, guid: 68d0ae75eefd3474bbe7a604dfb7b0ac, type: 3}
-    title: Create Exits
+    title: Ausgang erstellen
   - color: {r: 0.62352943, g: 0.6313726, b: 0.62352943, a: 0.19607843}
     sprite: {fileID: 21300000, guid: 50c1420e02b40bd4abd010d939a625a0, type: 3}
-    title: Drop Sound System
+    title: Sound System erstellen
   - color: {r: 0.62352943, g: 0.6313726, b: 0.62352943, a: 0.19607843}
     sprite: {fileID: 21300000, guid: d9c0fb99ce3bd694682e738e42e31b8f, type: 3}
-    title: Medium Explosion
+    title: Mittlere Explosion
   - color: {r: 0.62352943, g: 0.6313726, b: 0.62352943, a: 0.19607843}
     sprite: {fileID: 21300000, guid: 71900ba6691a82f4387ff72081ead8bb, type: 3}
-    title: Big Explosion
+    title: "Gro\xDFe Explosion"
   - color: {r: 0.62352943, g: 0.6313726, b: 0.62352943, a: 0.19607843}
     sprite: {fileID: 21300000, guid: 9921fa1119f67f949929949a165cf2e9, type: 3}
-    title: Small Explosion
+    title: Kleine Explosion
   - color: {r: 0.62352943, g: 0.6313726, b: 0.62352943, a: 0.19607843}
     sprite: {fileID: 21300000, guid: b05b5ba84eb01ef4a8e27043460df013, type: 3}
-    title: Falling Truss
+    title: Fallender Mast
   - color: {r: 0.62352943, g: 0.6313726, b: 0.62352943, a: 0.19607843}
     sprite: {fileID: 21300000, guid: 9c1e96086decb504ca27456f52821dcf, type: 3}
-    title: Fire
+    title: Feuer
   zoomSpeed: 13
   cameraSpeed: 60
   statusImage: {fileID: 1067994971}
@@ -36647,7 +36647,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1010426982}
   m_Layer: 5
-  m_Name: InputWindow
+  m_Name: InputPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -55638,7 +55638,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1532212578}
   m_Layer: 5
-  m_Name: ReloadSceneWindow
+  m_Name: ReloadScenePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -57131,8 +57131,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 261, y: -102}
-  m_SizeDelta: {x: 470, y: 180}
+  m_AnchoredPosition: {x: 293.7, y: -102}
+  m_SizeDelta: {x: 535.4, y: 180}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1565258498
 MonoBehaviour:
@@ -70966,8 +70966,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 22, y: 45}
-  m_SizeDelta: {x: 500, y: 125.4}
+  m_AnchoredPosition: {x: 17, y: 45}
+  m_SizeDelta: {x: 549.5, y: 125.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1933098816
 MonoBehaviour:
@@ -70989,42 +70989,13 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: 'Slot 1: Spawn Agents
-
-    Slot 2: Remove all Agents
-
-    Slot 3: Rotate Barriers out
-
-    Slot 4: Rotate Barriers in
-
-    Slot 5: Add Barrier
-
-    Slot 6: Remove Barrier
-
-    Slot 7: Remove Exits
-
-
-    ESC: Deselect Mode
-
-    TAB: Radial Menu ON/OFF
-
-    Right MB: Rotate Camera, X & Z
-
-    Mousewheel: Rotate Camera, Y
-
-
-    N: Night Mode ON/OFF
-
-    O: LOD ON/OFF
-
-    L: Lights ON/OFF
-
-
-    H: Enable/Disable this window
-
-    I: Enable/Disable statistic window
-
-'
+  m_text: "Slot 1: Konzertbesucher generieren\nSlot 2: Konzertbesucher entfernen\nSlot
+    3: Seitenteile nach au\xDFen rotieren\nSlot 4: Seitenteile nach innen rotieren\nSlot
+    5: Seitenteil hinzuf\xFCgen\nSlot 6: Seitenteil entfernen\nSlot 7: Ausg\xE4nge
+    entfernen\n\nESC: Modus beenden\nTAB: Radial Menu AN/AUS\nRechter MB: Kamera rotieren,
+    X & Z\nMausrad: Kamera rotieren, Y\n\nN: Nacht Modus AN/AUS\nO: LOD AN/AUS\nL:
+    Lichter und Effekte AN/AUS\n\nH: Dieses Fenster aktivieren/deaktivieren\nI: Statistik
+    Fenster aktivieren/deaktivieren\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5302535af1044152a457ed104f1f4b91, type: 2}
   m_sharedMaterial: {fileID: 2164040, guid: 5302535af1044152a457ed104f1f4b91, type: 2}
@@ -71069,7 +71040,7 @@ MonoBehaviour:
   m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
-  m_firstOverflowCharacterIndex: 324
+  m_firstOverflowCharacterIndex: 410
   m_linkedTextComponent: {fileID: 0}
   m_isLinkedTextComponent: 0
   m_isTextTruncated: 0
@@ -71093,10 +71064,10 @@ MonoBehaviour:
   m_margin: {x: -1.638208, y: -194.42635, z: 41.774757, w: -191.47601}
   m_textInfo:
     textComponent: {fileID: 1933098816}
-    characterCount: 389
+    characterCount: 497
     spriteCount: 0
-    spaceCount: 70
-    wordCount: 72
+    spaceCount: 73
+    wordCount: 75
     linkCount: 0
     lineCount: 19
     pageCount: 1
